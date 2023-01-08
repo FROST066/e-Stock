@@ -92,7 +92,7 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
         msg: "Entrez le nom de la catégorie",
         fontSize: 18,
         toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
+        gravity: ToastGravity.CENTER,
       );
     } else {
       //enregistrement

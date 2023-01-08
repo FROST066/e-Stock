@@ -1,3 +1,4 @@
+import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final mdpController = TextEditingController();
+  final confimedMdpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: "Mot de passe",
                       prefixIcon: Icons.lock_rounded,
                       obscureText: true,
+                    ),
+                    CustomTextFormField(
+                      controller: confimedMdpController,
+                      hintText: "Confirmez le mot de passe",
+                      prefixIcon: Icons.lock_rounded,
+                      obscureText: true,
                     )
                   ],
                 )),
@@ -68,9 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {}
-                      },
+                      onPressed: () => showMissing(),
                       child: const Text("Valider"),
                     ),
                   ),
@@ -92,17 +98,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void showMissing() {
     String msg = "";
-    if (emailController.text == "" || !emailController.text.contains('@')) {
+    if (nameController.text == "") {
+      msg = "Entrez votre nom et prénom(s) ";
+    } else if (emailController.text == "" ||
+        !emailController.text.contains('@')) {
       msg = "Entrez un email valide";
     } else if (mdpController.text == "") {
       msg = "Entrez un mot de passe valide";
+    } else if (confimedMdpController.text == "") {
+      msg = "Confirmez le mot de passe ";
+    } else if (confimedMdpController.text != mdpController.text) {
+      msg = "Les 2 mots de passe ne correspondent pas";
+    } else {
+      //traitement
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (ctx) => const FirstPage()),
+          (route) => false);
     }
     //Don't work on Linux
-    Fluttertoast.showToast(
-      msg: msg,
-      fontSize: 18,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-    );
+    if (msg != "") {
+      Fluttertoast.showToast(
+        msg: msg,
+        fontSize: 18,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+      );
+    }
   }
 }
