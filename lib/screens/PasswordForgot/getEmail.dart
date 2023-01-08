@@ -29,7 +29,7 @@ class _GetEmailState extends State<GetEmail> {
                 height: MediaQuery.of(context).size.height * 0.35,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Image.asset(
-                  "assets/images/logo.png",
+                  "assets/images/getEmail.png",
                   fit: BoxFit.fill,
                 ),
               ),
