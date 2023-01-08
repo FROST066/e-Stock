@@ -8,12 +8,14 @@ class CustomTextFormField extends StatelessWidget {
       required this.hintText,
       required this.prefixIcon,
       this.textInputType,
-      this.obscureText});
+      this.obscureText,
+      this.maxLines});
   TextEditingController controller;
   String hintText;
   IconData prefixIcon;
   TextInputType? textInputType;
   bool? obscureText;
+  int? maxLines;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width * 0.9;
@@ -25,10 +27,11 @@ class CustomTextFormField extends StatelessWidget {
         color: appGrey,
       ),
       child: TextFormField(
+        maxLines: maxLines ?? 1,
         obscureText: obscureText ?? false,
         style: const TextStyle(color: Colors.black),
         controller: controller,
-        keyboardType: textInputType ?? TextInputType.name,
+        keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 15),
             hintText: hintText,

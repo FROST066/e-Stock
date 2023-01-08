@@ -13,7 +13,7 @@ ButtonStyle defaultStyle = ButtonStyle(
       borderRadius: BorderRadius.circular(18.0),
     )),
     padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
-        const EdgeInsets.symmetric(vertical: 20, horizontal: 12)),
+        const EdgeInsets.symmetric(vertical: 16, horizontal: 12)),
     foregroundColor: MaterialStateProperty.all<Color?>(Colors.white),
     backgroundColor: MaterialStateProperty.all<Color?>(appBlue));
 

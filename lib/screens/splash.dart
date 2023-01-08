@@ -13,13 +13,20 @@ class Splash extends StatelessWidget {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: MediaQuery.of(context).size.width,
-            child: Image.asset(
-              "assets/images/logo.png",
-              fit: BoxFit.fill,
-            ),
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 15),
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Image.asset(
+                  "assets/images/logo.png",
+                  fit: BoxFit.fill,
+                ),
+              ),
+              const Text("e-Stock",
+                  style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
+            ],
           ),
           const CircularProgressIndicator(
             color: appBlue,
