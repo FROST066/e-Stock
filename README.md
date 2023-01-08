@@ -1,6 +1,6 @@
-# e_stock
+# e-Stock
 
-A new Flutter project.
+Inventory management App built with Flutter and Firebase
 
 ## Getting Started
 
