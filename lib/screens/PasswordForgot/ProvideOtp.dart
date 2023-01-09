@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/PasswordForgot/ProvideNewMdp.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -16,6 +17,8 @@ class ProvideOtp extends StatefulWidget {
 class _ProvideOtpState extends State<ProvideOtp> {
   @override
   Widget build(BuildContext context) {
+    bool keyBordOpen =
+        !Platform.isLinux && MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(title: const Text("Verification email")),
       body: Center(
@@ -26,18 +29,17 @@ class _ProvideOtpState extends State<ProvideOtp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(),
+              const SizedBox(),
               const Text("Verifiez votre boite mail. Le code a été envoyé"),
               OTPTextField(
-                length: 5,
-                width: MediaQuery.of(context).size.width * 0.7,
-                fieldWidth: (MediaQuery.of(context).size.width * 0.7 / 5) - 8,
-                style: TextStyle(fontSize: 17),
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldStyle: FieldStyle.box,
-                onChanged: (value) => print(value),
-                onCompleted: (pin) => print("Completed: " + pin),
-              ),
+                  length: 5,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  fieldWidth: (MediaQuery.of(context).size.width * 0.7 / 5) - 8,
+                  style: const TextStyle(fontSize: 17),
+                  textFieldAlignment: MainAxisAlignment.spaceAround,
+                  fieldStyle: FieldStyle.box,
+                  onChanged: (value) => print(value),
+                  onCompleted: onOTPFieldComplete),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,5 +76,13 @@ class _ProvideOtpState extends State<ProvideOtp> {
         ),
       ),
     );
+  }
+
+  void onOTPFieldComplete(String pin) {
+    print("Completed: " + pin);
+    //check if correct code by Firebase authentification
+    // if ok
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (ctx) => const ProvideNewMdp()));
   }
 }

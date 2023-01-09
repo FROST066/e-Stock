@@ -42,16 +42,16 @@ class MyApp extends StatelessWidget {
           bodyText2: GoogleFonts.lora(),
         ),
       ),
-      // home: const HomePage(),
+
       // home: const HomePage(),
       // home: const Congrats(),
       // home: const ProvideNewMdp(),
       // home: const ProvideOtp(),
       // home: const GetEmail(),
-      home: const SignUpScreen(),
+      // home: const SignUpScreen(),
       // home: const LoginPage(),
       // home: const FirstPage(),
-      // home: const Splash(),
+      home: const Splash(),
       // home: const GetStarted(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/FirstPage.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -30,7 +31,8 @@ class GetStarted extends StatelessWidget {
             margin: const EdgeInsets.only(left: 20, right: 20),
             child: TextButton(
                 style: defaultStyle,
-                onPressed: () {},
+                onPressed: () => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (ctx) => const FirstPage())),
                 child: const Text("Get started")),
           )
         ],

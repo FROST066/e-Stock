@@ -1,3 +1,5 @@
+import 'package:e_stock/screens/LoginPage.dart';
+import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -17,7 +19,7 @@ class FirstPage extends StatelessWidget {
           Column(
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 15),
+                margin: const EdgeInsets.only(bottom: 15),
                 height: MediaQuery.of(context).size.height * 0.4,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Image.asset(
@@ -36,7 +38,8 @@ class FirstPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 12),
                 child: ElevatedButton(
                   style: defaultStyle,
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (ctx) => const LoginPage())),
                   child: const Text("Connexion"),
                 ),
               ),
@@ -45,7 +48,10 @@ class FirstPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 12),
                 child: ElevatedButton(
                   style: customStyle,
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => const SignUpScreen())),
                   child: const Text("Inscription"),
                 ),
               )

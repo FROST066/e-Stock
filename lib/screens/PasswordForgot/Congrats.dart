@@ -1,4 +1,5 @@
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,7 +50,11 @@ class _CongratsState extends State<Congrats> {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle,
-                      onPressed: () => {},
+                      onPressed: () => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => const LoginPage()),
+                          (route) => false),
                       child: const Text("Se connecter"),
                     ),
                   ),

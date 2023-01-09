@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:e_stock/screens/HomePage.dart';
+import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
+import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -73,18 +78,29 @@ class _LoginPageState extends State<LoginPage> {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {}
-                      },
+                      onPressed: () => showMissing(),
                       child: const Text("Connexion"),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("S'inscrire", style: TextStyle(color: appBlue)),
-                      Text("Mot de passe oublié ?",
-                          style: TextStyle(color: appBlue)),
+                    children: [
+                      InkWell(
+                        child: const Text("S'inscrire",
+                            style: TextStyle(color: appBlue)),
+                        onTap: () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => const SignUpScreen())),
+                      ),
+                      InkWell(
+                        child: const Text("Mot de passe oublié ?",
+                            style: TextStyle(color: appBlue)),
+                        onTap: () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => const GetEmail())),
+                      ),
                     ],
                   ),
                 ],
@@ -102,15 +118,24 @@ class _LoginPageState extends State<LoginPage> {
       msg = "Entrez un email valide";
     } else if (mdpController.text == "") {
       msg = "Entrez un mot de passe valide";
+    } else {
+      //get UserName and save it in prefs
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (ctx) => const HomePage()),
+          (route) => false);
     }
     //Don't work on Linux
     if (msg != "") {
-      Fluttertoast.showToast(
-        msg: msg,
-        fontSize: 18,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-      );
+      print(msg);
+      if (!Platform.isLinux) {
+        Fluttertoast.showToast(
+          msg: msg,
+          fontSize: 18,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
     }
   }
 }

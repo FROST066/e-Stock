@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/PasswordForgot/ProvideOtp.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,29 +18,36 @@ class _GetEmailState extends State<GetEmail> {
 
   @override
   Widget build(BuildContext context) {
+    bool keyBordOpen =
+        !Platform.isLinux && MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(title: const Text("Votre email")),
       body: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+          height:
+              MediaQuery.of(context).size.height - (!keyBordOpen ? 100 : 300),
           child: Center(
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                height: MediaQuery.of(context).size.height * 0.35,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Image.asset(
-                  "assets/images/getEmail.png",
-                  fit: BoxFit.fill,
-                ),
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Image.asset(
+                      "assets/images/getEmail.png",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  CustomTextFormField(
+                      controller: emailController,
+                      hintText: "Adresse Email",
+                      prefixIcon: Icons.email,
+                      textInputType: TextInputType.emailAddress),
+                ],
               ),
-              CustomTextFormField(
-                  controller: emailController,
-                  hintText: "Adresse Email",
-                  prefixIcon: Icons.email,
-                  textInputType: TextInputType.emailAddress),
               Container(
                 margin: const EdgeInsets.only(bottom: 20),
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -48,7 +58,7 @@ class _GetEmailState extends State<GetEmail> {
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: ElevatedButton(
                         style: defaultStyle,
-                        onPressed: () {},
+                        onPressed: () => showMissing(),
                         child: const Text("Continuer"),
                       ),
                     ),
@@ -66,13 +76,22 @@ class _GetEmailState extends State<GetEmail> {
     String msg = "";
     if (emailController.text == "" || !emailController.text.contains('@')) {
       msg = "Entrez un email valide";
+    } else {
+      //send otp code by Email
+      Navigator.push(
+          context, MaterialPageRoute(builder: (ctx) => const ProvideOtp()));
     }
-    //Don't work on Linux
-    Fluttertoast.showToast(
-      msg: msg,
-      fontSize: 18,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-    );
+
+    if (msg != "") {
+      print(msg);
+      if (!Platform.isLinux) {
+        Fluttertoast.showToast(
+          msg: msg,
+          fontSize: 18,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
+    }
   }
 }

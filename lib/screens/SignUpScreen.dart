@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
@@ -118,12 +120,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     //Don't work on Linux
     if (msg != "") {
-      Fluttertoast.showToast(
-        msg: msg,
-        fontSize: 18,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-      );
+      print(msg);
+      if (!Platform.isLinux) {
+        Fluttertoast.showToast(
+          msg: msg,
+          fontSize: 18,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     }
   }
 }
