@@ -1,6 +1,7 @@
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
+import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
 import 'package:e_stock/screens/PasswordForgot/Congrats.dart';
 import 'package:e_stock/screens/PasswordForgot/ProvideNewMdp.dart';
 import 'package:e_stock/screens/PasswordForgot/ProvideOtp.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           bodyText2: GoogleFonts.lora(),
         ),
       ),
-
+      home: const HistoryScreen(),
       // home: const HomePage(),
       // home: const Congrats(),
       // home: const ProvideNewMdp(),
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
       // home: const SignUpScreen(),
       // home: const LoginPage(),
       // home: const FirstPage(),
-      home: const Splash(),
+      // home: const Splash(),
       // home: const GetStarted(),
     );
   }

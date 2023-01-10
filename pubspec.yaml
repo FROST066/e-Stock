@@ -24,6 +24,7 @@ dependencies:
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1
   shared_preferences: ^2.0.15
+  flutter_animated_dialog: ^2.0.1
 
 dev_dependencies:
   flutter_test:

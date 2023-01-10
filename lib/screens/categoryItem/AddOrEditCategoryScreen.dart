@@ -35,7 +35,7 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-              addOrEdit ? "Ajouter une categsorie" : "Modifier la categorie ")),
+              addOrEdit ? "Ajouter une catégorie" : "Modifier la catégorie ")),
       body: Center(
           heightFactor: 1,
           child: SingleChildScrollView(

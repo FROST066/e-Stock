@@ -1,3 +1,4 @@
+import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -67,7 +68,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   ElevatedButton(
                     style: homePageBtStyle,
                     child: const Text("HISTORIQUE"),
-                    onPressed: () {},
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) => const HistoryScreen())),
                   ),
                   ElevatedButton(
                     style: homePageBtStyle,
