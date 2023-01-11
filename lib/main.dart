@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           bodyText2: GoogleFonts.lora(),
         ),
       ),
-      home: const HistoryScreen(),
+      // home: const HistoryScreen(),
       // home: const HomePage(),
       // home: const Congrats(),
       // home: const ProvideNewMdp(),
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       // home: const SignUpScreen(),
       // home: const LoginPage(),
       // home: const FirstPage(),
-      // home: const Splash(),
+      home: const Splash(),
       // home: const GetStarted(),
     );
   }

@@ -25,6 +25,10 @@ dependencies:
   line_icons: ^2.0.1
   shared_preferences: ^2.0.15
   flutter_animated_dialog: ^2.0.1
+  date_time_picker: ^2.1.0
+  pdf: ^3.8.4
+  printing: ^5.9.3
+  open_filex: ^4.3.2
 
 dev_dependencies:
   flutter_test:

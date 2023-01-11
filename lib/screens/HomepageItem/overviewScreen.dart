@@ -1,3 +1,4 @@
+import 'package:e_stock/screens/HomepageItem/BalanceSheetScreen.dart';
 import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -74,10 +75,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
                             builder: (builder) => const HistoryScreen())),
                   ),
                   ElevatedButton(
-                    style: homePageBtStyle,
-                    child: const Text("     BILAN      "),
-                    onPressed: () {},
-                  )
+                      style: homePageBtStyle,
+                      child: const Text("     BILAN      "),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) =>
+                                  const BalanceSheetScreen()))),
                 ],
               )),
         ],

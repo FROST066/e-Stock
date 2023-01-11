@@ -1,3 +1,5 @@
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +17,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Historique des transaction"),
@@ -29,25 +32,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Column(
           children: [
             Flexible(
-              flex: 2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-                margin: const EdgeInsets.only(top: 20, bottom: 10),
-                width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15), color: appGrey),
-                child: TextFormField(
-                  style: const TextStyle(color: Colors.black),
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 15),
-                      hintText: "Chercher une categorie",
-                      prefixIcon: Icon(Icons.search),
-                      border: InputBorder.none,
-                      iconColor: Colors.black),
-                  onChanged: (value) {},
-                ),
-              ),
-            ),
+                flex: !isPortrait ? 6 : 2, child: const DoubleDatePicker()),
             Flexible(
               flex: 8,
               child: SingleChildScrollView(

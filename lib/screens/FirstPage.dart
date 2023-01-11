@@ -21,10 +21,10 @@ class FirstPage extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(bottom: 15),
                 height: MediaQuery.of(context).size.height * 0.4,
-                width: MediaQuery.of(context).size.width * 0.8,
+                // width: MediaQuery.of(context).size.width * 0.8,
                 child: Image.asset(
                   "assets/images/logo.png",
-                  fit: BoxFit.fill,
+                  fit: BoxFit.contain,
                 ),
               ),
               const Text("e-Stock",

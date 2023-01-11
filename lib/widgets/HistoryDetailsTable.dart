@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 TextStyle ts = GoogleFonts.abel(
     fontSize: 13, decoration: TextDecoration.none, color: Colors.black);
-Widget customTable(Map<String, String> map) {
+Widget customTableWithMap(Map<String, String> map) {
   print("Map selected:");
   print(map);
   List<String> keys = map.keys.toList();
-
+// map.en
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 6),
     child: Table(
@@ -17,6 +17,25 @@ Widget customTable(Map<String, String> map) {
                 TableCell(child: centerText(e)),
                 TableCell(child: centerText(map[e]!)),
               ]))
+          .toList(),
+    ),
+  );
+}
+
+Widget customTableWithArray(List<List<String>> tab) {
+  print(tab);
+
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 6),
+    child: Table(
+      border: TableBorder.all(width: 2),
+      children: tab
+          .map((e) => TableRow(
+              children: e
+                  .map(
+                    (e) => TableCell(child: centerText(e)),
+                  )
+                  .toList()))
           .toList(),
     ),
   );

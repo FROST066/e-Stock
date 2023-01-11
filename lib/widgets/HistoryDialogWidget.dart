@@ -2,6 +2,7 @@ import 'package:e_stock/widgets/HistoryDetailsTable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../other/styles.dart';
 
@@ -45,7 +46,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                 foregroundColor: appBlue,
                 child: ClipOval(
                   child: Icon(
-                    CupertinoIcons.person_crop_circle_fill,
+                    LineIcons.tags,
                     size: 70,
                   ),
                 ),
@@ -76,13 +77,13 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
               ),
             ],
           ),
-          customTable({
-            "Heure": e["hour"]!,
-            "Date": e["date"]!,
-            "Nombre d'article": e["nbre"]!,
-            "Prix unitaire": e["price"]!,
-            "Total": e["total"]!,
-          })
+          customTableWithArray([
+            ["Heure", e["hour"]!],
+            ["Date", e["date"]!],
+            ["Nombre d'article", e["nbre"]!],
+            ["Prix unitaire", e["price"]!],
+            ["Total", e["total"]!],
+          ])
         ],
       ),
     ),
