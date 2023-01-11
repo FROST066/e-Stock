@@ -1,19 +1,10 @@
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:e_stock/other/styles.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 
 const _darkColor = PdfColors.blueGrey800;
-const _lightColor = PdfColors.white;
+// const _lightColor = PdfColors.white;
 Future<Uint8List> buildPdf(
     PdfPageFormat pageFormat, List<List<String>> data, String filename) async {
   String? logo = await rootBundle.loadString('assets/images/logo.svg');
@@ -64,27 +55,17 @@ pw.Widget _contentTable(pw.Context context, List<List<String>> data) {
         bottom: pw.BorderSide(color: PdfColors.blueGrey800, width: 1),
       ),
     ),
-    // cellAlignments: {
-    //   0: pw.Alignment.centerLeft,
-    //   1: pw.Alignment.centerLeft,
-    //   2: pw.Alignment.centerRight,
-    //   3: pw.Alignment.center,
-    //   4: pw.Alignment.centerRight,
-    // },
   );
 }
 
 pw.Widget _contentHeader(String filename, String? logo) {
-  // String? logo = await rootBundle.loadString('assets/images/logo.png');
   return pw.Container(
     child: pw.Column(
-      // mainAxisAlignment: pw.MainAxisAlignment.spa/,
       mainAxisSize: pw.MainAxisSize.max,
       children: [
         pw.Column(children: [
           pw.Container(
             alignment: pw.Alignment.topLeft,
-            // padding: const pw.EdgeInsets.only(),
             height: 75,
             child: logo != null ? pw.SvgImage(svg: logo) : pw.PdfLogo(),
           ),
@@ -101,7 +82,6 @@ pw.Widget _contentHeader(String filename, String? logo) {
         pw.Text(
           filename.replaceAll("_", " "),
           style: pw.TextStyle(
-            // color: baseColor,
             fontWeight: pw.FontWeight.bold,
             fontSize: 40,
           ),

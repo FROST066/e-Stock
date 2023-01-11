@@ -36,3 +36,15 @@ ButtonStyle homePageBtStyle = ButtonStyle(
         const EdgeInsets.symmetric(vertical: 25, horizontal: 20)),
     foregroundColor: MaterialStateProperty.all<Color?>(Colors.black),
     backgroundColor: MaterialStateProperty.all<Color?>(Colors.white));
+
+ButtonStyle productDialogBtStyle(Color backgroundColor) {
+  return ButtonStyle(
+      textStyle:
+          MaterialStateProperty.all<TextStyle?>(const TextStyle(fontSize: 15)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder?>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+      padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
+          const EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
+      foregroundColor: MaterialStateProperty.all<Color?>(Colors.white),
+      backgroundColor: MaterialStateProperty.all<Color?>(backgroundColor));
+}
