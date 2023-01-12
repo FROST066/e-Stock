@@ -76,7 +76,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 4),
                       margin: const EdgeInsets.only(right: 8),
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.78,
                       height: 100,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
@@ -177,13 +177,9 @@ Widget customCard(Map<String, String> e, BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    e["name"] ?? "Une erreur",
-                    style: ts,
-                  ),
-                  Text(
-                    e["priceV"] ?? "Une erreur",
-                  )
+                  Text(e["name"] ?? "Une erreur", style: ts),
+                  Text(e["priceV"] ?? "Une erreur"),
+                  const SizedBox()
                 ],
               ),
             ),

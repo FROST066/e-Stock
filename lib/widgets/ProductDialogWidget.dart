@@ -117,7 +117,7 @@ Widget productDialogWidget(BuildContext ctx, Map<String, String> e) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                    style: productDialogBtStyle(Colors.blue),
+                    style: productDialogBtStyle(appBlue),
                     onPressed: () {},
                     child: const Text("Modifier")),
                 TextButton(
