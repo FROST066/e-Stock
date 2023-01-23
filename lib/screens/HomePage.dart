@@ -1,5 +1,6 @@
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/HomepageItem/OverviewScreen.dart';
+import 'package:e_stock/screens/ProfilItem/ProfilItem.dart';
 import 'package:e_stock/screens/categoryItem/AddOrEditCategoryScreen.dart';
 import 'package:e_stock/screens/categoryItem/AllCategoriesScreen.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     OverViewScreen(),
     AllCategoriesScreen(),
     OverViewScreen(),
-    AllCategoriesScreen()
+    ProfilItem()
   ];
   @override
   Widget build(BuildContext context) {

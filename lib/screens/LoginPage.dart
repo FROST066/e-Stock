@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
+import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,30 +45,35 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
               ],
             ),
-            Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: const Text("Connexion",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 25)),
-                    ),
-                    CustomTextFormField(
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: const Text("Connexion",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 25)),
+                      ),
+                      CustomTextFormField(
                         controller: emailController,
                         hintText: "Adresse Email",
                         prefixIcon: Icons.email,
-                        textInputType: TextInputType.emailAddress),
-                    CustomTextFormField(
-                      controller: mdpController,
-                      hintText: "Mot de passe",
-                      prefixIcon: Icons.lock_rounded,
-                      obscureText: true,
-                    )
-                  ],
-                )),
+                        textInputType: TextInputType.emailAddress,
+                        validatorFun: emailValidator,
+                      ),
+                      CustomTextFormField(
+                        controller: mdpController,
+                        hintText: "Mot de passe",
+                        prefixIcon: Icons.lock_rounded,
+                        obscureText: true,
+                      )
+                    ],
+                  )),
+            ),
             Container(
               margin: const EdgeInsets.only(bottom: 20, top: 30),
               width: MediaQuery.of(context).size.width * 0.9,

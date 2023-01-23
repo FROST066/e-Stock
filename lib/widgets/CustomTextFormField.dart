@@ -2,30 +2,27 @@ import 'package:e_stock/other/styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      required this.prefixIcon,
-      this.textInputType,
-      this.obscureText,
-      this.maxLines});
-  TextEditingController controller;
+  CustomTextFormField({
+    super.key,
+    this.controller,
+    this.validatorFun,
+    required this.hintText,
+    required this.prefixIcon,
+    this.textInputType,
+    this.obscureText,
+    this.maxLines,
+  });
+  TextEditingController? controller;
   String hintText;
   IconData prefixIcon;
   TextInputType? textInputType;
   bool? obscureText;
   int? maxLines;
+  String? Function(String?)? validatorFun;
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.9;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: appGrey,
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         maxLines: maxLines ?? 1,
         obscureText: obscureText ?? false,
@@ -33,16 +30,17 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(vertical: 1),
             hintText: hintText,
+            // hintStyle: TextStyle(color: Colors.black),
             prefixIcon: Icon(prefixIcon),
-            border: InputBorder.none,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            filled: true,
+            fillColor: appGrey,
             iconColor: Colors.black),
-        // validator: (value) {
-        //   return value == null || value == ""
-        //       ? "              Ce champ est obligatoire"
-        //       : null;
-        // },
+        validator: validatorFun ?? (value) => null,
       ),
     );
   }

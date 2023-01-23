@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:e_stock/screens/FirstPage.dart';
+import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,34 +41,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fit: BoxFit.fill,
               ),
             ),
-            Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextFormField(
-                        controller: nameController,
-                        hintText: "Nom et Prenoms",
-                        prefixIcon: Icons.person),
-                    CustomTextFormField(
-                        controller: emailController,
-                        hintText: "Adresse Email",
-                        prefixIcon: Icons.email,
-                        textInputType: TextInputType.emailAddress),
-                    CustomTextFormField(
-                      controller: mdpController,
-                      hintText: "Mot de passe",
-                      prefixIcon: Icons.lock_rounded,
-                      obscureText: true,
-                    ),
-                    CustomTextFormField(
-                      controller: confimedMdpController,
-                      hintText: "Confirmez le mot de passe",
-                      prefixIcon: Icons.lock_rounded,
-                      obscureText: true,
-                    )
-                  ],
-                )),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextFormField(
+                          controller: nameController,
+                          hintText: "Nom et Prenoms",
+                          prefixIcon: Icons.person),
+                      CustomTextFormField(
+                          controller: emailController,
+                          hintText: "Adresse Email",
+                          prefixIcon: Icons.email,
+                          validatorFun: emailValidator,
+                          textInputType: TextInputType.emailAddress),
+                      CustomTextFormField(
+                        controller: mdpController,
+                        hintText: "Mot de passe",
+                        prefixIcon: Icons.lock_rounded,
+                        obscureText: true,
+                      ),
+                      CustomTextFormField(
+                        controller: confimedMdpController,
+                        hintText: "Confirmez le mot de passe",
+                        prefixIcon: Icons.lock_rounded,
+                        obscureText: true,
+                      )
+                    ],
+                  )),
+            ),
             Container(
               margin: const EdgeInsets.only(bottom: 20),
               width: MediaQuery.of(context).size.width * 0.9,

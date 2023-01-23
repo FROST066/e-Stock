@@ -1,6 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:e_stock/widgets/DoubleDatePicker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -21,12 +20,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Historique des transaction"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset("assets/images/pdf.png"),
-          )
-        ],
       ),
       body: Center(
         child: Column(
