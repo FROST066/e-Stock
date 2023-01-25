@@ -58,17 +58,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           prefixIcon: Icons.email,
                           validatorFun: emailValidator,
                           textInputType: TextInputType.emailAddress),
-                      CustomTextFormField(
+                      CustomPasswordFormField(
                         controller: mdpController,
                         hintText: "Mot de passe",
-                        prefixIcon: Icons.lock_rounded,
-                        obscureText: true,
                       ),
-                      CustomTextFormField(
+                      CustomPasswordFormField(
                         controller: confimedMdpController,
                         hintText: "Confirmez le mot de passe",
-                        prefixIcon: Icons.lock_rounded,
-                        obscureText: true,
                       )
                     ],
                   )),

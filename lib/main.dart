@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
           button: const TextStyle(fontSize: 20),
           // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
           bodyText2: GoogleFonts.lora(),
+          bodyText1: GoogleFonts.amiri(fontSize: 30),
         ),
       ),
       // home: const HistoryScreen(),

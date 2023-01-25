@@ -65,11 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                         textInputType: TextInputType.emailAddress,
                         validatorFun: emailValidator,
                       ),
-                      CustomTextFormField(
+                      CustomPasswordFormField(
                         controller: mdpController,
                         hintText: "Mot de passe",
-                        prefixIcon: Icons.lock_rounded,
-                        obscureText: true,
                       )
                     ],
                   )),
@@ -84,7 +82,16 @@ class _LoginPageState extends State<LoginPage> {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle,
-                      onPressed: () => showMissing(),
+                      // onPressed: () => showMissing(),
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => const HomePage()),
+                              (route) => false);
+                        }
+                      },
                       child: const Text("Connexion"),
                     ),
                   ),

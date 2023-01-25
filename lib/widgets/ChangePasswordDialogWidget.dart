@@ -6,34 +6,19 @@ import 'package:line_icons/line_icons.dart';
 
 import '../other/styles.dart';
 
-class AddOrEditShopDialogWidget extends StatefulWidget {
-  AddOrEditShopDialogWidget(
-      {super.key,
-      required this.ctx,
-      this.shopName,
-      this.updateFun,
-      this.addFun});
-  BuildContext ctx;
-  String? shopName;
-  void Function(String)? updateFun;
-  void Function(String)? addFun;
+class ChangePasswordDialogWidget extends StatefulWidget {
+  const ChangePasswordDialogWidget({super.key, required this.ctx});
+  final BuildContext ctx;
   @override
-  State<AddOrEditShopDialogWidget> createState() =>
-      _AddOrEditShopDialogWidgetState();
+  State<ChangePasswordDialogWidget> createState() =>
+      _ChangePasswordDialogWidgetState();
 }
 
-class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
-  final shopNameController = TextEditingController();
-  late bool addOrEdit;
-  @override
-  void initState() {
-    shopNameController.text = widget.shopName ?? "";
-    addOrEdit = widget.shopName == null;
-    // true == add
-    // false == Edit
-    print(widget.shopName);
-    super.initState();
-  }
+class _ChangePasswordDialogWidgetState
+    extends State<ChangePasswordDialogWidget> {
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final repeatPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +30,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
             borderRadius: BorderRadius.circular(15),
             color: Colors.white,
           ),
-          height: 200,
+          height: 270,
           width: MediaQuery.of(widget.ctx).size.width * 0.8,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
           child: Column(
@@ -55,10 +40,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // const SizedBox(),
-                  Text(
-                      addOrEdit
-                          ? "Ajouter une boutique "
-                          : "Modifier la boutique ",
+                  Text("Modifier le mot de passe",
                       style: GoogleFonts.oswald(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
@@ -75,25 +57,29 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 ],
               ),
               Form(
-                  child: CustomTextFormField(
-                      autofocus: true,
-                      controller: shopNameController,
-                      hintText: "Nom de la boutique",
-                      prefixIcon: Icons.business_outlined)),
+                  child: Column(
+                children: [
+                  CustomPasswordFormField(
+                    autofocus: true,
+                    controller: oldPasswordController,
+                    hintText: "Ancien mot de passe",
+                  ),
+                  CustomPasswordFormField(
+                    controller: newPasswordController,
+                    hintText: "Nouveau mot de passe",
+                  ),
+                ],
+              )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
                   style: defaultStyle,
                   onPressed: () {
-                    addOrEdit
-                        ? widget.addFun!(shopNameController.text)
-                        : widget.updateFun!(shopNameController.text);
+                    //traitement
                     Navigator.pop(context);
                   },
-                  child: Text(
-                    addOrEdit ? "Valider " : "Modifier  ",
-                  ),
+                  child: const Text("Modifier  "),
                 ),
               ),
             ],

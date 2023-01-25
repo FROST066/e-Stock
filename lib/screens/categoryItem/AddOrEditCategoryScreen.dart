@@ -38,49 +38,52 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
               addOrEdit ? "Ajouter une catégorie" : "Modifier la catégorie ")),
       body: Center(
           heightFactor: 1,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Form(
-                    key: formKey,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * .9,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 35),
+                          CustomTextFormField(
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
+                          CustomTextFormField(
+                            controller: descController,
+                            hintText: "Description",
+                            prefixIcon: Icons.description,
+                            maxLines: 3,
+                          )
+                        ],
+                      )),
+                  // Flexible(child: SizedBox()),
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: 20, top: keyBordOpen ? 30 : 300),
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 35),
-                        CustomTextFormField(
-                          controller: categNameController,
-                          hintText: "Nom de la catégorie",
-                          prefixIcon: Icons.category,
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          margin: const EdgeInsets.symmetric(vertical: 12),
+                          child: ElevatedButton(
+                            style: defaultStyle,
+                            onPressed: () => showMissing(),
+                            child: Text(addOrEdit ? "Ajouter " : "Enregistrer"),
+                          ),
                         ),
-                        CustomTextFormField(
-                          controller: descController,
-                          hintText: "Description",
-                          prefixIcon: Icons.description,
-                          maxLines: 4,
-                        )
                       ],
-                    )),
-                // Flexible(child: SizedBox()),
-                Container(
-                  margin:
-                      EdgeInsets.only(bottom: 20, top: keyBordOpen ? 30 : 300),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        margin: const EdgeInsets.symmetric(vertical: 12),
-                        child: ElevatedButton(
-                          style: defaultStyle,
-                          onPressed: () => showMissing(),
-                          child: Text(addOrEdit ? "Ajouter " : "Enregistrer"),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )),
     );

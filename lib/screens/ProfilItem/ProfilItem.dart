@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
+import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import 'AboutScreen.dart';
 
 class ProfilItem extends StatefulWidget {
   const ProfilItem({super.key});
@@ -26,7 +30,7 @@ class _ProfilItemState extends State<ProfilItem> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
+        child: SizedBox(
             child: Column(children: [
       Flexible(
         flex: 2,
@@ -61,7 +65,9 @@ class _ProfilItemState extends State<ProfilItem> {
                     // bottom: 25,
                     bottom: MediaQuery.of(context).size.height * .3 * .15,
                     right: MediaQuery.of(context).size.width * .1,
-                    child: const Icon(Icons.add_a_photo_rounded, size: 30))
+                    child: GestureDetector(
+                        onTap: () => getFile(),
+                        child: const Icon(Icons.add_a_photo_rounded, size: 30)))
               ],
             ),
             const Text("User Name"),
@@ -145,8 +151,8 @@ class _ProfilItemState extends State<ProfilItem> {
                                                 children: [
                                                   IconButton(
                                                       onPressed: () =>
-                                                          showCustomDialog(
-                                                              context, e.id),
+                                                          showCustomDialogForSHop(
+                                                              e.id),
                                                       icon: Icon(
                                                         Icons.edit,
                                                         color: e.isActive
@@ -170,12 +176,12 @@ class _ProfilItemState extends State<ProfilItem> {
                             )),
                         Flexible(
                           flex: 2,
-                          child: Container(
+                          child: SizedBox(
                             width: 100,
                             // margin: const EdgeInsets.only(bottom: 10),
                             child: ElevatedButton(
                               style: defaultStyle,
-                              onPressed: () => showCustomDialog(context),
+                              onPressed: () => showCustomDialogForSHop(),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
@@ -192,14 +198,68 @@ class _ProfilItemState extends State<ProfilItem> {
                       ],
                     ),
                   ), //for Settings
-                  Column(
-                    children: [],
+                  Container(
+                    margin: const EdgeInsets.only(left: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          child: ToggleSwitch(
+                            radiusStyle: true,
+                            minWidth: 90.0,
+                            minHeight: 40.0,
+                            initialLabelIndex: 0,
+                            cornerRadius: 20.0,
+                            activeFgColor: Colors.black,
+                            inactiveBgColor: appGrey,
+                            inactiveFgColor: Colors.white,
+                            totalSwitches: 2,
+                            icons: const [
+                              Icons.lightbulb,
+                              Icons.nights_stay_outlined
+                            ],
+                            labels: const ['Light', 'Dark'],
+                            iconSize: 30.0,
+                            activeBgColors: const [
+                              [Colors.white],
+                              [Colors.black]
+                            ],
+                            animate: true,
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            onToggle: (index) {
+                              print('switched to: $index');
+                            },
+                          ),
+                        ),
+                        settingItem(Icons.edit, "Modifier mon mot de passe",
+                            () => showCustomDialogForChangePassword()),
+                        settingItem(
+                            Icons.info_outline,
+                            "A propos",
+                            () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => AboutScreen()))),
+                        settingItem(Icons.logout, "Déconnexion", () => {}),
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
           ))
     ])));
+  }
+
+  void getFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
+    if (result != null) {
+      setState(() {
+        imageFile = File(result.paths[0]!);
+      });
+    }
   }
 
   void updateFun(String id, String newShopName) {
@@ -223,7 +283,7 @@ class _ProfilItemState extends State<ProfilItem> {
     });
   }
 
-  void showCustomDialog(BuildContext context, [String? shopId]) {
+  void showCustomDialogForSHop([String? shopId]) {
     updateFunc(newShopName) => updateFun(shopId ?? "", newShopName);
     showAnimatedDialog(
         context: context,
@@ -239,6 +299,35 @@ class _ProfilItemState extends State<ProfilItem> {
             updateFun: updateFunc,
             addFun: addFun,
           );
+        },
+        animationType: DialogTransitionType.slideFromBottom,
+        // animationType: DialogTransitionType.scale,
+        // curve: Curves.linear,
+        duration: const Duration(seconds: 1));
+  }
+
+  Widget settingItem(IconData iconData, String text, void Function() func) {
+    return InkWell(
+      onTap: () => func(),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon(iconData, color: appBlue, size: 30),
+            SizedBox(width: MediaQuery.of(context).size.width * .09),
+            Text(text, style: const TextStyle(color: appBlue, fontSize: 20)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showCustomDialogForChangePassword() {
+    showAnimatedDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext ctx) {
+          return ChangePasswordDialogWidget(ctx: ctx);
         },
         animationType: DialogTransitionType.slideFromBottom,
         // animationType: DialogTransitionType.scale,

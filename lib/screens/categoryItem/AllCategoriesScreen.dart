@@ -1,7 +1,8 @@
+import 'package:e_stock/models/Categorie.dart';
 import 'package:flutter/material.dart';
-
 import '../../other/styles.dart';
 import 'AddOrEditCategoryScreen.dart';
+import 'package:search_choices/search_choices.dart';
 
 class AllCategoriesScreen extends StatefulWidget {
   const AllCategoriesScreen({super.key});
@@ -11,6 +12,29 @@ class AllCategoriesScreen extends StatefulWidget {
 }
 
 class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
+  List<Categorie> listCategories = [
+    Categorie("0019", "Technologies", "Une description"),
+    Categorie("0019", "Electromenager", "Une description"),
+    Categorie("0019", "Alimentation", "Une description"),
+    Categorie("0019", "Bricolage", "Une description"),
+  ];
+  List<Categorie> listCategoriesToDisplay = [];
+  List<DropdownMenuItem> items = [];
+  String? selectedValueSingleDialog;
+  @override
+  void initState() {
+    items = listCategories
+        .map((e) => DropdownMenuItem(
+            value: e.name,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(e.name),
+            )))
+        .toList();
+    listCategoriesToDisplay = listCategories;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -19,39 +43,15 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
           Flexible(
             flex: 2,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-              margin: const EdgeInsets.only(top: 60, bottom: 30),
-              width: MediaQuery.of(context).size.width * 0.9,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15), color: appGrey),
-              child: TextFormField(
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 15),
-                    hintText: "Chercher une categorie",
-                    prefixIcon: Icon(Icons.search),
-                    border: InputBorder.none,
-                    iconColor: Colors.black),
-                onChanged: (value) {},
-              ),
-            ),
+                margin: const EdgeInsets.only(top: 27, bottom: 27),
+                width: MediaQuery.of(context).size.width * 0.93,
+                child: searchableSelect()),
           ),
           Flexible(
             flex: 8,
             child: SingleChildScrollView(
               child: Column(
-                  children: [
-                {
-                  "nom": "Le nom",
-                  "description":
-                      "Une descrjeduhuhf ef iejfief efijeije fioefjdci efiejfoef efoijiption"
-                },
-                {
-                  "nom": "Le nom",
-                  "description":
-                      "Une descrip ddnidniwdiwd wdwjd0owjdowd wdjwodjwdjndjd ecmnedimwdtion"
-                }
-              ]
+                  children: listCategoriesToDisplay
                       .map((e) => Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 6),
@@ -70,12 +70,12 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        e["nom"]!,
+                                        e.name,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 17),
                                       ),
-                                      Text(e["description"]!)
+                                      Text(e.description)
                                     ],
                                   ),
                                 ),
@@ -87,9 +87,9 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AddOrEditCategoryScreen(
-                                                        name: e["nom"]!,
-                                                        description: e[
-                                                            "description"]!))),
+                                                        name: e.name,
+                                                        description:
+                                                            e.description))),
                                         icon: const Icon(
                                           Icons.edit,
                                           color: appBlue,
@@ -110,6 +110,43 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
           )
         ],
       ),
+    );
+  }
+
+  Widget searchableSelect() {
+    return SearchChoices.single(
+      items: items,
+      value: selectedValueSingleDialog,
+      hint: "  Rechercher une catégorie",
+      searchHint: "Rechercher une catégorie",
+      fieldDecoration: BoxDecoration(
+        color: appGrey,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: appGrey),
+      ),
+      searchInputDecoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 2),
+          prefixIcon: const Icon(Icons.search),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none),
+          filled: true,
+          fillColor: appGrey,
+          iconColor: Colors.black),
+      onChanged: (value) {
+        setState(() {
+          selectedValueSingleDialog = value;
+          if (value == null) {
+            listCategoriesToDisplay = listCategories;
+          } else {
+            listCategoriesToDisplay = listCategories
+                .where((element) => element.name == selectedValueSingleDialog)
+                .toList();
+          }
+        });
+      },
+      isExpanded: true,
     );
   }
 }

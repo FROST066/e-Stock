@@ -23,57 +23,55 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
     return Scaffold(
       appBar: AppBar(title: const Text("Recuperation du mot de passe")),
       body: Center(
-          child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              height: MediaQuery.of(context).size.height * 0.35,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Image.asset(
-                "assets/images/ProvideNewMdp.png",
-                fit: BoxFit.fill,
+          child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 15),
+                height: MediaQuery.of(context).size.height * 0.35,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Image.asset(
+                  "assets/images/ProvideNewMdp.png",
+                  fit: BoxFit.fill,
+                ),
               ),
-            ),
-            Form(
-                key: formKey,
+              Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomPasswordFormField(
+                        controller: mdpController,
+                        hintText: "Mot de passe",
+                      ),
+                      CustomPasswordFormField(
+                        controller: confirmedMdpController,
+                        hintText: "Confirmer le mot de passe",
+                      )
+                    ],
+                  )),
+              Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                width: MediaQuery.of(context).size.width * 0.9,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTextFormField(
-                      controller: mdpController,
-                      hintText: "Mot de passe",
-                      prefixIcon: Icons.lock_rounded,
-                      textInputType: TextInputType.emailAddress,
-                      obscureText: true,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      child: ElevatedButton(
+                        style: defaultStyle,
+                        onPressed: () => showMissing(),
+                        child: const Text("Valider"),
+                      ),
                     ),
-                    CustomTextFormField(
-                      controller: confirmedMdpController,
-                      hintText: "Confirmer le mot de passe",
-                      prefixIcon: Icons.lock_rounded,
-                      obscureText: true,
-                    )
                   ],
-                )),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    child: ElevatedButton(
-                      style: defaultStyle,
-                      onPressed: () => showMissing(),
-                      child: const Text("Valider"),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       )),
     );
@@ -94,6 +92,7 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
     }
     //Don't work on Linux
     if (msg != "") {
+      print(msg);
       if (!Platform.isLinux) {
         Fluttertoast.showToast(
           msg: msg,
