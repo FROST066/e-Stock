@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.bold, fontSize: 25)),
                       ),
                       CustomTextFormField(
+                        autofocus: true,
                         controller: emailController,
                         hintText: "Adresse Email",
                         prefixIcon: Icons.email,

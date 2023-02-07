@@ -10,6 +10,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'AboutScreen.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 class ProfilItem extends StatefulWidget {
   const ProfilItem({super.key});
@@ -32,9 +33,11 @@ class _ProfilItemState extends State<ProfilItem> {
     return Center(
         child: SizedBox(
             child: Column(children: [
+      const SizedBox(height: 35),
       Flexible(
-        flex: 2,
+        flex: 5,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Stack(
               children: [
@@ -74,13 +77,13 @@ class _ProfilItemState extends State<ProfilItem> {
           ],
         ),
       ),
-      Expanded(
-          flex: 3,
+      Flexible(
+          flex: 5,
           child: DefaultTabController(
             length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                bottom: TabBar(
+            child: ThemeSwitchingArea(
+              child: Scaffold(
+                appBar: TabBar(
                   labelPadding: const EdgeInsets.symmetric(vertical: 12),
                   indicatorColor: appBlue,
                   tabs: [
@@ -99,153 +102,168 @@ class _ProfilItemState extends State<ProfilItem> {
                               style: TextStyle(color: Colors.black))
                         ]),
                   ],
+
+                  // title: const Text('Tabs Demo'),
                 ),
-                // title: const Text('Tabs Demo'),
-              ),
-              body: TabBarView(
-                children: [
-                  SizedBox(
-                    height: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Flexible(
-                            flex: 8,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: shopList
-                                    .map((e) => Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 6),
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 7),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.9,
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: e.isActive
-                                                  ? appBlue
-                                                  : appGrey),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Flexible(
-                                                flex: 1,
-                                                child: Text(
-                                                  e.shopName,
-                                                  style: TextStyle(
-                                                      color: e.isActive
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 17),
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  IconButton(
-                                                      onPressed: () =>
-                                                          showCustomDialogForSHop(
-                                                              e.id),
-                                                      icon: Icon(
-                                                        Icons.edit,
+                body: TabBarView(
+                  children: [
+                    SizedBox(
+                      height: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                              flex: 8,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: shopList
+                                      .map((e) => Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 6),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 7),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                color: e.isActive
+                                                    ? appBlue
+                                                    : appGrey),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    e.shopName,
+                                                    style: TextStyle(
                                                         color: e.isActive
                                                             ? Colors.white
-                                                            : appBlue,
-                                                      )),
-                                                  IconButton(
-                                                      onPressed: () =>
-                                                          removeFun(e.id),
-                                                      icon: const Icon(
-                                                        Icons.delete,
-                                                        color: Colors.red,
-                                                      ))
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ))
-                                    .toList(),
-                              ),
-                            )),
-                        Flexible(
-                          flex: 2,
-                          child: SizedBox(
-                            width: 100,
-                            // margin: const EdgeInsets.only(bottom: 10),
-                            child: ElevatedButton(
-                              style: defaultStyle,
-                              onPressed: () => showCustomDialogForSHop(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.add),
-                                  Text("Créer",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17))
-                                ],
+                                                            : Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 17),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    IconButton(
+                                                        onPressed: () =>
+                                                            showCustomDialogForSHop(
+                                                                e.id),
+                                                        icon: Icon(
+                                                          Icons.edit,
+                                                          color: e.isActive
+                                                              ? Colors.white
+                                                              : appBlue,
+                                                        )),
+                                                    IconButton(
+                                                        onPressed: () =>
+                                                            removeFun(e.id),
+                                                        icon: const Icon(
+                                                          Icons.delete,
+                                                          color: Colors.red,
+                                                        ))
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              )),
+                          Flexible(
+                            flex: 2,
+                            child: SizedBox(
+                              width: 100,
+                              // margin: const EdgeInsets.only(bottom: 10),
+                              child: ElevatedButton(
+                                style: defaultStyle,
+                                onPressed: () => showCustomDialogForSHop(),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.add),
+                                    Text("Créer",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17))
+                                  ],
+                                ),
                               ),
                             ),
+                          )
+                        ],
+                      ),
+                    ), //for Settings
+                    Container(
+                      margin: const EdgeInsets.only(left: 25),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: ThemeSwitcher.withTheme(
+                              builder: (_, switcher, theme) {
+                                return ToggleSwitch(
+                                  radiusStyle: true,
+                                  minWidth: 90.0,
+                                  changeOnTap: true,
+                                  minHeight: 40.0,
+                                  initialLabelIndex:
+                                      Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? 0
+                                          : 1,
+                                  cornerRadius: 20.0,
+                                  activeFgColor: Colors.black,
+                                  inactiveBgColor: appGrey,
+                                  inactiveFgColor: Colors.white,
+                                  totalSwitches: 2,
+                                  icons: const [
+                                    Icons.lightbulb,
+                                    Icons.nights_stay_outlined
+                                  ],
+                                  labels: const ['Light', 'Dark'],
+                                  iconSize: 30.0,
+                                  activeBgColors: const [
+                                    [Colors.white],
+                                    [Colors.black]
+                                  ],
+                                  animate: true,
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                  onToggle: (index) => {
+                                    switcher.changeTheme(
+                                      theme: index == 1
+                                          ? ThemeData.dark()
+                                          : ThemeData.light(),
+                                    )
+                                  },
+                                );
+                              },
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                  ), //for Settings
-                  Container(
-                    margin: const EdgeInsets.only(left: 25),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: ToggleSwitch(
-                            radiusStyle: true,
-                            minWidth: 90.0,
-                            minHeight: 40.0,
-                            initialLabelIndex: 0,
-                            cornerRadius: 20.0,
-                            activeFgColor: Colors.black,
-                            inactiveBgColor: appGrey,
-                            inactiveFgColor: Colors.white,
-                            totalSwitches: 2,
-                            icons: const [
-                              Icons.lightbulb,
-                              Icons.nights_stay_outlined
-                            ],
-                            labels: const ['Light', 'Dark'],
-                            iconSize: 30.0,
-                            activeBgColors: const [
-                              [Colors.white],
-                              [Colors.black]
-                            ],
-                            animate: true,
-                            curve: Curves.fastLinearToSlowEaseIn,
-                            onToggle: (index) {
-                              print('switched to: $index');
-                            },
-                          ),
-                        ),
-                        settingItem(Icons.edit, "Modifier mon mot de passe",
-                            () => showCustomDialogForChangePassword()),
-                        settingItem(
-                            Icons.info_outline,
-                            "A propos",
-                            () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => AboutScreen()))),
-                        settingItem(Icons.logout, "Déconnexion", () => {}),
-                      ],
-                    ),
-                  )
-                ],
+                          settingItem(Icons.edit, "Modifier mon mot de passe",
+                              () => showCustomDialogForChangePassword()),
+                          settingItem(
+                              Icons.info_outline,
+                              "A propos",
+                              () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => AboutScreen()))),
+                          settingItem(Icons.logout, "Déconnexion", () => {}),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ))

@@ -1,8 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
-class STconst {}
 
 const Color appBlue = Color(0xFF2e3190);
 const Color appGrey = Color(0xFFceced6);

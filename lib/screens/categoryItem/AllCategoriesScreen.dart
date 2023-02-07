@@ -41,14 +41,14 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       child: Column(
         children: [
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Container(
-                margin: const EdgeInsets.only(top: 27, bottom: 27),
+                margin: const EdgeInsets.only(top: 90, bottom: 20),
                 width: MediaQuery.of(context).size.width * 0.93,
                 child: searchableSelect()),
           ),
           Flexible(
-            flex: 8,
+            flex: 7,
             child: SingleChildScrollView(
               child: Column(
                   children: listCategoriesToDisplay

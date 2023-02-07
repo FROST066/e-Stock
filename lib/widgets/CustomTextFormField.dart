@@ -1,6 +1,9 @@
 import 'package:e_stock/other/styles.dart';
 import 'package:flutter/material.dart';
 
+final isPlatformDark =
+    WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
+
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
     super.key,
@@ -33,7 +36,7 @@ class CustomTextFormField extends StatelessWidget {
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 2),
             hintText: hintText,
-            // hintStyle: TextStyle(color: Colors.black),
+            hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
             prefixIcon: Icon(prefixIcon),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -85,7 +88,7 @@ class _CustomPasswordFormFieldState extends State<CustomPasswordFormField> {
         decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 1),
             hintText: widget.hintText,
-            // hintStyle: TextStyle(color: Colors.black),
+            hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
             prefixIcon: const Icon(Icons.lock_outline),
             suffixIcon: GestureDetector(
                 onTap: () => setState(() {

@@ -1,4 +1,5 @@
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/other/themes.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
@@ -12,6 +13,7 @@ import 'package:e_stock/screens/getStarted.dart';
 import 'package:e_stock/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,38 +25,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // brightness: Brightness.dark,
-        appBarTheme: AppBarTheme(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            foregroundColor: Colors.black,
-            centerTitle: true,
-            titleTextStyle: GoogleFonts.lora(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
-        primaryColor: appBlue,
-        textTheme: TextTheme(
-          button: const TextStyle(fontSize: 20),
-          // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          bodyText2: GoogleFonts.lora(),
-          bodyText1: GoogleFonts.amiri(fontSize: 30),
-        ),
-      ),
-      // home: const HistoryScreen(),
-      // home: const HomePage(),
-      // home: const Congrats(),
-      // home: const ProvideNewMdp(),
-      // home: const ProvideOtp(),
-      // home: const GetEmail(),
-      // home: const SignUpScreen(),
-      // home: const LoginPage(),
-      // home: const FirstPage(),
-      home: const Splash(),
-      // home: const GetStarted(),
+    final isPlatformDark =
+        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
+    final initTheme = isPlatformDark ? darkTheme : lightTheme;
+    return ThemeProvider(
+      initTheme: initTheme,
+      builder: (_, myTheme) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: myTheme,
+          // home: const HistoryScreen(),
+          // home: const HomePage(),
+          // home: const Congrats(),
+          // home: const ProvideNewMdp(),
+          // home: const ProvideOtp(),
+          // home: const GetEmail(),
+          // home: const SignUpScreen(),
+          // home: const LoginPage(),
+          // home: const FirstPage(),
+          home: const Splash(),
+          // home: const GetStarted(),
+        );
+      },
     );
   }
 }
