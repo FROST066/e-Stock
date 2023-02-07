@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import '../../other/const.dart';
+import '../../other/themes.dart';
 import 'AboutScreen.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
@@ -30,6 +33,7 @@ class _ProfilItemState extends State<ProfilItem> {
   // TabController tabController = TabController(length: 2, vsync: this);
   @override
   Widget build(BuildContext context) {
+    bool isLight = Theme.of(context).brightness == Brightness.light;
     return Center(
         child: SizedBox(
             child: Column(children: [
@@ -47,7 +51,7 @@ class _ProfilItemState extends State<ProfilItem> {
                   height: MediaQuery.of(context).size.height * .25,
                   child: CircleAvatar(
                     radius: 40,
-                    backgroundColor: const Color.fromARGB(255, 171, 205, 233),
+                    backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     child: ClipOval(
                       child: imageFile != null
@@ -85,21 +89,33 @@ class _ProfilItemState extends State<ProfilItem> {
               child: Scaffold(
                 appBar: TabBar(
                   labelPadding: const EdgeInsets.symmetric(vertical: 12),
-                  indicatorColor: appBlue,
+                  indicatorColor: Theme.of(context).primaryColor,
                   tabs: [
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Icon(Icons.business, color: appBlue),
+                        children: [
+                          Icon(
+                            Icons.business,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           Text("Mes boutiques",
-                              style: TextStyle(color: Colors.black))
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(fontWeight: FontWeight.bold))
                         ]),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Icon(Icons.settings, color: appBlue),
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           Text("Parametres",
-                              style: TextStyle(color: Colors.black))
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(fontWeight: FontWeight.bold))
                         ]),
                   ],
 
@@ -131,7 +147,8 @@ class _ProfilItemState extends State<ProfilItem> {
                                                 borderRadius:
                                                     BorderRadius.circular(15),
                                                 color: e.isActive
-                                                    ? appBlue
+                                                    ? Theme.of(context)
+                                                        .primaryColor
                                                     : appGrey),
                                             child: Row(
                                               mainAxisAlignment:
@@ -161,7 +178,9 @@ class _ProfilItemState extends State<ProfilItem> {
                                                           Icons.edit,
                                                           color: e.isActive
                                                               ? Colors.white
-                                                              : appBlue,
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
                                                         )),
                                                     IconButton(
                                                         onPressed: () =>
@@ -184,7 +203,7 @@ class _ProfilItemState extends State<ProfilItem> {
                               width: 100,
                               // margin: const EdgeInsets.only(bottom: 10),
                               child: ElevatedButton(
-                                style: defaultStyle,
+                                style: defaultStyle(context),
                                 onPressed: () => showCustomDialogForSHop(),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -193,7 +212,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                     Text("Créer",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17))
+                                            fontSize: 15))
                                   ],
                                 ),
                               ),
@@ -212,40 +231,37 @@ class _ProfilItemState extends State<ProfilItem> {
                             child: ThemeSwitcher.withTheme(
                               builder: (_, switcher, theme) {
                                 return ToggleSwitch(
-                                  radiusStyle: true,
-                                  minWidth: 90.0,
-                                  changeOnTap: true,
-                                  minHeight: 40.0,
-                                  initialLabelIndex:
-                                      Theme.of(context).brightness ==
-                                              Brightness.light
-                                          ? 0
-                                          : 1,
-                                  cornerRadius: 20.0,
-                                  activeFgColor: Colors.black,
-                                  inactiveBgColor: appGrey,
-                                  inactiveFgColor: Colors.white,
-                                  totalSwitches: 2,
-                                  icons: const [
-                                    Icons.lightbulb,
-                                    Icons.nights_stay_outlined
-                                  ],
-                                  labels: const ['Light', 'Dark'],
-                                  iconSize: 30.0,
-                                  activeBgColors: const [
-                                    [Colors.white],
-                                    [Colors.black]
-                                  ],
-                                  animate: true,
-                                  curve: Curves.fastLinearToSlowEaseIn,
-                                  onToggle: (index) => {
-                                    switcher.changeTheme(
-                                      theme: index == 1
-                                          ? ThemeData.dark()
-                                          : ThemeData.light(),
-                                    )
-                                  },
-                                );
+                                    radiusStyle: true,
+                                    minWidth: 90.0,
+                                    changeOnTap: true,
+                                    minHeight: 40.0,
+                                    initialLabelIndex: isLight ? 0 : 1,
+                                    cornerRadius: 20.0,
+                                    inactiveBgColor:
+                                        isLight ? appGrey : appDarkGrey,
+                                    activeFgColor: isLight
+                                        ? Colors.black.withOpacity(0.85)
+                                        : Colors.white,
+                                    inactiveFgColor:
+                                        isLight ? Colors.white : Colors.black,
+                                    totalSwitches: 2,
+                                    icons: const [
+                                      Icons.lightbulb,
+                                      Icons.nights_stay_outlined
+                                    ],
+                                    labels: const ['Light', 'Dark'],
+                                    iconSize: 30.0,
+                                    activeBgColors: [
+                                      const [Colors.white],
+                                      [Colors.black.withOpacity(0.85)]
+                                    ],
+                                    animate: true,
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    onToggle: (index) => switcher.changeTheme(
+                                          theme: index == 1
+                                              ? darkTheme
+                                              : lightTheme,
+                                        ));
                               },
                             ),
                           ),
@@ -258,7 +274,14 @@ class _ProfilItemState extends State<ProfilItem> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (builder) => AboutScreen()))),
-                          settingItem(Icons.logout, "Déconnexion", () => {}),
+                          settingItem(Icons.logout, "Déconnexion", () {
+                            //traitement
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => const FirstPage()),
+                                (route) => false);
+                          }),
                         ],
                       ),
                     )
@@ -331,9 +354,11 @@ class _ProfilItemState extends State<ProfilItem> {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
-            Icon(iconData, color: appBlue, size: 30),
+            Icon(iconData, color: Theme.of(context).primaryColor, size: 30),
             SizedBox(width: MediaQuery.of(context).size.width * .09),
-            Text(text, style: const TextStyle(color: appBlue, fontSize: 20)),
+            Text(text,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 20)),
           ],
         ),
       ),

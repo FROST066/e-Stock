@@ -1,9 +1,6 @@
 import 'package:e_stock/other/styles.dart';
 import 'package:flutter/material.dart';
 
-final isPlatformDark =
-    WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
-
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
     super.key,

@@ -7,6 +7,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../other/const.dart';
+
 class Splash extends StatefulWidget {
   const Splash({super.key});
 
@@ -72,8 +74,8 @@ class _SplashState extends State<Splash> {
                   style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
             ],
           ),
-          const CircularProgressIndicator(
-            color: appBlue,
+          CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
           )
         ],
       )),

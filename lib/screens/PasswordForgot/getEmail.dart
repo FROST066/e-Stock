@@ -63,7 +63,7 @@ class _GetEmailState extends State<GetEmail> {
                         width: MediaQuery.of(context).size.width * 0.9,
                         margin: const EdgeInsets.symmetric(vertical: 12),
                         child: ElevatedButton(
-                          style: defaultStyle,
+                          style: defaultStyle(context),
                           onPressed: () => {
                             if (_formKey.currentState!.validate())
                               {

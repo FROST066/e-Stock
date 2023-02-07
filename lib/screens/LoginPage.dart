@@ -8,6 +8,7 @@ import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../other/const.dart';
 import '../other/styles.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: "Adresse Email",
                         prefixIcon: Icons.email,
                         textInputType: TextInputType.emailAddress,
-                        validatorFun: emailValidator,
+                        // validatorFun: emailValidator,
                       ),
                       CustomPasswordFormField(
                         controller: mdpController,
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
-                      style: defaultStyle,
+                      style: defaultStyle(context),
                       // onPressed: () => showMissing(),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
@@ -100,16 +101,20 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        child: const Text("S'inscrire",
-                            style: TextStyle(color: appBlue)),
+                        child: Text("S'inscrire",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            )),
                         onTap: () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (builder) => const SignUpScreen())),
                       ),
                       InkWell(
-                        child: const Text("Mot de passe oublié ?",
-                            style: TextStyle(color: appBlue)),
+                        child: Text("Mot de passe oublié ?",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            )),
                         onTap: () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

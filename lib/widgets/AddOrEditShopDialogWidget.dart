@@ -84,7 +84,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
-                  style: defaultStyle,
+                  style: defaultStyle(context),
                   onPressed: () {
                     addOrEdit
                         ? widget.addFun!(shopNameController.text)

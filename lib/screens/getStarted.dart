@@ -30,7 +30,7 @@ class GetStarted extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20, right: 20),
             child: TextButton(
-                style: defaultStyle,
+                style: defaultStyle(context),
                 onPressed: () => Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (ctx) => const FirstPage())),
                 child: const Text("Get started")),

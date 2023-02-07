@@ -3,6 +3,7 @@ import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:line_icons/line_icons.dart';
+import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -152,13 +153,13 @@ Widget customCard(Map<String, String> e, BuildContext context) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Flexible(
+          Flexible(
             flex: 1,
             child: Center(
               child: Icon(
                 LineIcons.adobe,
                 size: 60,
-                color: appBlue,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),

@@ -37,7 +37,7 @@ class FirstPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.8,
                 margin: const EdgeInsets.symmetric(vertical: 12),
                 child: ElevatedButton(
-                  style: defaultStyle,
+                  style: defaultStyle(context),
                   onPressed: () => Navigator.push(context,
                       MaterialPageRoute(builder: (ctx) => const LoginPage())),
                   child: const Text("Connexion"),
@@ -47,7 +47,7 @@ class FirstPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.8,
                 margin: const EdgeInsets.symmetric(vertical: 12),
                 child: ElevatedButton(
-                  style: customStyle,
+                  style: customStyle(context),
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(

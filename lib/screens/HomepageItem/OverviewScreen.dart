@@ -51,12 +51,12 @@ class _OverViewScreenState extends State<OverViewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    style: homePageBtStyle,
+                    style: homePageBtStyle(context),
                     child: const Text("EN RUPTURE"),
                     onPressed: () {},
                   ),
                   ElevatedButton(
-                    style: homePageBtStyle,
+                    style: homePageBtStyle(context),
                     child: const Text(" PRODUITS "),
                     onPressed: () => Navigator.push(
                         context,
@@ -71,7 +71,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    style: homePageBtStyle,
+                    style: homePageBtStyle(context),
                     child: const Text("HISTORIQUE"),
                     onPressed: () => Navigator.push(
                         context,
@@ -79,7 +79,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                             builder: (builder) => const HistoryScreen())),
                   ),
                   ElevatedButton(
-                      style: homePageBtStyle,
+                      style: homePageBtStyle(context),
                       child: const Text("     BILAN      "),
                       onPressed: () => Navigator.push(
                           context,

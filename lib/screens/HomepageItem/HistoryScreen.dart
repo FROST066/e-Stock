@@ -3,6 +3,7 @@ import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import '../../other/const.dart';
 import '../../other/styles.dart';
 import '../../widgets/HistoryDialogWidget.dart';
 
@@ -107,7 +108,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15),
-                                                    color: appBlue),
+                                                    color: isPlatformDark
+                                                        ? appDarkBlue
+                                                        : appBlue),
                                                 child: Text(e["date"]!,
                                                     style: const TextStyle(
                                                         color: Colors.white,

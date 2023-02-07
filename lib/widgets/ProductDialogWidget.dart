@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../other/const.dart';
 import '../other/styles.dart';
 
 Widget productDialogWidget(BuildContext ctx, Map<String, String> e) {
@@ -39,11 +40,11 @@ Widget productDialogWidget(BuildContext ctx, Map<String, String> e) {
           ),
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.white,
-                foregroundColor: appBlue,
-                child: ClipOval(
+                foregroundColor: Theme.of(ctx).primaryColor,
+                child: const ClipOval(
                   child: Icon(
                     LineIcons.tags,
                     size: 70,
@@ -117,7 +118,7 @@ Widget productDialogWidget(BuildContext ctx, Map<String, String> e) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                    style: productDialogBtStyle(appBlue),
+                    style: productDialogBtStyle(Theme.of(ctx).primaryColor),
                     onPressed: () {},
                     child: const Text("Modifier")),
                 TextButton(

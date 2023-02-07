@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../other/const.dart';
 import '../other/styles.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -78,16 +79,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
-                      style: defaultStyle,
+                      style: defaultStyle(context),
                       onPressed: () => showMissing(),
                       child: const Text("Valider"),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("Vous avez déjà un compte ?"),
-                      Text("Se connecter", style: TextStyle(color: appBlue)),
+                    children: [
+                      const Text("Vous avez déjà un compte ?"),
+                      Text("Se connecter",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          )),
                     ],
                   ),
                 ],

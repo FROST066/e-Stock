@@ -1,5 +1,6 @@
 import 'package:e_stock/models/Categorie.dart';
 import 'package:flutter/material.dart';
+import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'AddOrEditCategoryScreen.dart';
 import 'package:search_choices/search_choices.dart';
@@ -72,10 +73,13 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                       Text(
                                         e.name,
                                         style: const TextStyle(
+                                            color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 17),
                                       ),
-                                      Text(e.description)
+                                      Text(e.description,
+                                          style: const TextStyle(
+                                              color: Colors.black)),
                                     ],
                                   ),
                                 ),
@@ -90,9 +94,9 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                                         name: e.name,
                                                         description:
                                                             e.description))),
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.edit,
-                                          color: appBlue,
+                                          color: Theme.of(context).primaryColor,
                                         )),
                                     IconButton(
                                         onPressed: () {},
@@ -118,6 +122,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       items: items,
       value: selectedValueSingleDialog,
       hint: "  Rechercher une catégorie",
+      style: const TextStyle(color: Colors.black, fontSize: 17),
       searchHint: "Rechercher une catégorie",
       fieldDecoration: BoxDecoration(
         color: appGrey,
@@ -125,6 +130,8 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
         border: Border.all(color: appGrey),
       ),
       searchInputDecoration: InputDecoration(
+          labelStyle: const TextStyle(color: Colors.black),
+          hintStyle: const TextStyle(color: Colors.black),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 2),
           prefixIcon: const Icon(Icons.search),

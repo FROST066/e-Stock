@@ -72,7 +72,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide.none),
                       filled: true,
-                      fillColor: appGrey,
+                      fillColor: appDarkGrey,
                       iconColor: Colors.black),
                   onChanged: (value) {
                     setState(() {
@@ -123,7 +123,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    bottom: 20, top: isKeyboardVisible ? 30 : 250),
+                    bottom: 20, top: !isKeyboardVisible ? 30 : 250),
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Column(
                   children: [
@@ -131,7 +131,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: ElevatedButton(
-                        style: defaultStyle,
+                        style: defaultStyle(context),
                         onPressed: () => showMissing(),
                         child: const Text("Valider"),
                       ),

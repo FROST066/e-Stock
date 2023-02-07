@@ -3,6 +3,7 @@ import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../other/const.dart';
 import '../../other/styles.dart';
 
 class BalanceSheetScreen extends StatefulWidget {
@@ -82,31 +83,32 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
       ),
     );
   }
-}
 
-Widget iconWithTex(IconData icon, String title, String value) {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 18),
-    width: 150,
-    child: Row(
-      children: [
-        Icon(
-          icon,
-          color: appBlue,
-          size: 50,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title),
-            const SizedBox(),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            )
-          ],
-        )
-      ],
-    ),
-  );
+  Widget iconWithTex(IconData icon, String title, String value) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 18),
+      width: 150,
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+            size: 50,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title),
+              const SizedBox(),
+              Text(
+                value,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

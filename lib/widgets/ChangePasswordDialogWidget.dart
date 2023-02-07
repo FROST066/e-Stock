@@ -74,7 +74,7 @@ class _ChangePasswordDialogWidgetState
                 width: MediaQuery.of(context).size.width * 0.9,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
-                  style: defaultStyle,
+                  style: defaultStyle(context),
                   onPressed: () {
                     //traitement
                     Navigator.pop(context);

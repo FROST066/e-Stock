@@ -14,7 +14,7 @@ final lightTheme = ThemeData.light().copyWith(
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20),
     // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-    bodyText2: GoogleFonts.lora(),
+    bodyText2: GoogleFonts.lora(color: Colors.black),
     bodyText1: GoogleFonts.amiri(fontSize: 30),
   ),
 );
@@ -25,11 +25,11 @@ final darkTheme = ThemeData.dark().copyWith(
       centerTitle: true,
       titleTextStyle: GoogleFonts.lora(
           color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-  primaryColor: appBlue,
+  primaryColor: appDarkBlue,
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20, color: Colors.white),
     // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-    bodyText2: GoogleFonts.lora(),
+    bodyText2: GoogleFonts.lora(color: Colors.white),
     bodyText1: GoogleFonts.amiri(fontSize: 30),
   ),
 );

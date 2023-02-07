@@ -49,7 +49,7 @@ class _CongratsState extends State<Congrats> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
-                      style: defaultStyle,
+                      style: defaultStyle(context),
                       onPressed: () => Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
+import '../../other/const.dart';
+
 class ProvideOtp extends StatefulWidget {
   const ProvideOtp({super.key});
 
@@ -48,7 +50,8 @@ class _ProvideOtpState extends State<ProvideOtp> {
                     onPressed: () {},
                     child: Text(
                       "Renvoyer",
-                      style: GoogleFonts.lora(color: appBlue, fontSize: 17),
+                      style: GoogleFonts.lora(
+                          color: Theme.of(context).primaryColor, fontSize: 17),
                     ),
                   )
                 ],
@@ -62,7 +65,7 @@ class _ProvideOtpState extends State<ProvideOtp> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: ElevatedButton(
-                        style: defaultStyle,
+                        style: defaultStyle(context),
                         onPressed: () {},
                         child: const Text("Valider",
                             style: TextStyle(fontSize: 18)),
