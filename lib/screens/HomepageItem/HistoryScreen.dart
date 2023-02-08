@@ -3,7 +3,6 @@ import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import '../../other/const.dart';
 import '../../other/styles.dart';
 import '../../widgets/HistoryDialogWidget.dart';
 
@@ -94,7 +93,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           child: Column(
                                             children: [
                                               Text(e["nbre"]!,
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
+                                                      color: ThemeData.dark()
+                                                          .scaffoldBackgroundColor,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 17)),
@@ -108,9 +109,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15),
-                                                    color: isPlatformDark
-                                                        ? appDarkBlue
-                                                        : appBlue),
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                                 child: Text(e["date"]!,
                                                     style: const TextStyle(
                                                         color: Colors.white,
@@ -134,7 +134,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           children: [
                                             Text(
                                               e["name"]!,
-                                              style: const TextStyle(
+                                              style: TextStyle(
+                                                  color: ThemeData.dark()
+                                                      .scaffoldBackgroundColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 20),
                                             ),
@@ -144,7 +146,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   ? "TYPE: Achat"
                                                   : "TYPE: Vente",
                                               style: GoogleFonts.aBeeZee(
-                                                  fontSize: 11),
+                                                fontSize: 11,
+                                                color: ThemeData.dark()
+                                                    .scaffoldBackgroundColor,
+                                              ),
                                             )
                                           ],
                                         ),

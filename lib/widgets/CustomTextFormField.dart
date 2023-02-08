@@ -31,10 +31,10 @@ class CustomTextFormField extends StatelessWidget {
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 15, horizontal: 2),
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
-            prefixIcon: Icon(prefixIcon),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide.none),
@@ -46,6 +46,7 @@ class CustomTextFormField extends StatelessWidget {
               if (value == null || value == "") {
                 return "Ce champ est obligatoire";
               }
+              return null;
             },
       ),
     );

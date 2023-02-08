@@ -1,14 +1,11 @@
 import 'dart:io';
-
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../other/const.dart';
 import '../other/styles.dart';
+import 'LoginPage.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -88,10 +85,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Vous avez déjà un compte ?"),
-                      Text("Se connecter",
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          )),
+                      InkWell(
+                        onTap: () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => const LoginPage())),
+                        child: Text("Se connecter",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      ),
                     ],
                   ),
                 ],

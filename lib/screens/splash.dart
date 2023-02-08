@@ -1,13 +1,8 @@
-import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/getStarted.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../other/const.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});

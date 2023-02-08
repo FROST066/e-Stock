@@ -1,9 +1,8 @@
-import 'package:e_stock/widgets/CustomTable.dart';
+import 'package:e_stock/models/produit.dart';
 import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:line_icons/line_icons.dart';
-import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -14,51 +13,55 @@ class AllProductsScreen extends StatefulWidget {
   State<AllProductsScreen> createState() => _AllProductsScreenState();
 }
 
-TextStyle ts = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+TextStyle ts = const TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 18,
+);
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
-  List<Map<String, String>> list = [
-    {
-      "name": "Tomato",
-      "description": "bla bal balla bla bla bla c'est une longue descritption",
-      "categorie": "Fruit",
-      "low": "50",
-      "priceA": "50 FCFA",
-      "priceV": "2500 FCFA"
-    },
-    {
-      "name": "Carotte",
-      "description": "bla bal balla bla bla bla c'est une longue descritption",
-      "categorie": "Légume",
-      "low": "50",
-      "priceA": "50 FCFA",
-      "priceV": "2500 FCFA"
-    },
-    {
-      "name": "Avocat",
-      "description": "bla bal balla bla bla bla c'est une longue descritption",
-      "categorie": "Fruit",
-      "low": "50",
-      "priceA": "50 FCFA",
-      "priceV": "2500 FCFA"
-    },
-    {
-      "name": "Ananas",
-      "description": "bla bal balla bla bla bla c'est une longue descritption",
-      "categorie": "Fruit",
-      "low": "50",
-      "priceA": "50 FCFA",
-      "priceV": "2500 FCFA"
-    },
-    {
-      "name": "Tomato",
-      "description": "bla bal balla bla bla bla c'est une longue descritption",
-      "categorie": "Fruit",
-      "low": "50",
-      "priceA": "50 FCFA",
-      "priceV": "2500 FCFA"
-    },
+  List<Produit> list = [
+    Produit(
+        "1",
+        "Tomato",
+        "bla bal balla bla bla bla c'est une longue descritption",
+        "1",
+        50,
+        50,
+        50),
+    Produit(
+        "2",
+        "Carotte",
+        "bla bal balla bla bla bla c'est une longue descritption",
+        "1",
+        20,
+        250,
+        5000),
+    Produit(
+        "3",
+        "Avocat",
+        "bla bal balla bla bla bla c'est une longue descritption",
+        "3",
+        10,
+        100,
+        150),
+    Produit(
+        "4",
+        "Ananas",
+        "bla bal balla bla bla bla c'est une longue descritption",
+        "3",
+        50,
+        50,
+        2500),
+    Produit(
+        "5",
+        "Tomato",
+        "bla bal balla bla bla bla c'est une longue descritption",
+        "2",
+        30,
+        40,
+        100),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +136,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   }
 }
 
-Widget customCard(Map<String, String> e, BuildContext context) {
+Widget customCard(Produit e, BuildContext context) {
   // print(e);
   return GestureDetector(
     onTap: () => showCustomDialog(context, e),
@@ -178,8 +181,14 @@ Widget customCard(Map<String, String> e, BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(e["name"] ?? "Une erreur", style: ts),
-                  Text(e["priceV"] ?? "Une erreur"),
+                  Text(e.name,
+                      style: ts.copyWith(
+                          color: ThemeData.dark().scaffoldBackgroundColor)),
+                  Text(
+                    "${e.priceV} FCFA",
+                    style: TextStyle(
+                        color: ThemeData.dark().scaffoldBackgroundColor),
+                  ),
                   const SizedBox()
                 ],
               ),
@@ -191,7 +200,7 @@ Widget customCard(Map<String, String> e, BuildContext context) {
   );
 }
 
-void showCustomDialog(BuildContext context, Map<String, String> e) {
+void showCustomDialog(BuildContext context, Produit e) {
   showAnimatedDialog(
       context: context,
       barrierDismissible: true,

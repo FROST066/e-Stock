@@ -2,8 +2,6 @@ import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-
-import '../other/const.dart';
 import '../other/styles.dart';
 
 Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
@@ -11,7 +9,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: Theme.of(ctx).scaffoldBackgroundColor,
       ),
       height: 300,
       width: MediaQuery.of(ctx).size.width * 0.8,
@@ -27,7 +25,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
                       decoration: TextDecoration.none,
-                      color: Colors.black)),
+                      color: Theme.of(ctx).textTheme.bodyText2!.color)),
               GestureDetector(
                 onTap: () => Navigator.pop(ctx),
                 child: const Icon(
@@ -58,11 +56,11 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                   children: [
                     Text(
                       e["name"]!,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           decoration: TextDecoration.none,
-                          color: Colors.black),
+                          color: Theme.of(ctx).textTheme.bodyText2!.color),
                     ),
                     const SizedBox(height: 5),
                     Text(
@@ -70,7 +68,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                       style: GoogleFonts.quicksand(
                           fontSize: 13,
                           decoration: TextDecoration.none,
-                          color: Colors.black),
+                          color: Theme.of(ctx).textTheme.bodyText2!.color),
                     )
                   ],
                 ),
@@ -83,7 +81,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
             ["Nombre d'article", e["nbre"]!],
             ["Prix unitaire", e["price"]!],
             ["Total", e["total"]!],
-          ])
+          ], ctx)
         ],
       ),
     ),

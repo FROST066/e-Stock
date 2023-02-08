@@ -1,6 +1,5 @@
 import 'package:e_stock/models/Categorie.dart';
 import 'package:flutter/material.dart';
-import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'AddOrEditCategoryScreen.dart';
 import 'package:search_choices/search_choices.dart';

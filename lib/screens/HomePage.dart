@@ -23,8 +23,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> listPages = const [
     OverViewScreen(),
     AllCategoriesScreen(),
-    // TransactionScreen(ctx:context),
-    SizedBox(),
+    TransactionScreen(),
     ProfilItem()
   ];
   @override
@@ -40,11 +39,7 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add),
               ),
-        body: _selectedIndex == 2
-            ? TransactionScreen(
-                ctx: context,
-              )
-            : listPages[_selectedIndex],
+        body: listPages[_selectedIndex],
         bottomNavigationBar: Container(
             decoration: BoxDecoration(
               boxShadow: [

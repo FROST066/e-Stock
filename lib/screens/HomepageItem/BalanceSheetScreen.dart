@@ -3,7 +3,6 @@ import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../other/const.dart';
 import '../../other/styles.dart';
 
 class BalanceSheetScreen extends StatefulWidget {
@@ -73,7 +72,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                       )),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    child: customTableWithArray(data),
+                    child: customTableWithArray(data, context),
                   )
                 ]),
               ),
@@ -98,12 +97,18 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title),
+              Text(
+                title,
+                style:
+                    TextStyle(color: ThemeData.dark().scaffoldBackgroundColor),
+              ),
               const SizedBox(),
               Text(
                 value,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: ThemeData.dark().scaffoldBackgroundColor),
               )
             ],
           )

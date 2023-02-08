@@ -7,8 +7,6 @@ import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../other/const.dart';
 import '../other/styles.dart';
 
 class LoginPage extends StatefulWidget {

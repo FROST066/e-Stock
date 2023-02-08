@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../other/const.dart';
 import '../../other/themes.dart';
 import 'AboutScreen.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';

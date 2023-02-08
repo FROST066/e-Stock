@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import '../../other/const.dart';
-
 class ProvideOtp extends StatefulWidget {
   const ProvideOtp({super.key});
 

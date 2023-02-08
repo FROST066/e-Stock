@@ -28,7 +28,7 @@ class _ChangePasswordDialogWidgetState
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.white,
+            color: Theme.of(widget.ctx).scaffoldBackgroundColor,
           ),
           height: 270,
           width: MediaQuery.of(widget.ctx).size.width * 0.8,
@@ -45,7 +45,8 @@ class _ChangePasswordDialogWidgetState
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                           decoration: TextDecoration.none,
-                          color: Colors.black)),
+                          color:
+                              Theme.of(widget.ctx).textTheme.bodyText2!.color)),
                   GestureDetector(
                     onTap: () => Navigator.pop(widget.ctx),
                     child: const Icon(
