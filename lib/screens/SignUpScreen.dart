@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../other/const.dart';
 import '../other/styles.dart';
 import 'LoginPage.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -77,7 +80,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle(context),
-                      onPressed: () => showMissing(),
+                      onPressed: () async {
+                        if (mdpController.text != confimedMdpController.text) {
+                          //flutter toast
+                          print("Les 2 mots de passe ne correspondent pas");
+                        } else {
+                          if (formKey.currentState!.validate()) {
+                            await _signUp(nameController.text,
+                                emailController.text, mdpController.text);
+                          }
+                        }
+                      },
                       child: const Text("Valider"),
                     ),
                   ),
@@ -137,6 +150,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
           gravity: ToastGravity.CENTER,
         );
       }
+    }
+  }
+
+  Future<void>? _signUp(String nom, mail, mdp) async {
+    //set loading to true
+    List<String> nameList = nom.split(" ");
+    var formData = {
+      "nom": nameList[0],
+      "prenom": nameList[1],
+      "mail": mail,
+      "mdp": mdp,
+    };
+    print("---------------requesting $BASE_URL");
+    try {
+      http.Response response = await http.post(
+        Uri.parse(BASE_URL),
+        body: formData,
+      );
+      print(response.body);
+      var jsonresponse = json.decode(response.body);
+      if (response.statusCode.toString().startsWith("2")) {
+        try {
+          if (jsonresponse['status']) {
+            //traitement des données recues
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (ctx) => const FirstPage()),
+                (route) => false);
+          } else {
+            print("Une erreur est survenue!!! Veuillez réessayer");
+          }
+        } catch (e) {
+          print("------------${e.toString()}");
+        }
+      } else {
+        print("pb httt code statuts ${response.statusCode}");
+        // return false;
+      }
+    } catch (e) {
+      print("------------${e.toString()}");
+      // return false;
+    } finally {
+      //set loading to false
     }
   }
 }

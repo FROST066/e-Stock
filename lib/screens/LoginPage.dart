@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:e_stock/other/const.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
@@ -8,6 +10,8 @@ import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../other/styles.dart';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -83,13 +87,10 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       style: defaultStyle(context),
                       // onPressed: () => showMissing(),
-                      onPressed: () {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => const HomePage()),
-                              (route) => false);
+                          await _login(
+                              emailController.text, mdpController.text);
                         }
                       },
                       child: const Text("Connexion"),
@@ -153,6 +154,43 @@ class _LoginPageState extends State<LoginPage> {
           gravity: ToastGravity.BOTTOM,
         );
       }
+    }
+  }
+
+  Future<void>? _login(email, mdp) async {
+    //set loading to true
+    var formData = {"email": email, "mdp": mdp, "connexion": "1"};
+    print("---------------requesting $BASE_URL");
+    try {
+      http.Response response = await http.post(
+        Uri.parse(BASE_URL),
+        body: formData,
+      );
+      // print(response.body);
+      var jsonresponse = json.decode(response.body);
+      if (response.statusCode.toString().startsWith("2")) {
+        try {
+          if (jsonresponse['status']) {
+            //traitement des données recues
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (ctx) => HomePage()),
+                (route) => false);
+          } else {
+            print("Nom d'utilisateur ou mot de passe incorrect");
+          }
+        } catch (e) {
+          print("------------${e.toString()}");
+        }
+      } else {
+        print("pb httt code statuts ${response.statusCode}");
+        // return false;
+      }
+    } catch (e) {
+      print("------------${e.toString()}");
+      // return false;
+    } finally {
+      //set loading to false
     }
   }
 }
