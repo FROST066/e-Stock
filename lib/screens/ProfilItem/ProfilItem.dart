@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:e_stock/models/Shop.dart';
+import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../other/themes.dart';
 import 'AboutScreen.dart';
@@ -24,9 +26,9 @@ class ProfilItem extends StatefulWidget {
 class _ProfilItemState extends State<ProfilItem> {
   File? imageFile;
   List<Shop> shopList = [
-    Shop("89uinr", "Quincaillerie", true),
-    Shop("89inr", "Patisserie", false),
-    Shop("8uinr", "Salon de coiffure", false),
+    Shop(id: 1, shopName: "Quincaillerie", isActive: true),
+    Shop(id: 2, shopName: "Patisserie", isActive: false),
+    Shop(id: 3, shopName: "Salon de coiffure", isActive: false),
   ];
   int selectedShop = 0;
   // TabController tabController = TabController(length: 2, vsync: this);
@@ -117,8 +119,6 @@ class _ProfilItemState extends State<ProfilItem> {
                                   .copyWith(fontWeight: FontWeight.bold))
                         ]),
                   ],
-
-                  // title: const Text('Tabs Demo'),
                 ),
                 body: TabBarView(
                   children: [
@@ -145,7 +145,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(15),
-                                                color: e.isActive
+                                                color: e.isActive!
                                                     ? Theme.of(context)
                                                         .primaryColor
                                                     : appGrey),
@@ -157,9 +157,9 @@ class _ProfilItemState extends State<ProfilItem> {
                                                 Flexible(
                                                   flex: 1,
                                                   child: Text(
-                                                    e.shopName,
+                                                    e.shopName!,
                                                     style: TextStyle(
-                                                        color: e.isActive
+                                                        color: e.isActive!
                                                             ? Colors.white
                                                             : Colors.black,
                                                         fontWeight:
@@ -172,10 +172,10 @@ class _ProfilItemState extends State<ProfilItem> {
                                                     IconButton(
                                                         onPressed: () =>
                                                             showCustomDialogForSHop(
-                                                                e.id),
+                                                                e),
                                                         icon: Icon(
                                                           Icons.edit,
-                                                          color: e.isActive
+                                                          color: e.isActive!
                                                               ? Colors.white
                                                               : Theme.of(
                                                                       context)
@@ -183,7 +183,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                                         )),
                                                     IconButton(
                                                         onPressed: () =>
-                                                            removeFun(e.id),
+                                                            removeFun(e.id!),
                                                         icon: const Icon(
                                                           Icons.delete,
                                                           color: Colors.red,
@@ -256,11 +256,16 @@ class _ProfilItemState extends State<ProfilItem> {
                                     ],
                                     animate: true,
                                     curve: Curves.fastLinearToSlowEaseIn,
-                                    onToggle: (index) => switcher.changeTheme(
-                                          theme: index == 1
-                                              ? darkTheme
-                                              : lightTheme,
-                                        ));
+                                    onToggle: (index) async {
+                                      switcher.changeTheme(
+                                        theme:
+                                            index == 1 ? darkTheme : lightTheme,
+                                      );
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.setBool(
+                                          PrefKeys.IS_LIGHT, index == 0);
+                                    });
                               },
                             ),
                           ),
@@ -302,7 +307,7 @@ class _ProfilItemState extends State<ProfilItem> {
     }
   }
 
-  void updateFun(String id, String newShopName) {
+  void updateFun(int id, String newShopName) {
     shopList.firstWhere((element) => element.id == id).shopName = newShopName;
     setState(() {
       shopList;
@@ -310,32 +315,29 @@ class _ProfilItemState extends State<ProfilItem> {
   }
 
   void addFun(String shopName) {
-    shopList.add(Shop("$shopName+id", shopName, false));
+    shopList
+        .add(Shop(id: shopList.length, shopName: shopName, isActive: false));
     setState(() {
       shopList;
     });
   }
 
-  void removeFun(String shopId) {
+  void removeFun(int shopId) {
     shopList.removeWhere((element) => element.id == shopId);
     setState(() {
       shopList;
     });
   }
 
-  void showCustomDialogForSHop([String? shopId]) {
-    updateFunc(newShopName) => updateFun(shopId ?? "", newShopName);
+  void showCustomDialogForSHop([Shop? shop]) {
+    updateFunc(newShopName) => updateFun(shop!.id!, newShopName);
     showAnimatedDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext ctx) {
           return AddOrEditShopDialogWidget(
             ctx: ctx,
-            shopName: shopId != null
-                ? shopList
-                    .firstWhere((element) => element.id == shopId)
-                    .shopName
-                : null,
+            shop: shop,
             updateFun: updateFunc,
             addFun: addFun,
           );

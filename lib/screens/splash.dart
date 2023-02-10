@@ -1,3 +1,4 @@
+import 'package:e_stock/other/const.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/getStarted.dart';
@@ -23,10 +24,8 @@ class _SplashState extends State<Splash> {
 
   Future<void> checkUserConnected() async {
     final prefs = await SharedPreferences.getInstance();
-    String userName = prefs.getString('userName') ?? "";
-    if (userName == "") {
-      userIsConnected = false;
-    }
+    String? userID = prefs.getString(PrefKeys.USER_ID);
+    userIsConnected = userID != null;
   }
 
   @override
@@ -41,6 +40,7 @@ class _SplashState extends State<Splash> {
             context,
             MaterialPageRoute(
                 builder: (builder) => userIsConnected
+                    // builder: (builder) => true
                     ? const HomePage()
                     : isFirstTime
                         ? const GetStarted()

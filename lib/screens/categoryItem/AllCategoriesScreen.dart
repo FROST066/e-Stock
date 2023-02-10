@@ -13,10 +13,10 @@ class AllCategoriesScreen extends StatefulWidget {
 
 class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   List<Categorie> listCategories = [
-    Categorie("0019", "Technologies", "Une description"),
-    Categorie("0019", "Electromenager", "Une description"),
-    Categorie("0019", "Alimentation", "Une description"),
-    Categorie("0019", "Bricolage", "Une description"),
+    Categorie(1, "Technologies", "Une description"),
+    Categorie(2, "Electromenager", "Une description"),
+    Categorie(3, "Alimentation", "Une description"),
+    Categorie(4, "Bricolage", "Une description"),
   ];
   List<Categorie> listCategoriesToDisplay = [];
   List<DropdownMenuItem> items = [];
@@ -90,9 +90,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AddOrEditCategoryScreen(
-                                                        name: e.name,
-                                                        description:
-                                                            e.description))),
+                                                        categorie: e))),
                                         icon: Icon(
                                           Icons.edit,
                                           color: Theme.of(context).primaryColor,

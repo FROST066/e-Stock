@@ -1,4 +1,4 @@
-import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/themes.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
@@ -10,24 +10,29 @@ import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/screens/getStarted.dart';
+import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/screens/splash.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final themeIsLight = prefs.getBool(PrefKeys.IS_LIGHT);
+  bool isLight = themeIsLight ??
+      WidgetsBinding.instance.window.platformBrightness == Brightness.light;
+  print("isLight: $isLight");
+  runApp(MyApp(isLight: isLight));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.isLight});
+  final bool isLight;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final isPlatformDark =
-        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
-    final initTheme = isPlatformDark ? darkTheme : lightTheme;
+    final initTheme = isLight ? lightTheme : darkTheme;
     return ThemeProvider(
       initTheme: initTheme,
       builder: (_, myTheme) {

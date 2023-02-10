@@ -35,7 +35,9 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddOrEditCategoryScreen())),
+                        builder: (context) => AddOrEditCategoryScreen(
+                              categorie: null,
+                            ))),
                 backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add),
               ),

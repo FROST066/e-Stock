@@ -3,12 +3,17 @@ import 'dart:io';
 
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/screens/HomePage.dart';
+import 'package:e_stock/screens/HomepageItem/OverviewScreen.dart';
 import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
+import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/Shop.dart';
 import '../other/styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -130,32 +135,32 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void showMissing() {
-    String msg = "";
-    if (emailController.text == "" || !emailController.text.contains('@')) {
-      msg = "Entrez un email valide";
-    } else if (mdpController.text == "") {
-      msg = "Entrez un mot de passe valide";
-    } else {
-      //get UserName and save it in prefs
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (ctx) => const HomePage()),
-          (route) => false);
-    }
-    //Don't work on Linux
-    if (msg != "") {
-      print(msg);
-      if (!Platform.isLinux) {
-        Fluttertoast.showToast(
-          msg: msg,
-          fontSize: 18,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-        );
-      }
-    }
-  }
+  // void showMissing() {
+  //   String msg = "";
+  //   if (emailController.text == "" || !emailController.text.contains('@')) {
+  //     msg = "Entrez un email valide";
+  //   } else if (mdpController.text == "") {
+  //     msg = "Entrez un mot de passe valide";
+  //   } else {
+  //     //get UserName and save it in prefs
+  //     Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (ctx) => const HomePage()),
+  //         (route) => false);
+  //   }
+  //   //Don't work on Linux
+  //   if (msg != "") {
+  //     print(msg);
+  //     if (!Platform.isLinux) {
+  //       Fluttertoast.showToast(
+  //         msg: msg,
+  //         fontSize: 18,
+  //         toastLength: Toast.LENGTH_LONG,
+  //         gravity: ToastGravity.BOTTOM,
+  //       );
+  //     }
+  //   }
+  // }
 
   Future<void>? _login(email, mdp) async {
     //set loading to true
@@ -171,26 +176,107 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode.toString().startsWith("2")) {
         try {
           if (jsonresponse['status']) {
+            print(jsonresponse);
+            //save user data in shared prefs
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setInt(
+                PrefKeys.USER_ID, int.parse(json.encode(jsonresponse['id'])));
             //traitement des données recues
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (ctx) => HomePage()),
-                (route) => false);
+            List<Shop> shopList =
+                (json.decode(jsonresponse['shopList']) as List)
+                    .map((e) => Shop.fromJson(e))
+                    .toList();
+            if (shopList.length == 1) {
+              prefs.setInt(PrefKeys.SHOP_ID, shopList[0].id!);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (e) => const HomePage()),
+                  (route) => false);
+            } else {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (ctx) => shopList.isEmpty
+                          ? onShopListEmpty()
+                          : ShopList(shopList: shopList)));
+            }
           } else {
             print("Nom d'utilisateur ou mot de passe incorrect");
           }
         } catch (e) {
-          print("------------${e.toString()}");
+          print("-----1-------${e.toString()}");
         }
       } else {
         print("pb httt code statuts ${response.statusCode}");
         // return false;
       }
     } catch (e) {
-      print("------------${e.toString()}");
+      print("------2------${e.toString()}");
       // return false;
     } finally {
       //set loading to false
     }
+  }
+}
+
+class onShopListEmpty extends StatefulWidget {
+  const onShopListEmpty({super.key});
+
+  @override
+  State<onShopListEmpty> createState() => _onShopListEmptyState();
+}
+
+class _onShopListEmptyState extends State<onShopListEmpty> {
+  final shopNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+          height: 200,
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Créer une boutique ",
+                      style: GoogleFonts.oswald(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          decoration: TextDecoration.none,
+                          color: Theme.of(context).textTheme.bodyText2!.color)),
+                ],
+              ),
+              Form(
+                  key: _formKey,
+                  child: CustomTextFormField(
+                      autofocus: true,
+                      controller: shopNameController,
+                      hintText: "Nom de la boutique",
+                      prefixIcon: Icons.business_outlined)),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                margin: const EdgeInsets.only(bottom: 10),
+                child: ElevatedButton(
+                  style: defaultStyle(context),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {}
+                  },
+                  child: Text("Créer"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

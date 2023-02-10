@@ -4,17 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../models/Shop.dart';
 import '../other/styles.dart';
 
 class AddOrEditShopDialogWidget extends StatefulWidget {
   AddOrEditShopDialogWidget(
-      {super.key,
-      required this.ctx,
-      this.shopName,
-      this.updateFun,
-      this.addFun});
+      {super.key, required this.ctx, this.shop, this.updateFun, this.addFun});
   BuildContext ctx;
-  String? shopName;
+  Shop? shop;
   void Function(String)? updateFun;
   void Function(String)? addFun;
   @override
@@ -24,14 +21,15 @@ class AddOrEditShopDialogWidget extends StatefulWidget {
 
 class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
   final shopNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   late bool addOrEdit;
   @override
   void initState() {
-    shopNameController.text = widget.shopName ?? "";
-    addOrEdit = widget.shopName == null;
+    shopNameController.text = widget.shop == null ? "" : widget.shop!.shopName!;
+    addOrEdit = widget.shop == null;
     // true == add
     // false == Edit
-    print(widget.shopName);
+    print(widget.shop!.shopName);
     super.initState();
   }
 
@@ -76,6 +74,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 ],
               ),
               Form(
+                  key: _formKey,
                   child: CustomTextFormField(
                       autofocus: true,
                       controller: shopNameController,
@@ -87,10 +86,12 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 child: ElevatedButton(
                   style: defaultStyle(context),
                   onPressed: () {
-                    addOrEdit
-                        ? widget.addFun!(shopNameController.text)
-                        : widget.updateFun!(shopNameController.text);
-                    Navigator.pop(context);
+                    if (_formKey.currentState!.validate()) {
+                      addOrEdit
+                          ? widget.addFun!(shopNameController.text)
+                          : widget.updateFun!(shopNameController.text);
+                      Navigator.pop(context);
+                    }
                   },
                   child: Text(
                     addOrEdit ? "Valider " : "Modifier  ",

@@ -1,4 +1,5 @@
 class Categorie {
-  String id, name, description;
-  Categorie(this.id, this.name, this.description);
+  int categorieID;
+  String name, description;
+  Categorie(this.categorieID, this.name, this.description);
 }
