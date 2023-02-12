@@ -11,7 +11,7 @@ class PrefKeys {
 }
 
 List<Shop> shopList = [
-  Shop(id: 1, shopName: "Quincaillerie", isActive: true),
-  Shop(id: 2, shopName: "Patisserie", isActive: false),
-  Shop(id: 3, shopName: "Salon de coiffure", isActive: false),
+  Shop(1, "Quincaillerie", isActive: true),
+  Shop(2, "Patisserie", isActive: false),
+  Shop(3, "Salon de coiffure", isActive: false),
 ];

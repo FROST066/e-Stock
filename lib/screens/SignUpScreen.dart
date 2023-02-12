@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../other/const.dart';
 import '../other/styles.dart';
+import '../widgets/customFlutterToast.dart';
 import 'LoginPage.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final mdpController = TextEditingController();
   final confimedMdpController = TextEditingController();
-
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,16 +83,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: defaultStyle(context),
                       onPressed: () async {
                         if (mdpController.text != confimedMdpController.text) {
-                          //flutter toast
-                          print("Les 2 mots de passe ne correspondent pas");
+                          customFlutterToast(
+                              msg: "Les 2 mots de passe ne correspondent pas");
                         } else {
-                          if (formKey.currentState!.validate()) {
+                          if (!_isLoading && formKey.currentState!.validate()) {
                             await _signUp(nameController.text,
                                 emailController.text, mdpController.text);
                           }
                         }
                       },
-                      child: const Text("Valider"),
+                      child: !_isLoading
+                          ? const Text("Valider")
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.white)),
                     ),
                   ),
                   Row(
@@ -153,8 +158,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  Future<void>? _signUp(String nom, mail, mdp) async {
-    //set loading to true
+  _signUp(String nom, mail, mdp) async {
+    setState(() {
+      _isLoading = true;
+    });
     List<String> nameList = nom.split(" ");
     var formData = {
       "nom": nameList[0],
@@ -164,35 +171,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
     };
     print("---------------requesting $BASE_URL");
     try {
-      http.Response response = await http.post(
-        Uri.parse(BASE_URL),
-        body: formData,
-      );
-      print(response.body);
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: formData);
+      // print(response.body);
       var jsonresponse = json.decode(response.body);
       if (response.statusCode.toString().startsWith("2")) {
         try {
           if (jsonresponse['status']) {
             //traitement des données recues
+            customFlutterToast(msg: "Inscription réussie");
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (ctx) => const FirstPage()),
                 (route) => false);
           } else {
-            print("Une erreur est survenue!!! Veuillez réessayer");
+            customFlutterToast(
+                msg: "Une erreur est survenue!!! Veuillez réessayer");
           }
         } catch (e) {
-          print("------------${e.toString()}");
+          print("------1------${e.toString()}");
         }
       } else {
         print("pb httt code statuts ${response.statusCode}");
         // return false;
       }
     } catch (e) {
-      print("------------${e.toString()}");
+      print("------2------${e.toString()}");
       // return false;
     } finally {
-      //set loading to false
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

@@ -26,9 +26,9 @@ class ProfilItem extends StatefulWidget {
 class _ProfilItemState extends State<ProfilItem> {
   File? imageFile;
   List<Shop> shopList = [
-    Shop(id: 1, shopName: "Quincaillerie", isActive: true),
-    Shop(id: 2, shopName: "Patisserie", isActive: false),
-    Shop(id: 3, shopName: "Salon de coiffure", isActive: false),
+    Shop(1, "Quincaillerie", isActive: true),
+    Shop(2, "Patisserie", isActive: false),
+    Shop(3, "Salon de coiffure", isActive: false),
   ];
   int selectedShop = 0;
   // TabController tabController = TabController(length: 2, vsync: this);
@@ -157,7 +157,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                                 Flexible(
                                                   flex: 1,
                                                   child: Text(
-                                                    e.shopName!,
+                                                    e.shopName,
                                                     style: TextStyle(
                                                         color: e.isActive!
                                                             ? Colors.white
@@ -183,7 +183,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                                         )),
                                                     IconButton(
                                                         onPressed: () =>
-                                                            removeFun(e.id!),
+                                                            removeFun(e.id),
                                                         icon: const Icon(
                                                           Icons.delete,
                                                           color: Colors.red,
@@ -278,14 +278,50 @@ class _ProfilItemState extends State<ProfilItem> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (builder) => AboutScreen()))),
-                          settingItem(Icons.logout, "Déconnexion", () {
-                            //traitement
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => const FirstPage()),
-                                (route) => false);
+                          settingItem(Icons.logout, "Déconnexion", () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.clear();
+                            if (mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) => const FirstPage()),
+                                  (route) => false);
+                            }
                           }),
+
+                          // InkWell(
+                          //   child: Container(
+                          //     padding: const EdgeInsets.symmetric(vertical: 12),
+                          //     child: Row(
+                          //       children: [
+                          //         Icon(Icons.logout,
+                          //             color: Theme.of(context).primaryColor,
+                          //             size: 30),
+                          //         SizedBox(
+                          //             width: MediaQuery.of(context).size.width *
+                          //                 .09),
+                          //         Text("Déconnexion",
+                          //             style: TextStyle(
+                          //                 color: Theme.of(context).primaryColor,
+                          //                 fontSize: 20)),
+                          //       ],
+                          //     ),
+                          //   ),
+                          //   onTap: () async {
+                          //     final prefs =
+                          //         await SharedPreferences.getInstance();
+                          //     prefs.clear();
+                          //     if (mounted) {
+                          //       Navigator.pushAndRemoveUntil(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (builder) =>
+                          //                   const FirstPage()),
+                          //           (route) => false);
+                          //     }
+                          //   },
+                          // ),
                         ],
                       ),
                     )
@@ -315,8 +351,7 @@ class _ProfilItemState extends State<ProfilItem> {
   }
 
   void addFun(String shopName) {
-    shopList
-        .add(Shop(id: shopList.length, shopName: shopName, isActive: false));
+    shopList.add(Shop(shopList.length, shopName, isActive: false));
     setState(() {
       shopList;
     });
@@ -330,7 +365,7 @@ class _ProfilItemState extends State<ProfilItem> {
   }
 
   void showCustomDialogForSHop([Shop? shop]) {
-    updateFunc(newShopName) => updateFun(shop!.id!, newShopName);
+    updateFunc(newShopName) => updateFun(shop!.id, newShopName);
     showAnimatedDialog(
         context: context,
         barrierDismissible: true,

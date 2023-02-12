@@ -1,13 +1,10 @@
-import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/HomepageItem/OverviewScreen.dart';
 import 'package:e_stock/screens/ProfilItem/ProfilItem.dart';
 import 'package:e_stock/screens/TransactionsItem/TransactionScreen.dart';
 import 'package:e_stock/screens/categoryItem/AddOrEditCategoryScreen.dart';
 import 'package:e_stock/screens/categoryItem/AllCategoriesScreen.dart';
-import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:pie_chart/pie_chart.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class HomePage extends StatefulWidget {

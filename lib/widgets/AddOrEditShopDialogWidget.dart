@@ -1,8 +1,6 @@
-import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../models/Shop.dart';
 import '../other/styles.dart';
@@ -25,7 +23,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
   late bool addOrEdit;
   @override
   void initState() {
-    shopNameController.text = widget.shop == null ? "" : widget.shop!.shopName!;
+    shopNameController.text = widget.shop == null ? "" : widget.shop!.shopName;
     addOrEdit = widget.shop == null;
     // true == add
     // false == Edit

@@ -2,6 +2,7 @@ import 'package:e_stock/other/const.dart';
 import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/getStarted.dart';
+import 'package:e_stock/screens/shopList.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,37 +15,33 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   //Just initialisation
-  bool isFirstTime = true, userIsConnected = false;
+  bool? isFirstTime;
+  int? userID, shopID;
 
-  Future<void> checkIfFirstTime() async {
+  initialize() async {
     final prefs = await SharedPreferences.getInstance();
-    isFirstTime = prefs.getBool('isFirstTime') ?? true;
-    if (isFirstTime) prefs.setBool('isFirstTime', false);
-  }
-
-  Future<void> checkUserConnected() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? userID = prefs.getString(PrefKeys.USER_ID);
-    userIsConnected = userID != null;
+    isFirstTime = prefs.getBool('isFirstTime');
+    userID = prefs.getInt(PrefKeys.USER_ID);
+    shopID = prefs.getInt(PrefKeys.SHOP_ID);
+    if (isFirstTime == null) prefs.setBool('isFirstTime', false);
   }
 
   @override
   void initState() {
     super.initState();
-    checkIfFirstTime().whenComplete(() => print("isFirstTime: $isFirstTime"));
-    checkUserConnected()
-        .whenComplete(() => print("user connected: $userIsConnected"));
-    Future.delayed(
-        const Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (builder) => userIsConnected
-                    // builder: (builder) => true
-                    ? const HomePage()
-                    : isFirstTime
-                        ? const GetStarted()
-                        : const FirstPage())));
+    initialize();
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (builder) => userID == null
+                  ? isFirstTime == null
+                      ? const GetStarted()
+                      : const FirstPage()
+                  : shopID == null
+                      ? const ShopList()
+                      : const HomePage()));
+    });
   }
 
   @override
