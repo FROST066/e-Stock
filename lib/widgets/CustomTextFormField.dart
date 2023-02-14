@@ -2,28 +2,33 @@ import 'package:e_stock/other/styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({
-    super.key,
-    this.controller,
-    this.validatorFun,
-    required this.hintText,
-    this.prefixIcon,
-    this.textInputType,
-    this.autofocus,
-    this.maxLines,
-  });
+  CustomTextFormField(
+      {super.key,
+      this.controller,
+      this.validatorFun,
+      required this.hintText,
+      this.prefixIcon,
+      this.textInputType,
+      this.autofocus,
+      this.maxLines,
+      this.textAlign,
+      this.onChanged});
   TextEditingController? controller;
   String hintText;
   IconData? prefixIcon;
   TextInputType? textInputType;
   bool? obscureText, autofocus;
   int? maxLines;
+  TextAlign? textAlign;
   String? Function(String?)? validatorFun;
+  void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
+        textAlign: textAlign ?? TextAlign.start,
+        onChanged: onChanged ?? (value) {},
         autofocus: autofocus ?? false,
         maxLines: maxLines ?? 1,
         style: const TextStyle(color: Colors.black),

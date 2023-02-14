@@ -1,4 +1,4 @@
-import 'package:e_stock/models/produit.dart';
+import 'package:e_stock/models/product.dart';
 import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -19,49 +19,44 @@ TextStyle ts = const TextStyle(
 );
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
-  List<Produit> list = [
-    Produit(
-        "1",
-        "Tomato",
-        "bla bal balla bla bla bla c'est une longue descritption",
-        "1",
-        50,
-        50,
-        50),
-    Produit(
-        "2",
-        "Carotte",
-        "bla bal balla bla bla bla c'est une longue descritption",
-        "1",
-        20,
-        250,
-        5000),
-    Produit(
-        "3",
-        "Avocat",
-        "bla bal balla bla bla bla c'est une longue descritption",
-        "3",
-        10,
-        100,
-        150),
-    Produit(
-        "4",
-        "Ananas",
-        "bla bal balla bla bla bla c'est une longue descritption",
-        "3",
-        50,
-        50,
-        2500),
-    Produit(
-        "5",
-        "Tomato",
-        "bla bal balla bla bla bla c'est une longue descritption",
-        "2",
-        30,
-        40,
-        100),
+  List<Product> list = [
+    Product(
+      productId: 1,
+      name: "Carotte",
+      description: "bla bal balla bla bla bla c'est une longue descritption",
+      categoryId: 1,
+      low: 20,
+      sellingPrice: 250,
+      purchasePrice: 500,
+    ),
+    Product(
+      productId: 2,
+      name: "Tomate",
+      description: "bla bal balla bla bla bla c'est une longue descritption",
+      categoryId: 1,
+      low: 30,
+      sellingPrice: 350,
+      purchasePrice: 500,
+    ),
+    Product(
+      productId: 2,
+      name: "Carotte",
+      description: "bla bal balla bla bla bla c'est une longue descritption",
+      categoryId: 1,
+      low: 20,
+      sellingPrice: 250,
+      purchasePrice: 500,
+    ),
+    Product(
+      productId: 3,
+      name: "Pomme",
+      description: "bla bal balla bla bla bla c'est une longue descritption",
+      categoryId: 1,
+      low: 10,
+      sellingPrice: 100,
+      purchasePrice: 300,
+    ),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +131,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   }
 }
 
-Widget customCard(Produit e, BuildContext context) {
+Widget customCard(Product e, BuildContext context) {
   // print(e);
   return GestureDetector(
     onTap: () => showCustomDialog(context, e),
@@ -185,7 +180,7 @@ Widget customCard(Produit e, BuildContext context) {
                       style: ts.copyWith(
                           color: ThemeData.dark().scaffoldBackgroundColor)),
                   Text(
-                    "${e.priceV} FCFA",
+                    "${e.sellingPrice} FCFA",
                     style: TextStyle(
                         color: ThemeData.dark().scaffoldBackgroundColor),
                   ),
@@ -200,7 +195,7 @@ Widget customCard(Produit e, BuildContext context) {
   );
 }
 
-void showCustomDialog(BuildContext context, Produit e) {
+void showCustomDialog(BuildContext context, Product e) {
   showAnimatedDialog(
       context: context,
       barrierDismissible: true,

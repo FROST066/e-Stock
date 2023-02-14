@@ -2,10 +2,10 @@ import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-import '../models/produit.dart';
+import '../models/product.dart';
 import '../other/styles.dart';
 
-Widget productDialogWidget(BuildContext ctx, Produit e) {
+Widget productDialogWidget(BuildContext ctx, Product e) {
   return Center(
     child: Container(
       decoration: BoxDecoration(
@@ -65,7 +65,7 @@ Widget productDialogWidget(BuildContext ctx, Produit e) {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Catégorie: ${e.idCategorie}",
+                      "Catégorie: ${e.categoryId}",
                       style: GoogleFonts.quicksand(
                           fontSize: 13,
                           decoration: TextDecoration.none,
@@ -107,8 +107,8 @@ Widget productDialogWidget(BuildContext ctx, Produit e) {
             ),
           ),
           customTableWithArray([
-            ["Prix d'achat", e.priceA.toString()],
-            ["Prix de vente", e.priceV.toString()],
+            ["Prix d'achat", e.purchasePrice.toString()],
+            ["Prix de vente", e.sellingPrice.toString()],
             ["Stock critique", e.low.toString()],
           ], ctx),
           Padding(

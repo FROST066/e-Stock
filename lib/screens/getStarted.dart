@@ -1,5 +1,5 @@
 import 'package:e_stock/other/styles.dart';
-import 'package:e_stock/screens/FirstPage.dart';
+import 'package:e_stock/screens/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 class GetStarted extends StatelessWidget {
@@ -32,7 +32,7 @@ class GetStarted extends StatelessWidget {
             child: TextButton(
                 style: defaultStyle(context),
                 onPressed: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (ctx) => const FirstPage())),
+                    MaterialPageRoute(builder: (ctx) => const LoginPage())),
                 child: const Text("Get started")),
           )
         ],

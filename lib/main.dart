@@ -1,6 +1,5 @@
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/themes.dart';
-import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
 import 'package:e_stock/screens/PasswordForgot/Congrats.dart';

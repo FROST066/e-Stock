@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       //traitement
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (ctx) => const FirstPage()),
+          MaterialPageRoute(builder: (ctx) => const LoginPage()),
           (route) => false);
     }
     //Don't work on Linux
@@ -182,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             customFlutterToast(msg: "Inscription réussie");
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (ctx) => const FirstPage()),
+                MaterialPageRoute(builder: (ctx) => const LoginPage()),
                 (route) => false);
           } else {
             customFlutterToast(

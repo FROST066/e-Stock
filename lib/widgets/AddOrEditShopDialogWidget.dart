@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import '../models/Shop.dart';
+import '../other/const.dart';
 import '../other/styles.dart';
 
 class AddOrEditShopDialogWidget extends StatefulWidget {
@@ -11,7 +15,7 @@ class AddOrEditShopDialogWidget extends StatefulWidget {
   BuildContext ctx;
   Shop? shop;
   void Function(String)? updateFun;
-  void Function(String)? addFun;
+  void Function(int, String)? addFun;
   @override
   State<AddOrEditShopDialogWidget> createState() =>
       _AddOrEditShopDialogWidgetState();
@@ -21,13 +25,86 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
   final shopNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late bool addOrEdit;
+  bool _isCreating = false;
+
+  createShop() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt(PrefKeys.USER_ID);
+    setState(() {
+      _isCreating = true;
+    });
+    final formData = {
+      "createMagasin": "1",
+      "nom": shopNameController.text,
+      "user": "$userID"
+    };
+    try {
+      print("---------------requesting $BASE_URL");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: formData);
+      // print(response.statusCode);
+      var jsonresponse = json.decode(response.body);
+      print(jsonresponse);
+      try {
+        widget.addFun!(int.parse(jsonresponse['id']), shopNameController.text);
+      } catch (e) {
+        print("-----1-------${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      // return false;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCreating = false;
+        });
+      }
+    }
+  }
+
+  updateShop() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt(PrefKeys.USER_ID);
+    setState(() {
+      _isCreating = true;
+    });
+    final formData = {
+      "updateShop": "1",
+      "nom": shopNameController.text,
+      "userID": "$userID",
+      "ShopId": "${widget.shop!.id}"
+    };
+    try {
+      print("---------------requesting $BASE_URL  for update");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: formData);
+      // print(response.statusCode);
+      // print(response.body);
+      var jsonresponse = json.decode(response.body);
+      print(jsonresponse);
+      try {
+        widget.updateFun!(shopNameController.text);
+      } catch (e) {
+        print("-----1-------${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      // return false;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCreating = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     shopNameController.text = widget.shop == null ? "" : widget.shop!.shopName;
     addOrEdit = widget.shop == null;
     // true == add
     // false == Edit
-    print(widget.shop!.shopName);
     super.initState();
   }
 
@@ -50,7 +127,6 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // const SizedBox(),
                   Text(
                       addOrEdit
                           ? "Ajouter une boutique "
@@ -83,17 +159,19 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
                   style: defaultStyle(context),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      addOrEdit
-                          ? widget.addFun!(shopNameController.text)
-                          : widget.updateFun!(shopNameController.text);
+                  onPressed: () async {
+                    if (!_isCreating && _formKey.currentState!.validate()) {
+                      addOrEdit ? await createShop() : await updateShop();
                       Navigator.pop(context);
                     }
                   },
-                  child: Text(
-                    addOrEdit ? "Valider " : "Modifier  ",
-                  ),
+                  child: _isCreating
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(addOrEdit ? "Valider " : "Modifier  "),
                 ),
               ),
             ],

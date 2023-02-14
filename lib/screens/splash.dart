@@ -1,6 +1,6 @@
 import 'package:e_stock/other/const.dart';
-import 'package:e_stock/screens/FirstPage.dart';
 import 'package:e_stock/screens/HomePage.dart';
+import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/screens/getStarted.dart';
 import 'package:e_stock/screens/shopList.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +30,17 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
     initialize();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (builder) => userID == null
+          PageRouteBuilder(
+              transitionsBuilder: (_, a, __, c) =>
+                  FadeTransition(opacity: a, child: c),
+              transitionDuration: const Duration(seconds: 1),
+              pageBuilder: (builder, _, __) => userID == null
                   ? isFirstTime == null
                       ? const GetStarted()
-                      : const FirstPage()
+                      : const LoginPage()
                   : shopID == null
                       ? const ShopList()
                       : const HomePage()));
@@ -55,8 +58,7 @@ class _SplashState extends State<Splash> {
             children: [
               Container(
                 margin: const EdgeInsets.only(bottom: 15),
-                height: MediaQuery.of(context).size.height * 0.4,
-                // width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height * 0.2,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.contain,
@@ -66,9 +68,9 @@ class _SplashState extends State<Splash> {
                   style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
             ],
           ),
-          CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          )
+          // CircularProgressIndicator(
+          //   color: Theme.of(context).primaryColor,
+          // )
         ],
       )),
     );

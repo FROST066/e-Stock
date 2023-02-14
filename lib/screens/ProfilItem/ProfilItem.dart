@@ -1,9 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/styles.dart';
-import 'package:e_stock/screens/FirstPage.dart';
+import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +15,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../other/themes.dart';
 import 'AboutScreen.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilItem extends StatefulWidget {
   const ProfilItem({super.key});
@@ -25,13 +26,58 @@ class ProfilItem extends StatefulWidget {
 
 class _ProfilItemState extends State<ProfilItem> {
   File? imageFile;
-  List<Shop> shopList = [
-    Shop(1, "Quincaillerie", isActive: true),
-    Shop(2, "Patisserie", isActive: false),
-    Shop(3, "Salon de coiffure", isActive: false),
-  ];
-  int selectedShop = 0;
-  // TabController tabController = TabController(length: 2, vsync: this);
+  late SharedPreferences prefs;
+  List<Shop>? shopList;
+  bool _isLoading = false;
+  loadShopList() async {
+    prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt(PrefKeys.USER_ID);
+    final shopID = prefs.getInt(PrefKeys.SHOP_ID);
+    setState(() {
+      _isLoading = true;
+    });
+    final url = "$BASE_URL?magasins=1&owner=$userID";
+    try {
+      print("---------------requesting $url");
+      http.Response response = await http.get(Uri.parse(url));
+      // print("Direct response ${response.body}");
+      var jsonresponse = json.decode(response.body);
+      print(jsonresponse);
+      print(response.statusCode);
+      try {
+        shopList = (jsonresponse as List).map((e) => Shop.fromJson(e)).toList();
+        for (var element in shopList!) {
+          element.isActive = false;
+          if (element.id == shopID) {
+            element.isActive = true;
+          }
+        }
+        moveToTop(shopList!.firstWhere((element) => element.isActive == true));
+      } catch (e) {
+        print("-----1-------${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      // return false;
+    } finally {
+      setState(() {
+        _isLoading = false;
+        shopList;
+      });
+    }
+  }
+
+  void moveToTop(Shop shop) {
+    shopList!.remove(shop);
+    shopList!.insert(0, shop);
+  }
+
+  @override
+  void initState() {
+    loadShopList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLight = Theme.of(context).brightness == Brightness.light;
@@ -129,83 +175,139 @@ class _ProfilItemState extends State<ProfilItem> {
                         children: [
                           Flexible(
                               flex: 8,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: shopList
-                                      .map((e) => Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 6),
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 7),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.9,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: e.isActive!
-                                                    ? Theme.of(context)
-                                                        .primaryColor
-                                                    : appGrey),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    e.shopName,
-                                                    style: TextStyle(
-                                                        color: e.isActive!
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 17),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    IconButton(
-                                                        onPressed: () =>
-                                                            showCustomDialogForSHop(
-                                                                e),
-                                                        icon: Icon(
-                                                          Icons.edit,
-                                                          color: e.isActive!
-                                                              ? Colors.white
-                                                              : Theme.of(
-                                                                      context)
-                                                                  .primaryColor,
-                                                        )),
-                                                    IconButton(
-                                                        onPressed: () =>
-                                                            removeFun(e.id),
-                                                        icon: const Icon(
-                                                          Icons.delete,
-                                                          color: Colors.red,
-                                                        ))
-                                                  ],
-                                                ),
-                                              ],
+                              child: _isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : shopList == null
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 35, vertical: 15),
+                                              child: Text(
+                                                  "Une erreur s'est produite. Verifiez votre connexion internet et rechargez la page"),
                                             ),
-                                          ))
-                                      .toList(),
-                                ),
-                              )),
+                                            ElevatedButton(
+                                                style: defaultStyle(context),
+                                                onPressed: () async =>
+                                                    await loadShopList(),
+                                                child: const Text("Recharger"))
+                                          ],
+                                        )
+                                      : SingleChildScrollView(
+                                          child: Column(
+                                            children: shopList!
+                                                .map((e) => InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          for (var element
+                                                              in shopList!) {
+                                                            element.isActive =
+                                                                false;
+                                                          }
+                                                          e.isActive = true;
+                                                        });
+                                                        moveToTop(e);
+                                                        prefs.setInt(
+                                                            PrefKeys.SHOP_ID,
+                                                            e.id);
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 6),
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 7),
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
+                                                        height: 60,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            color: e.isActive!
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .primaryColor
+                                                                : appGrey),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Flexible(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                e.shopName,
+                                                                style: TextStyle(
+                                                                    color: e.isActive!
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        17),
+                                                              ),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                IconButton(
+                                                                    onPressed: () =>
+                                                                        showCustomDialogForSHop(
+                                                                            e),
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color: e.isActive!
+                                                                          ? Colors
+                                                                              .white
+                                                                          : Theme.of(context)
+                                                                              .primaryColor,
+                                                                    )),
+                                                                Visibility(
+                                                                  visible: e
+                                                                          .id !=
+                                                                      prefs.getInt(
+                                                                          PrefKeys
+                                                                              .SHOP_ID)!,
+                                                                  child: IconButton(
+                                                                      onPressed: () => removeFun(e.id),
+                                                                      icon: const Icon(
+                                                                        Icons
+                                                                            .delete,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      )),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ))
+                                                .toList(),
+                                          ),
+                                        )),
                           Flexible(
                             flex: 2,
                             child: SizedBox(
                               width: 100,
-                              // margin: const EdgeInsets.only(bottom: 10),
                               child: ElevatedButton(
                                 style: defaultStyle(context),
                                 onPressed: () => showCustomDialogForSHop(),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [
                                     Icon(Icons.add),
                                     Text("Créer",
@@ -285,43 +387,10 @@ class _ProfilItemState extends State<ProfilItem> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (builder) => const FirstPage()),
+                                      builder: (builder) => const LoginPage()),
                                   (route) => false);
                             }
                           }),
-
-                          // InkWell(
-                          //   child: Container(
-                          //     padding: const EdgeInsets.symmetric(vertical: 12),
-                          //     child: Row(
-                          //       children: [
-                          //         Icon(Icons.logout,
-                          //             color: Theme.of(context).primaryColor,
-                          //             size: 30),
-                          //         SizedBox(
-                          //             width: MediaQuery.of(context).size.width *
-                          //                 .09),
-                          //         Text("Déconnexion",
-                          //             style: TextStyle(
-                          //                 color: Theme.of(context).primaryColor,
-                          //                 fontSize: 20)),
-                          //       ],
-                          //     ),
-                          //   ),
-                          //   onTap: () async {
-                          //     final prefs =
-                          //         await SharedPreferences.getInstance();
-                          //     prefs.clear();
-                          //     if (mounted) {
-                          //       Navigator.pushAndRemoveUntil(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //               builder: (builder) =>
-                          //                   const FirstPage()),
-                          //           (route) => false);
-                          //     }
-                          //   },
-                          // ),
                         ],
                       ),
                     )
@@ -344,21 +413,22 @@ class _ProfilItemState extends State<ProfilItem> {
   }
 
   void updateFun(int id, String newShopName) {
-    shopList.firstWhere((element) => element.id == id).shopName = newShopName;
+    shopList!.firstWhere((element) => element.id == id).shopName = newShopName;
     setState(() {
       shopList;
     });
   }
 
-  void addFun(String shopName) {
-    shopList.add(Shop(shopList.length, shopName, isActive: false));
+  void addFun(int id, String shopName) {
+    shopList!.add(Shop(id, shopName, isActive: false));
     setState(() {
       shopList;
     });
   }
 
   void removeFun(int shopId) {
-    shopList.removeWhere((element) => element.id == shopId);
+    //request to remove shop
+    shopList!.removeWhere((element) => element.id == shopId);
     setState(() {
       shopList;
     });
