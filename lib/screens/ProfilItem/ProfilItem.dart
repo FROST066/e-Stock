@@ -426,8 +426,20 @@ class _ProfilItemState extends State<ProfilItem> {
     });
   }
 
-  void removeFun(int shopId) {
-    //request to remove shop
+  removeFun(int shopId) async {
+    final formData = {"deleteMagasin": "1", "magasinId": "$shopId"};
+    try {
+      print("---------------requesting $BASE_URL  for remove");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: formData);
+      // print(response.statusCode);
+      // print(response.body);
+      var jsonresponse = json.decode(response.body);
+      print(jsonresponse);
+    } catch (e) {
+      print("------2------${e.toString()}");
+      // return false;
+    } finally {}
     shopList!.removeWhere((element) => element.id == shopId);
     setState(() {
       shopList;
