@@ -9,14 +9,14 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'categoryItem/AllCategoriesScreen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+  const HomePage({super.key, this.selectedIndex});
+  final int? selectedIndex;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   List<Widget> listPages = const [
     OverViewScreen(),
@@ -25,16 +25,24 @@ class _HomePageState extends State<HomePage> {
     ProfilItem()
   ];
   @override
+  void initState() {
+    _selectedIndex = widget.selectedIndex ?? 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: _selectedIndex != 1
             ? null
             : FloatingActionButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddOrEditCategoryScreen(category: null))),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddOrEditCategoryScreen(category: null)));
+                },
                 backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add),
               ),
@@ -42,10 +50,7 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: Container(
             decoration: BoxDecoration(
               boxShadow: [
-                BoxShadow(
-                  blurRadius: 20,
-                  color: Colors.black.withOpacity(.1),
-                )
+                BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
               ],
             ),
             child: SafeArea(

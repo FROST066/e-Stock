@@ -174,22 +174,19 @@ class _AllCategoryListViewItemState extends State<AllCategoryListViewItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.e.name,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17),
-                ),
-                Text(widget.e.description,
-                    style: const TextStyle(color: Colors.black)),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.e.name,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17),
+              ),
+              Text(widget.e.description,
+                  style: const TextStyle(color: Colors.black)),
+            ],
           ),
           _isRemoving
               ? const SizedBox(
@@ -228,8 +225,8 @@ class _AllCategoryListViewItemState extends State<AllCategoryListViewItem> {
     });
 
     final formData = {
-      "deleteCategory": "1",
-      "CategoryId": "${widget.e.categoryId}"
+      "deleteCategorie": "1",
+      "categorieId": "${widget.e.categoryId}"
     };
     try {
       print("---------------requesting $BASE_URL  for remove category");

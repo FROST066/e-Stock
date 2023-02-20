@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:e_stock/models/Category.dart';
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../other/const.dart';
+import '../../widgets/customFlutterToast.dart';
 
 class AddOrEditCategoryScreen extends StatefulWidget {
   AddOrEditCategoryScreen({super.key, required this.category});
@@ -23,6 +25,7 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
   final categNameController = TextEditingController();
   final descController = TextEditingController();
   late bool addOrEdit;
+  bool _isLoading = false;
   @override
   void initState() {
     categNameController.text =
@@ -33,6 +36,52 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
     // true == add
     // false == Edit
     super.initState();
+  }
+
+  addOrEditFunc() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
+    final formData = {
+      "categoryID": addOrEdit ? "0" : widget.category!.categoryId.toString(),
+      "nom": categNameController.text,
+      "descriptions": descController.text,
+      "magasin": "${shopId!}",
+    };
+    try {
+      print("---------------requesting $BASE_URL for Category");
+      try {
+        http.Response response = await http.post(
+          Uri.parse(BASE_URL),
+          body: formData,
+        );
+        print("Avant jsondecode ${response.body}");
+        var jsonresponse = json.decode(response.body);
+
+        if (jsonresponse['status']) {
+          print(jsonresponse);
+          //traitement des données recues
+          // Navigator.pop(context);
+          if (mounted) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => const HomePage(selectedIndex: 1)),
+                (route) => false);
+          }
+        }
+      } catch (e) {
+        print("-----1-------${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -83,55 +132,15 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
                           child: ElevatedButton(
                             style: defaultStyle(context),
                             onPressed: () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
-                              print(shopId);
-                              final formData = {
-                                "categoryID": addOrEdit
-                                    ? "0"
-                                    : widget.category!.categoryId.toString(),
-                                "nom": categNameController.text,
-                                "descriptions": descController.text,
-                                "magasin": shopId!.toString(),
-                              };
-                              print(
-                                  "---------------requesting $BASE_URL for Category");
-                              try {
-                                http.Response response = await http.post(
-                                  Uri.parse(BASE_URL),
-                                  body: formData,
-                                );
-                                print("Avant jsondecode ${response.body}");
-                                var jsonresponse = json.decode(response.body);
-                                if (response.statusCode
-                                    .toString()
-                                    .startsWith("2")) {
-                                  try {
-                                    if (jsonresponse['status']) {
-                                      print(jsonresponse);
-                                      //traitement des données recues
-                                      Navigator.pop(context);
-                                    } else {
-                                      print(
-                                          "Une erreur est survenue lors de l'ajout de la catégorie");
-                                    }
-                                  } catch (e) {
-                                    print("-----1-------${e.toString()}");
-                                  }
-                                } else {
-                                  print(
-                                      "pb httt code statuts ${response.statusCode}");
-                                  // return false;
-                                }
-                              } catch (e) {
-                                print("------2------${e.toString()}");
-                                // return false;
-                              } finally {
-                                //set loading to false
+                              if (!_isLoading &&
+                                  formKey.currentState!.validate()) {
+                                await addOrEditFunc();
                               }
                             },
-                            child: Text(addOrEdit ? "Ajouter " : "Enregistrer"),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : Text(addOrEdit ? "Ajouter " : "Enregistrer"),
                           ),
                         ),
                       ],
