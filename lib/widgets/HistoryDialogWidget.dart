@@ -64,7 +64,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Catégorie: ${e['categorie']!}",
+                      "Catégorie: ${e['Category']!}",
                       style: GoogleFonts.quicksand(
                           fontSize: 13,
                           decoration: TextDecoration.none,

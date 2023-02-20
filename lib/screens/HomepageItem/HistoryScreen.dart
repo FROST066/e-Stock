@@ -33,7 +33,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     children: [
                   {
                     "name": "Tomato",
-                    "categorie": "Fruit",
+                    "Category": "Fruit",
                     "type": "V",
                     "hour": "10:34",
                     "date": "31-12-2022",
@@ -43,7 +43,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                   {
                     "name": "Ananas",
-                    "categorie": "Fruit",
+                    "Category": "Fruit",
                     "type": "A",
                     "hour": "10:34",
                     "date": "31-12-2022",
@@ -53,7 +53,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   },
                   {
                     "name": "Tomato",
-                    "categorie": "Fruit",
+                    "Category": "Fruit",
                     "type": "V",
                     "hour": "10:34",
                     "date": "31-12-2022",

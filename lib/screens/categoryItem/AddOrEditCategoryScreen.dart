@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:e_stock/models/Categorie.dart';
+import 'package:e_stock/models/Category.dart';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,8 @@ import 'package:http/http.dart' as http;
 import '../../other/const.dart';
 
 class AddOrEditCategoryScreen extends StatefulWidget {
-  AddOrEditCategoryScreen({super.key, required this.categorie});
-  Categorie? categorie;
+  AddOrEditCategoryScreen({super.key, required this.category});
+  Category? category;
   @override
   State<AddOrEditCategoryScreen> createState() =>
       _AddOrEditCategoryScreenState();
@@ -26,10 +26,10 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
   @override
   void initState() {
     categNameController.text =
-        widget.categorie == null ? "" : widget.categorie!.name;
+        widget.category == null ? "" : widget.category!.name;
     descController.text =
-        widget.categorie == null ? "" : widget.categorie!.description;
-    addOrEdit = widget.categorie == null;
+        widget.category == null ? "" : widget.category!.description;
+    addOrEdit = widget.category == null;
     // true == add
     // false == Edit
     super.initState();
@@ -90,13 +90,13 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
                               final formData = {
                                 "categoryID": addOrEdit
                                     ? "0"
-                                    : widget.categorie!.categorieID.toString(),
+                                    : widget.category!.categoryId.toString(),
                                 "nom": categNameController.text,
                                 "descriptions": descController.text,
                                 "magasin": shopId!.toString(),
                               };
                               print(
-                                  "---------------requesting $BASE_URL for categorie");
+                                  "---------------requesting $BASE_URL for Category");
                               try {
                                 http.Response response = await http.post(
                                   Uri.parse(BASE_URL),

@@ -1,5 +1,3 @@
-import 'package:e_stock/models/Categorie.dart';
-
 // To parse this JSON data, do
 //
 //     final product = productFromJson(jsonString);

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:e_stock/models/order.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
@@ -38,8 +36,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .toList();
     prefs = await SharedPreferences.getInstance();
     int? shopID = prefs.getInt(PrefKeys.SHOP_ID);
-    commande =
-        Order(orderId: 1, shopId: shopID!, list: [OrderItem(), OrderItem()]);
+    commande = Order(orderId: 1, type: 0, shopId: shopID!, list: []);
     setState(() {
       _isLoading = false;
     });
@@ -127,6 +124,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             labels: const ['ENTREE', 'SORTIE'],
                             radiusStyle: true,
                             onToggle: (index) {
+                              // 1 correspond a vente et 0 a approvisionnement
+                              commande.type = index ?? 0;
                               print('switched to: $index');
                             },
                           ),
@@ -173,10 +172,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       child: ElevatedButton(
                         style: defaultStyle(context),
                         onPressed: () {
-                          for (var item in transactionItemList) {
-                            print(
-                                "${item.product.name}    ${item.quantityController.text}");
-                          }
+                          commande.list = transactionItemList
+                              .map((e) => OrderItem(
+                                    productId: e.product.productId,
+                                    quantity:
+                                        int.parse(e.quantityController.text),
+                                  ))
+                              .toList();
+
+                          print(productToJson(listProductsToDisplay[0]));
+                          // print(orderToJson(commande));
                         },
                         child: const Text("Valider"),
                       ),

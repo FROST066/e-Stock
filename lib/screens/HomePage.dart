@@ -2,10 +2,11 @@ import 'package:e_stock/screens/HomepageItem/OverviewScreen.dart';
 import 'package:e_stock/screens/ProfilItem/ProfilItem.dart';
 import 'package:e_stock/screens/TransactionsItem/TransactionScreen.dart';
 import 'package:e_stock/screens/categoryItem/AddOrEditCategoryScreen.dart';
-import 'package:e_stock/screens/categoryItem/AllCategoriesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+
+import 'categoryItem/AllCategoriesScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,9 +33,8 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddOrEditCategoryScreen(
-                              categorie: null,
-                            ))),
+                        builder: (context) =>
+                            AddOrEditCategoryScreen(category: null))),
                 backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add),
               ),
