@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     children: [
                       CustomTextFormField(
                           controller: nameController,
-                          hintText: "Nom et Prenoms",
+                          hintText: "Nom d'utilisateur",
                           prefixIcon: Icons.person),
                       CustomTextFormField(
                           controller: emailController,
@@ -161,14 +161,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isLoading = true;
     });
-    List<String> nameList = nom.split(" ");
-    var formData = {
-      "nom": nameList[0],
-      "prenom": nameList[1],
-      "mail": mail,
-      "mdp": mdp,
-    };
-    print("---------------requesting $BASE_URL");
+    var formData = {"nom": nom, "prenom": "", "mail": mail, "mdp": mdp};
+    print("---------------requesting $BASE_URL for sign up");
     try {
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);

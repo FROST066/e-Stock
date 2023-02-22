@@ -147,12 +147,14 @@ class _LoginPageState extends State<LoginPage> {
       // print(response.body);
       var jsonresponse = json.decode(response.body);
       //  print (response.statusCode);
+      print(jsonresponse);
       try {
         if (jsonresponse['status']) {
           print(jsonresponse);
-          //save user data in shared prefs
           final prefs = await SharedPreferences.getInstance();
           prefs.setInt(PrefKeys.USER_ID, int.parse(jsonresponse['id']));
+          // prefs.setString(PrefKeys.USER_NAME, jsonresponse['nom']);
+          // prefs.setString(PrefKeys.USER_URL, jsonresponse['url']);
 
           Navigator.push(
               context, MaterialPageRoute(builder: (ctx) => ShopList()));

@@ -1,26 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:e_stock/models/Category.dart';
 import 'package:e_stock/other/styles.dart';
-import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../../models/product.dart';
 import '../../other/const.dart';
 import '../../widgets/customFlutterToast.dart';
 
-class AddOrEditCategoryScreen extends StatefulWidget {
-  AddOrEditCategoryScreen({super.key, required this.category});
-  Category? category;
+class AddOrEditProductScreen extends StatefulWidget {
+  AddOrEditProductScreen({super.key, this.product});
+  Product? product;
   @override
-  State<AddOrEditCategoryScreen> createState() =>
-      _AddOrEditCategoryScreenState();
+  State<AddOrEditProductScreen> createState() => _AddOrEditProductScreenState();
 }
 
-class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
+class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
   final formKey = GlobalKey<FormState>();
   final categNameController = TextEditingController();
   final descController = TextEditingController();
@@ -29,10 +25,10 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
   @override
   void initState() {
     categNameController.text =
-        widget.category == null ? "" : widget.category!.name;
+        widget.product == null ? "" : widget.product!.name;
     descController.text =
-        widget.category == null ? "" : widget.category!.description;
-    addOrEdit = widget.category == null;
+        widget.product == null ? "" : widget.product!.description;
+    addOrEdit = widget.product == null;
     // true == add
     // false == Edit
     super.initState();
@@ -45,31 +41,29 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
     final prefs = await SharedPreferences.getInstance();
     int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
     final formData = {
-      "categoryID": addOrEdit ? "0" : widget.category!.categoryId.toString(),
+      "categoryID": addOrEdit ? "0" : widget.product!.categoryId.toString(),
       "nom": categNameController.text,
       "descriptions": descController.text,
       "magasin": "${shopId!}",
     };
     try {
-      print("---------------requesting $BASE_URL for Category");
+      print(
+          "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "}Category");
       try {
-        http.Response response = await http.post(
-          Uri.parse(BASE_URL),
-          body: formData,
-        );
+        http.Response response =
+            await http.post(Uri.parse(BASE_URL), body: formData);
         print("Avant jsondecode ${response.body}");
         var jsonresponse = json.decode(response.body);
 
         if (jsonresponse['status']) {
           print(jsonresponse);
           //traitement des données recues
-          // Navigator.pop(context);
           if (mounted) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => const HomePage(selectedIndex: 1)),
-                (route) => false);
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (builder) => const HomePage(selectedIndex: 1)),
+            //     (route) => false);
           }
         }
       } catch (e) {
@@ -90,8 +84,8 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
         !Platform.isLinux && MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-              addOrEdit ? "Ajouter une catégorie" : "Modifier la catégorie ")),
+          title:
+              Text(addOrEdit ? "Ajouter une Produit" : "Modifier la Produit ")),
       body: Center(
           heightFactor: 1,
           child: SizedBox(
@@ -112,11 +106,30 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
                             prefixIcon: Icons.category,
                           ),
                           CustomTextFormField(
-                            controller: descController,
-                            hintText: "Description",
-                            prefixIcon: Icons.description,
-                            maxLines: 3,
-                          )
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
+                          CustomTextFormField(
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
+                          CustomTextFormField(
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
+                          CustomTextFormField(
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
+                          CustomTextFormField(
+                            controller: categNameController,
+                            hintText: "Nom de la catégorie",
+                            prefixIcon: Icons.category,
+                          ),
                         ],
                       )),
                   // Flexible(child: SizedBox()),

@@ -1,4 +1,6 @@
 import 'package:e_stock/models/product.dart';
+import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
+import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -13,10 +15,7 @@ class AllProductsScreen extends StatefulWidget {
   State<AllProductsScreen> createState() => _AllProductsScreenState();
 }
 
-TextStyle ts = const TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 18,
-);
+TextStyle ts = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
   List<Product> list = [
@@ -48,18 +47,30 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       purchasePrice: 500,
     ),
     Product(
-      productId: 3,
-      name: "Pomme",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 10,
-      sellingPrice: 100,
-      purchasePrice: 300,
-    ),
+        productId: 3,
+        name: "Pomme",
+        description: "bla bal balla bla bla bla c'est une longue descritption",
+        categoryId: 1,
+        low: 10,
+        sellingPrice: 100,
+        purchasePrice: 300),
   ];
+  List<Product> _filteredList = [];
+  @override
+  void initState() {
+    _filteredList.addAll(list);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => AddOrEditProductScreen())),
+          child: const Icon(Icons.add)),
       appBar: AppBar(title: const Text("Produits")),
       body: Center(
         child: SizedBox(
@@ -67,53 +78,50 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 4),
-                      margin: const EdgeInsets.only(right: 8),
-                      width: MediaQuery.of(context).size.width * 0.78,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: appGrey),
-                      child: TextFormField(
-                        style: const TextStyle(color: Colors.black),
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 15),
-                            hintText: "Chercher un produit",
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
-                            iconColor: Colors.black),
-                        onChanged: (value) {},
-                      ),
-                    ),
-                    const Icon(MdiIcons.tuneVertical, size: 30)
-                  ],
-                ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                      flex: 7,
+                      child: CustomTextFormField(
+                        hintText: "Chercher un produit",
+                        prefixIcon: Icons.search,
+                        onChanged: (value) {
+                          setState(() {
+                            _filteredList.clear();
+                            if (value.isEmpty) {
+                              _filteredList.addAll(list);
+                            } else {
+                              for (Product item in list) {
+                                if (item.name
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase())) {
+                                  _filteredList.add(item);
+                                }
+                              }
+                            }
+                          });
+                        },
+                      )),
+                  const Icon(MdiIcons.tuneVertical, size: 30)
+                ],
               ),
-              Flexible(
-                flex: 2,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Tous les produits", style: ts),
-                      Text("Total: ${list.length}", style: ts),
+                      Text("Total: ${_filteredList.length}", style: ts),
                     ]),
               ),
               Expanded(
                 flex: 9,
                 child: GridView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    // print("index: ${index}");
-                    // print("list: ${list}");
-                    // print("element: ${list[index]}");
-                    return customCard(list[index], context);
-                  },
+                  itemCount: _filteredList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      customCard(_filteredList[index], context),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1,

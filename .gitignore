@@ -40,7 +40,10 @@ app.*.map.json
 
 # Android Studio will place build artifacts here
 /android/app/debug
-point.txt
 /android/app/profile
 /android/app/release
 
+
+# extra
+point.txt
+assets.zip

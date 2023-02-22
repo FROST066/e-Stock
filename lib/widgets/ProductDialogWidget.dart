@@ -1,3 +1,4 @@
+import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,9 +10,8 @@ Widget productDialogWidget(BuildContext ctx, Product e) {
   return Center(
     child: Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Theme.of(ctx).scaffoldBackgroundColor,
-      ),
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(ctx).scaffoldBackgroundColor),
       height: 400,
       width: MediaQuery.of(ctx).size.width * 0.8,
       padding: const EdgeInsets.all(8),
@@ -29,11 +29,7 @@ Widget productDialogWidget(BuildContext ctx, Product e) {
                       color: Theme.of(ctx).textTheme.bodyText2!.color)),
               GestureDetector(
                 onTap: () => Navigator.pop(ctx),
-                child: const Icon(
-                  Icons.cancel,
-                  size: 35,
-                  color: appGrey,
-                ),
+                child: const Icon(Icons.cancel, size: 35, color: appGrey),
               )
             ],
           ),
@@ -44,10 +40,7 @@ Widget productDialogWidget(BuildContext ctx, Product e) {
                 backgroundColor: Colors.white,
                 foregroundColor: Theme.of(ctx).primaryColor,
                 child: const ClipOval(
-                  child: Icon(
-                    LineIcons.tags,
-                    size: 70,
-                  ),
+                  child: Icon(LineIcons.tags, size: 70),
                 ),
               ),
               Padding(
@@ -77,11 +70,7 @@ Widget productDialogWidget(BuildContext ctx, Product e) {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              right: 8,
-              bottom: 10,
-              left: 8,
-            ),
+            padding: const EdgeInsets.only(right: 8, bottom: 10, left: 8),
             child: Text(
               e.description,
               style: GoogleFonts.quicksand(
@@ -118,7 +107,11 @@ Widget productDialogWidget(BuildContext ctx, Product e) {
               children: [
                 TextButton(
                     style: productDialogBtStyle(Theme.of(ctx).primaryColor),
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushReplacement(
+                        ctx,
+                        MaterialPageRoute(
+                            builder: (builder) =>
+                                AddOrEditProductScreen(product: e))),
                     child: const Text("Modifier")),
                 TextButton(
                     style: productDialogBtStyle(Colors.red),

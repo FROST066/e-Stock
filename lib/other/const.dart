@@ -8,6 +8,7 @@ class PrefKeys {
   static String USER_NAME = "USER_NAME";
   static String SHOP_ID = "SHOP_ID";
   static String IS_LIGHT = "IS_LIGHT";
+  static String USER_URL = "USER_URL";
 }
 
 List<Shop> shopList = [

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
+import '../../widgets/CustomTextFormField.dart';
 import 'AddOrEditCategoryScreen.dart';
-import 'package:search_choices/search_choices.dart';
 import 'package:http/http.dart' as http;
 
 class AllCategoriesScreen extends StatefulWidget {
@@ -20,8 +20,6 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   //   Category(categoryId: 1, name: 'Technologies', description: 'Une description')];
   List<Category> listCategories = [];
   List<Category> listCategorysToDisplay = [];
-  List<DropdownMenuItem> items = [];
-  String? selectedValueSingleDialog;
   bool _isLoading = false;
 
   loadCategoryList() async {
@@ -42,8 +40,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       try {
         listCategories =
             (jsonresponse as List).map((e) => Category.fromJson(e)).toList();
-        listCategorysToDisplay = listCategories;
-        initDropDown();
+        listCategorysToDisplay.addAll(listCategories);
       } catch (e) {
         print("-----1-------${e.toString()}");
       }
@@ -53,7 +50,6 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     } finally {
       setState(() {
         _isLoading = false;
-        shopList;
       });
     }
   }
@@ -74,11 +70,30 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                 Flexible(
                   flex: 3,
                   child: Container(
-                      margin: const EdgeInsets.only(top: 90, bottom: 20),
+                      margin: const EdgeInsets.only(top: 90, bottom: 5),
                       width: MediaQuery.of(context).size.width * 0.93,
-                      child: searchableSelect()),
+                      child: CustomTextFormField(
+                        hintText: "Chercher une categorie",
+                        prefixIcon: Icons.search,
+                        onChanged: (value) {
+                          setState(() {
+                            listCategorysToDisplay.clear();
+                            if (value.isEmpty) {
+                              listCategorysToDisplay.addAll(listCategories);
+                            } else {
+                              for (Category item in listCategories) {
+                                if (item.name
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase())) {
+                                  listCategorysToDisplay.add(item);
+                                }
+                              }
+                            }
+                          });
+                        },
+                      )),
                 ),
-                Flexible(
+                Expanded(
                   flex: 7,
                   child: SingleChildScrollView(
                     child: Column(
@@ -93,60 +108,9 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     );
   }
 
-  Widget searchableSelect() {
-    return SearchChoices.single(
-      items: items,
-      value: selectedValueSingleDialog,
-      hint: "  Rechercher une catégorie",
-      style: const TextStyle(color: Colors.black, fontSize: 17),
-      searchHint: "Rechercher une catégorie",
-      fieldDecoration: BoxDecoration(
-        color: appGrey,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: appGrey),
-      ),
-      searchInputDecoration: InputDecoration(
-          labelStyle: const TextStyle(color: Colors.black),
-          hintStyle: const TextStyle(color: Colors.black),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 2),
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide.none),
-          filled: true,
-          fillColor: appGrey,
-          iconColor: Colors.black),
-      onChanged: (value) {
-        setState(() {
-          selectedValueSingleDialog = value;
-          if (value == null) {
-            listCategorysToDisplay = listCategories;
-          } else {
-            listCategorysToDisplay = listCategories
-                .where((element) => element.name == selectedValueSingleDialog)
-                .toList();
-          }
-        });
-      },
-      isExpanded: true,
-    );
-  }
-
-  initDropDown() {
-    items = listCategories
-        .map((e) => DropdownMenuItem(
-            value: e.name,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(e.name),
-            )))
-        .toList();
-  }
-
   void removeCategory(Category category) {
     setState(() {
-      listCategories.remove(category);
+      // listCategories.remove(category);
       listCategorysToDisplay.remove(category);
     });
   }
