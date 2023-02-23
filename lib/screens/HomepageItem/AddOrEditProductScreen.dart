@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -18,20 +22,43 @@ class AddOrEditProductScreen extends StatefulWidget {
 
 class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
   final formKey = GlobalKey<FormState>();
-  final categNameController = TextEditingController();
-  final descController = TextEditingController();
+  final productNameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final lowController = TextEditingController();
+  final priceController = TextEditingController();
   late bool addOrEdit;
-  bool _isLoading = false;
+  bool _isLoading = false, _isFecthing = false;
+  int? selectedCategorie;
+  String? url;
+
+  File? imageFile;
   @override
   void initState() {
-    categNameController.text =
-        widget.product == null ? "" : widget.product!.name;
-    descController.text =
-        widget.product == null ? "" : widget.product!.description;
+    if (widget.product != null) {
+      productNameController.text = widget.product!.name;
+      descriptionController.text = widget.product!.description;
+      lowController.text = widget.product!.low.toString();
+      priceController.text = widget.product!.sellingPrice.toString();
+      selectedCategorie = widget.product!.categoryId;
+      url = widget.product!.url;
+    }
     addOrEdit = widget.product == null;
     // true == add
     // false == Edit
+    initialize();
     super.initState();
+  }
+
+  initialize() async {
+    setState(() {
+      _isFecthing = true;
+    });
+    if (StaticValues.getListCategories.isEmpty) {
+      await StaticValues.loadCategoryList();
+    }
+    setState(() {
+      _isFecthing = false;
+    });
   }
 
   addOrEditFunc() async {
@@ -40,35 +67,37 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
     });
     final prefs = await SharedPreferences.getInstance();
     int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
+    final urlGot = await uploadAndGetUrl();
     final formData = {
-      "categoryID": addOrEdit ? "0" : widget.product!.categoryId.toString(),
-      "nom": categNameController.text,
-      "descriptions": descController.text,
-      "magasin": "${shopId!}",
+      "productID": addOrEdit ? "0" : widget.product!.productId.toString(),
+      "nom": productNameController.text,
+      "description": descriptionController.text,
+      "categorieID": "${selectedCategorie!}",
+      "minStock": lowController.text,
+      "purshasePrice": priceController.text,
+      "url": urlGot ?? url,
+      "shopID": "${shopId!}",
     };
+    print("${formData}");
     try {
       print(
           "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "}Category");
-      try {
-        http.Response response =
-            await http.post(Uri.parse(BASE_URL), body: formData);
-        print("Avant jsondecode ${response.body}");
-        var jsonresponse = json.decode(response.body);
+      // try {
+      //   http.Response response =
+      //       await http.post(Uri.parse(BASE_URL), body: formData);
+      //   print("Avant jsondecode ${response.body}");
+      //   var jsonresponse = json.decode(response.body);
 
-        if (jsonresponse['status']) {
-          print(jsonresponse);
-          //traitement des données recues
-          if (mounted) {
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (builder) => const HomePage(selectedIndex: 1)),
-            //     (route) => false);
-          }
-        }
-      } catch (e) {
-        print("-----1-------${e.toString()}");
-      }
+      //   if (jsonresponse['status']) {
+      //     print(jsonresponse);
+      //     //traitement des données recues
+      //     if (mounted) {
+      //       Navigator.pop(context, true);
+      //     }
+      //   }
+      // } catch (e) {
+      //   print("-----1-------${e.toString()}");
+      // }
     } catch (e) {
       print("------2------${e.toString()}");
     } finally {
@@ -80,8 +109,6 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool keyBordOpen =
-        !Platform.isLinux && MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(
           title:
@@ -101,62 +128,153 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                         children: [
                           const SizedBox(height: 35),
                           CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
+                            controller: productNameController,
+                            hintText: "Nom du produit",
                           ),
                           CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
+                            controller: descriptionController,
+                            hintText: "Description du produit",
+                          ),
+                          _isFecthing
+                              ? const Center(child: CircularProgressIndicator())
+                              : Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: DropdownButtonFormField<int>(
+                                    style: const TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 15, horizontal: 10),
+                                        hintText: "Selectionner une categorie",
+                                        hintStyle: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.6)),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            borderSide: BorderSide.none),
+                                        filled: true,
+                                        fillColor: appGrey,
+                                        iconColor: Colors.black),
+                                    value: selectedCategorie,
+                                    items: StaticValues.getListCategories
+                                        .map((e) => DropdownMenuItem(
+                                            value: e.categoryId,
+                                            child: Text(e.name)))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCategorie = value ?? 0;
+                                      });
+                                    },
+                                    validator: (e) {
+                                      return (e == null)
+                                          ? "Ce champ est obligatoire"
+                                          : null;
+                                    },
+                                  ),
+                                ),
+                          CustomTextFormField(
+                            controller: lowController,
+                            hintText: "Stock critique",
+                            textInputType: TextInputType.number,
                           ),
                           CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
-                          ),
-                          CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
-                          ),
-                          CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
-                          ),
-                          CustomTextFormField(
-                            controller: categNameController,
-                            hintText: "Nom de la catégorie",
-                            prefixIcon: Icons.category,
+                            controller: priceController,
+                            hintText: "Prix d'approvisionnement",
+                            textInputType: TextInputType.number,
                           ),
                         ],
                       )),
-                  // Flexible(child: SizedBox()),
                   Container(
-                    margin: EdgeInsets.only(
-                        bottom: 20, top: keyBordOpen ? 30 : 300),
+                      margin: const EdgeInsets.only(top: 10),
+                      child: url == null
+                          ? imageFile != null
+                              ? Stack(
+                                  children: [
+                                    ClipOval(
+                                      child: Image.file(
+                                        imageFile!,
+                                        fit: BoxFit.cover,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .5,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                .5,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 10,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                        child: InkWell(
+                                          onTap: () => getFile(),
+                                          child: const Icon(
+                                              CupertinoIcons.camera,
+                                              size: 40),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : InkWell(
+                                  onTap: () => getFile(),
+                                  child: const Icon(Icons.add_a_photo_outlined,
+                                      size: 80),
+                                )
+                          : Stack(
+                              children: [
+                                ClipOval(
+                                  child: Image.network(
+                                    url!,
+                                    fit: BoxFit.cover,
+                                    width:
+                                        MediaQuery.of(context).size.width * .5,
+                                    height:
+                                        MediaQuery.of(context).size.width * .5,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 10,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).primaryColor),
+                                    child: InkWell(
+                                      onTap: () => getFile(),
+                                      child: const Icon(CupertinoIcons.camera,
+                                          size: 40),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20, top: 30),
                     width: MediaQuery.of(context).size.width * 0.9,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          child: ElevatedButton(
-                            style: defaultStyle(context),
-                            onPressed: () async {
-                              if (!_isLoading &&
-                                  formKey.currentState!.validate()) {
-                                await addOrEditFunc();
-                              }
-                            },
-                            child: _isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white)
-                                : Text(addOrEdit ? "Ajouter " : "Enregistrer"),
-                          ),
-                        ),
-                      ],
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      child: ElevatedButton(
+                        style: defaultStyle(context),
+                        onPressed: () async {
+                          if (!_isLoading && formKey.currentState!.validate()) {
+                            await addOrEditFunc();
+                          }
+                        },
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : Text(addOrEdit ? "Ajouter " : "Enregistrer"),
+                      ),
                     ),
                   ),
                 ],
@@ -166,12 +284,32 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
     );
   }
 
-  void showMissing() {
-    if (categNameController.text == "") {
-      customFlutterToast(msg: "Entrez le nom de la catégorie");
-    } else {
-      //enregistrement
-      Navigator.pop(context);
+  void getFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
+    if (result != null) {
+      print(result.files.single.path);
+      setState(() {
+        url = null;
+        imageFile = File(result.paths[0]!);
+      });
     }
+  }
+
+  Future<String?> uploadAndGetUrl() async {
+    if (imageFile == null) {
+      return null;
+    }
+    final prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt(PrefKeys.USER_ID);
+    // Create a reference to the Firebase Storage bucket
+    final storageRef = FirebaseStorage.instance.ref();
+    // Upload file and metadata to the path 'images/mountains.jpg'
+    final childTask = storageRef
+        .child("user$userID/produts/${imageFile!.path.split('/').last}");
+    final uploadTask = await childTask.putFile(imageFile!);
+    final essai = await childTask.getDownloadURL();
+    print(essai);
+    return essai;
   }
 }

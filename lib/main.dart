@@ -11,12 +11,18 @@ import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/screens/getStarted.dart';
 import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/screens/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final prefs = await SharedPreferences.getInstance();
   final themeIsLight = prefs.getBool(PrefKeys.IS_LIGHT);
   bool isLight = themeIsLight ??

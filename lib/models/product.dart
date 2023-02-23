@@ -1,7 +1,7 @@
 // To parse this JSON data, do
 //
 //     final product = productFromJson(jsonString);
-//ajouter le stock disponible
+
 import 'dart:convert';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
@@ -16,7 +16,8 @@ class Product {
     required this.purchasePrice,
     required this.sellingPrice,
     required this.low,
-    required this.categoryId,
+    this.categoryId,
+    this.url,
   });
 
   int productId;
@@ -25,8 +26,8 @@ class Product {
   int purchasePrice;
   int sellingPrice;
   int low;
-  int categoryId;
-  // int stock = 0;
+  int? categoryId;
+  String? url;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         productId: json["productID"],
@@ -36,6 +37,7 @@ class Product {
         sellingPrice: json["sellingPrice"],
         low: json["low"],
         categoryId: json["CategoryID"],
+        url: json["url"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,5 +48,11 @@ class Product {
         "sellingPrice": sellingPrice,
         "low": low,
         "CategoryID": categoryId,
+        "url": url,
       };
 }
+
+
+// {"productID": 1, "name": "Carotte", "description": "bla bal balla bla bla bla c'est une longue descritption", "purchasePrice": 500, "sellingPrice": 250, "low": 20, "CategoryID": 1,
+//     "url":""
+// }

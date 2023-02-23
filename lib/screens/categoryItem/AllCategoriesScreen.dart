@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
+import '../../services/static.dart';
 import '../../widgets/CustomTextFormField.dart';
 import 'AddOrEditCategoryScreen.dart';
 import 'package:http/http.dart' as http;
@@ -22,41 +23,21 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   List<Category> listCategorysToDisplay = [];
   bool _isLoading = false;
 
-  loadCategoryList() async {
-    final prefs = await SharedPreferences.getInstance();
-    final shopID = prefs.getInt(PrefKeys.SHOP_ID);
+  initialize() async {
     setState(() {
       _isLoading = true;
     });
-    final url = "$BASE_URL?magasin=$shopID&categories";
-    print(url);
-    try {
-      print("---------------requesting $url for get all categories");
-      http.Response response = await http.get(Uri.parse(url));
-      // print(response.body);
-      // print(response.statusCode);
-      var jsonresponse = json.decode(response.body);
-      print(jsonresponse);
-      try {
-        listCategories =
-            (jsonresponse as List).map((e) => Category.fromJson(e)).toList();
-        listCategorysToDisplay.addAll(listCategories);
-      } catch (e) {
-        print("-----1-------${e.toString()}");
-      }
-    } catch (e) {
-      print("------2------${e.toString()}");
-      // return false;
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    await StaticValues.loadCategoryList();
+    listCategories.addAll(StaticValues.getListCategories);
+    listCategorysToDisplay.addAll(StaticValues.getListCategories);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   void initState() {
-    loadCategoryList();
+    initialize();
     super.initState();
   }
 
@@ -110,9 +91,10 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
 
   void removeCategory(Category category) {
     setState(() {
-      // listCategories.remove(category);
+      listCategories.remove(category);
       listCategorysToDisplay.remove(category);
     });
+    StaticValues.loadCategoryList();
   }
 }
 

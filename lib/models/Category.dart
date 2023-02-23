@@ -34,6 +34,11 @@ class Category {
         "name": name,
         "description": description,
       };
+
+  @override
+  String toString() {
+    return "id: $categoryId, nom: $name, magasin: ${shopId ?? 0}, descriptions: $description";
+  }
 }
 
 // {
