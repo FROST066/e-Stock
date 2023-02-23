@@ -126,7 +126,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 35),
+                          const SizedBox(height: 25),
                           CustomTextFormField(
                             controller: productNameController,
                             hintText: "Nom du produit",
@@ -137,42 +137,52 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                           ),
                           _isFecthing
                               ? const Center(child: CircularProgressIndicator())
-                              : Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: DropdownButtonFormField<int>(
-                                    style: const TextStyle(color: Colors.black),
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 15, horizontal: 10),
-                                        hintText: "Selectionner une categorie",
-                                        hintStyle: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6)),
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            borderSide: BorderSide.none),
-                                        filled: true,
-                                        fillColor: appGrey,
-                                        iconColor: Colors.black),
-                                    value: selectedCategorie,
-                                    items: StaticValues.getListCategories
-                                        .map((e) => DropdownMenuItem(
-                                            value: e.categoryId,
-                                            child: Text(e.name)))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedCategorie = value ?? 0;
-                                      });
-                                    },
-                                    validator: (e) {
-                                      return (e == null)
-                                          ? "Ce champ est obligatoire"
-                                          : null;
-                                    },
-                                  ),
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text("Selectionner une categorie",
+                                        style: TextStyle()),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 10, top: 5),
+                                      child: DropdownButtonFormField<int>(
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 15,
+                                                    horizontal: 10),
+                                            // hintText: ,
+                                            hintStyle: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.6)),
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                borderSide: BorderSide.none),
+                                            filled: true,
+                                            fillColor: appGrey,
+                                            iconColor: Colors.black),
+                                        value: selectedCategorie,
+                                        items: StaticValues.getListCategories
+                                            .map((e) => DropdownMenuItem(
+                                                value: e.categoryId,
+                                                child: Text(e.name)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedCategorie = value ?? 0;
+                                          });
+                                        },
+                                        validator: (e) {
+                                          return (e == null)
+                                              ? "Ce champ est obligatoire"
+                                              : null;
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                           CustomTextFormField(
                             controller: lowController,
@@ -186,6 +196,9 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                           ),
                         ],
                       )),
+                  const Text("Image du produit",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   Container(
                       margin: const EdgeInsets.only(top: 10),
                       child: url == null

@@ -2,17 +2,18 @@ import 'package:e_stock/other/styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField(
-      {super.key,
-      this.controller,
-      this.validatorFun,
-      required this.hintText,
-      this.prefixIcon,
-      this.textInputType,
-      this.autofocus,
-      this.maxLines,
-      this.textAlign,
-      this.onChanged});
+  CustomTextFormField({
+    super.key,
+    this.controller,
+    this.validatorFun,
+    required this.hintText,
+    this.prefixIcon,
+    this.textInputType,
+    this.autofocus,
+    this.maxLines,
+    this.textAlign,
+    this.onChanged,
+  });
   TextEditingController? controller;
   String hintText;
   IconData? prefixIcon;
@@ -25,7 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12, top: 5),
       child: TextFormField(
         textAlign: textAlign ?? TextAlign.start,
         onChanged: onChanged ?? (value) {},
@@ -35,17 +36,15 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none),
-            filled: true,
-            fillColor: appGrey,
-            iconColor: Colors.black),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          labelText: hintText,
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+
+          // filled: true,
+          // fillColor: appGrey,
+          // iconColor: Colors.black
+        ),
         validator: validatorFun ??
             (value) {
               if (value == null || value == "") {
@@ -63,11 +62,11 @@ class CustomPasswordFormField extends StatefulWidget {
     super.key,
     this.controller,
     this.validatorFun,
-    required this.hintText,
+    required this.labelText,
     this.autofocus,
   });
   TextEditingController? controller;
-  String hintText;
+  String labelText;
   bool? autofocus;
   String? Function(String?)? validatorFun;
 
@@ -89,22 +88,19 @@ class _CustomPasswordFormFieldState extends State<CustomPasswordFormField> {
         style: const TextStyle(color: Colors.black),
         controller: widget.controller,
         decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 1),
-            hintText: widget.hintText,
-            hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
-            prefixIcon: const Icon(Icons.lock_outline),
-            suffixIcon: GestureDetector(
-                onTap: () => setState(() {
-                      obscureText = !obscureText;
-                    }),
-                child: Icon(
-                    obscureText ? Icons.visibility_off : Icons.visibility)),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none),
-            filled: true,
-            fillColor: appGrey,
-            iconColor: Colors.black),
+          contentPadding: const EdgeInsets.symmetric(vertical: 1),
+          labelText: widget.labelText,
+          prefixIcon: const Icon(Icons.lock_outline),
+          suffixIcon: GestureDetector(
+              onTap: () => setState(() {
+                    obscureText = !obscureText;
+                  }),
+              child:
+                  Icon(obscureText ? Icons.visibility_off : Icons.visibility)),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none),
+        ),
         validator: widget.validatorFun ??
             (value) {
               if (value == null || value == "") {

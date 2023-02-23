@@ -61,11 +61,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textInputType: TextInputType.emailAddress),
                       CustomPasswordFormField(
                         controller: mdpController,
-                        hintText: "Mot de passe",
+                        labelText: "Mot de passe",
                       ),
                       CustomPasswordFormField(
                         controller: confimedMdpController,
-                        hintText: "Confirmez le mot de passe",
+                        labelText: "Confirmez le mot de passe",
                       )
                     ],
                   )),

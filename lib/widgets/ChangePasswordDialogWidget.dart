@@ -63,11 +63,11 @@ class _ChangePasswordDialogWidgetState
                   CustomPasswordFormField(
                     autofocus: true,
                     controller: oldPasswordController,
-                    hintText: "Ancien mot de passe",
+                    labelText: "Ancien mot de passe",
                   ),
                   CustomPasswordFormField(
                     controller: newPasswordController,
-                    hintText: "Nouveau mot de passe",
+                    labelText: "Nouveau mot de passe",
                   ),
                 ],
               )),

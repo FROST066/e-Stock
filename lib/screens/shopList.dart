@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
+import 'package:e_stock/other/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -225,12 +226,23 @@ class _ShopListState extends State<ShopList> {
                                         children: [
                                           Flexible(
                                             flex: 1,
-                                            child: Text(
-                                              e.shopName,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17),
-                                            ),
+                                            child: Text(e.shopName,
+                                                style: Theme.of(context)
+                                                            .primaryColor ==
+                                                        appBlue
+                                                    ? darkTheme
+                                                        .textTheme.bodyText2!
+                                                        .copyWith(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold)
+                                                    : lightTheme
+                                                        .textTheme.bodyText2!
+                                                        .copyWith(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
                                           ),
                                         ],
                                       ),

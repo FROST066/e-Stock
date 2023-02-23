@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.bold, fontSize: 25)),
                       ),
                       CustomTextFormField(
-                        autofocus: true,
+                        // autofocus: true,
                         controller: emailController,
                         hintText: "Adresse Email",
                         prefixIcon: Icons.email,
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       CustomPasswordFormField(
                         controller: mdpController,
-                        hintText: "Mot de passe",
+                        labelText: "Mot de passe",
                       )
                     ],
                   )),

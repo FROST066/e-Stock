@@ -11,6 +11,18 @@ final lightTheme = ThemeData.light().copyWith(
       titleTextStyle: GoogleFonts.lora(
           color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
   primaryColor: appBlue,
+  inputDecorationTheme: InputDecorationTheme(
+    floatingLabelStyle: const TextStyle(fontSize: 18, color: appBlue),
+    prefixIconColor: appBlue,
+    suffixIconColor: appBlue,
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: appBlue, width: 2)),
+    labelStyle: const TextStyle(color: appBlue, fontSize: 18),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: appBlue, width: 2)),
+  ),
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20),
     // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
@@ -26,6 +38,18 @@ final darkTheme = ThemeData.dark().copyWith(
       titleTextStyle: GoogleFonts.lora(
           color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
   primaryColor: appDarkBlue,
+  inputDecorationTheme: InputDecorationTheme(
+    floatingLabelStyle: const TextStyle(fontSize: 18, color: appDarkBlue),
+    prefixIconColor: appDarkBlue,
+    suffixIconColor: appDarkBlue,
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: appDarkBlue, width: 2)),
+    labelStyle: const TextStyle(color: appDarkBlue, fontSize: 18),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(color: appDarkBlue, width: 2)),
+  ),
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20, color: Colors.white),
     // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),

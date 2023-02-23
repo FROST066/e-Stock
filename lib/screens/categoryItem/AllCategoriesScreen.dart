@@ -48,32 +48,29 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
           ? const CircularProgressIndicator()
           : Column(
               children: [
-                Flexible(
-                  flex: 3,
-                  child: Container(
-                      margin: const EdgeInsets.only(top: 90, bottom: 5),
-                      width: MediaQuery.of(context).size.width * 0.93,
-                      child: CustomTextFormField(
-                        hintText: "Chercher une categorie",
-                        prefixIcon: Icons.search,
-                        onChanged: (value) {
-                          setState(() {
-                            listCategorysToDisplay.clear();
-                            if (value.isEmpty) {
-                              listCategorysToDisplay.addAll(listCategories);
-                            } else {
-                              for (Category item in listCategories) {
-                                if (item.name
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase())) {
-                                  listCategorysToDisplay.add(item);
-                                }
+                Container(
+                    margin: const EdgeInsets.only(top: 90, bottom: 5),
+                    width: MediaQuery.of(context).size.width * 0.93,
+                    child: CustomTextFormField(
+                      hintText: "Chercher une categorie",
+                      prefixIcon: Icons.search,
+                      onChanged: (value) {
+                        setState(() {
+                          listCategorysToDisplay.clear();
+                          if (value.isEmpty) {
+                            listCategorysToDisplay.addAll(listCategories);
+                          } else {
+                            for (Category item in listCategories) {
+                              if (item.name
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase())) {
+                                listCategorysToDisplay.add(item);
                               }
                             }
-                          });
-                        },
-                      )),
-                ),
+                          }
+                        });
+                      },
+                    )),
                 Expanded(
                   flex: 7,
                   child: SingleChildScrollView(

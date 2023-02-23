@@ -45,11 +45,11 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
                     children: [
                       CustomPasswordFormField(
                         controller: mdpController,
-                        hintText: "Mot de passe",
+                        labelText: "Mot de passe",
                       ),
                       CustomPasswordFormField(
                         controller: confirmedMdpController,
-                        hintText: "Confirmer le mot de passe",
+                        labelText: "Confirmer le mot de passe",
                       )
                     ],
                   )),
