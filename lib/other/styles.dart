@@ -41,8 +41,10 @@ ButtonStyle homePageBtStyle(BuildContext ctx) {
               side: BorderSide(color: Theme.of(ctx).primaryColor, width: 2))),
       padding: MaterialStateProperty.all<EdgeInsetsGeometry?>(
           const EdgeInsets.symmetric(vertical: 25, horizontal: 20)),
-      foregroundColor: MaterialStateProperty.all<Color?>(Colors.black),
-      backgroundColor: MaterialStateProperty.all<Color?>(Colors.white));
+      foregroundColor: MaterialStateProperty.all<Color?>(
+          Theme.of(ctx).appBarTheme.foregroundColor),
+      backgroundColor: MaterialStateProperty.all<Color?>(
+          Theme.of(ctx).scaffoldBackgroundColor));
 }
 
 ButtonStyle productDialogBtStyle(Color backgroundColor) {

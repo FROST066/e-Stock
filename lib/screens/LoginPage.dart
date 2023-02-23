@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   // width: MediaQuery.of(context).size.width * 0.7,
                   child: Image.asset(
                     "assets/images/logo.png",
@@ -48,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
               ],
             ),
-            SizedBox(
+            Container(
+              margin: const EdgeInsets.only(top: 40),
               width: MediaQuery.of(context).size.width * 0.9,
               child: Form(
                   key: formKey,

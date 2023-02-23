@@ -32,19 +32,19 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChanged ?? (value) {},
         autofocus: autofocus ?? false,
         maxLines: maxLines ?? 1,
-        style: const TextStyle(color: Colors.black),
+        // style: const TextStyle(color: Colors.black),
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          labelText: hintText,
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            labelText: hintText,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null
 
-          // filled: true,
-          // fillColor: appGrey,
-          // iconColor: Colors.black
-        ),
+            // filled: true,
+            // fillColor: appGrey,
+            // iconColor: Colors.black
+            ),
         validator: validatorFun ??
             (value) {
               if (value == null || value == "") {
@@ -85,22 +85,18 @@ class _CustomPasswordFormFieldState extends State<CustomPasswordFormField> {
         autofocus: widget.autofocus ?? false,
         // maxLines: widget.maxLines ?? 1,
         obscureText: obscureText,
-        style: const TextStyle(color: Colors.black),
+        // style: const TextStyle(color: Colors.black),
         controller: widget.controller,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 1),
-          labelText: widget.labelText,
-          prefixIcon: const Icon(Icons.lock_outline),
-          suffixIcon: GestureDetector(
-              onTap: () => setState(() {
-                    obscureText = !obscureText;
-                  }),
-              child:
-                  Icon(obscureText ? Icons.visibility_off : Icons.visibility)),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide.none),
-        ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 1),
+            labelText: widget.labelText,
+            prefixIcon: const Icon(Icons.lock_outline),
+            suffixIcon: GestureDetector(
+                onTap: () => setState(() {
+                      obscureText = !obscureText;
+                    }),
+                child: Icon(
+                    obscureText ? Icons.visibility_off : Icons.visibility))),
         validator: widget.validatorFun ??
             (value) {
               if (value == null || value == "") {
