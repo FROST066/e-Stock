@@ -16,13 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'firebase_options.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp();
   final prefs = await SharedPreferences.getInstance();
   final themeIsLight = prefs.getBool(PrefKeys.IS_LIGHT);
   bool isLight = themeIsLight ??

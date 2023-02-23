@@ -14,8 +14,9 @@ import '../../other/const.dart';
 import '../../widgets/customFlutterToast.dart';
 
 class AddOrEditProductScreen extends StatefulWidget {
-  AddOrEditProductScreen({super.key, this.product});
+  AddOrEditProductScreen({super.key, this.product, required this.refresh});
   Product? product;
+  final Future<void> Function() refresh;
   @override
   State<AddOrEditProductScreen> createState() => _AddOrEditProductScreenState();
 }
@@ -37,9 +38,9 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
     if (widget.product != null) {
       productNameController.text = widget.product!.name;
       descriptionController.text = widget.product!.description;
-      lowController.text = widget.product!.low.toString();
+      lowController.text = widget.product!.stockMin.toString();
       priceController.text = widget.product!.sellingPrice.toString();
-      selectedCategorie = widget.product!.categoryId;
+      selectedCategorie = widget.product!.categoryID;
       url = widget.product!.url;
     }
     addOrEdit = widget.product == null;
@@ -65,41 +66,41 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    final prefs = await SharedPreferences.getInstance();
-    int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
     final urlGot = await uploadAndGetUrl();
-    final formData = {
-      "productID": addOrEdit ? "0" : widget.product!.productId.toString(),
-      "nom": productNameController.text,
-      "description": descriptionController.text,
-      "categorieID": "${selectedCategorie!}",
-      "minStock": lowController.text,
-      "purshasePrice": priceController.text,
-      "url": urlGot ?? url,
-      "shopID": "${shopId!}",
-    };
+    final formData = addOrEdit
+        ? {
+            "nom": productNameController.text,
+            "createProduct": "1",
+            "description": descriptionController.text,
+            "prixUnitaire": priceController.text,
+            "quantiteDisponible": "0",
+            "categorie": "${selectedCategorie!}",
+            "urlPhoto": urlGot ?? url ?? ""
+          }
+        : {
+            "updateProduct": "1",
+            "nom": productNameController.text,
+            "description": descriptionController.text,
+            "prixUnitaire": priceController.text,
+            "quantiteDisponible": "0",
+            "categorie": "${selectedCategorie!}",
+            "idProduct": widget.product!.productID.toString(),
+          };
     print("${formData}");
     try {
       print(
-          "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "}Category");
-      // try {
-      //   http.Response response =
-      //       await http.post(Uri.parse(BASE_URL), body: formData);
-      //   print("Avant jsondecode ${response.body}");
-      //   var jsonresponse = json.decode(response.body);
-
-      //   if (jsonresponse['status']) {
-      //     print(jsonresponse);
-      //     //traitement des données recues
-      //     if (mounted) {
-      //       Navigator.pop(context, true);
-      //     }
-      //   }
-      // } catch (e) {
-      //   print("-----1-------${e.toString()}");
-      // }
+          "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "} product ");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: formData);
+      var jsonresponse = json.decode(response.body);
+      print("${response.body}");
+      print("${response.statusCode}");
+      print(jsonresponse);
+      if (mounted && jsonresponse["status"]) {
+        Navigator.pop(context, true);
+      }
     } catch (e) {
-      print("------2------${e.toString()}");
+      print("------1------${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;
@@ -137,61 +138,57 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                           ),
                           _isFecthing
                               ? const Center(child: CircularProgressIndicator())
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("Selectionner une categorie",
-                                        style: TextStyle()),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 10, top: 5),
-                                      child: DropdownButtonFormField<int>(
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 15,
-                                                    horizontal: 10),
-                                            // hintText: ,
-                                            hintStyle: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.6)),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                borderSide: BorderSide.none),
-                                            filled: true,
-                                            fillColor: appGrey,
-                                            iconColor: Colors.black),
-                                        value: selectedCategorie,
-                                        items: StaticValues.getListCategories
-                                            .map((e) => DropdownMenuItem(
-                                                value: e.categoryId,
-                                                child: Text(e.name)))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedCategorie = value ?? 0;
-                                          });
-                                        },
-                                        validator: (e) {
-                                          return (e == null)
-                                              ? "Ce champ est obligatoire"
-                                              : null;
-                                        },
-                                      ),
-                                    ),
-                                  ],
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 10, top: 5),
+                                  child: DropdownButtonFormField<int>(
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                    decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 10),
+                                        labelText: "Selectionner une categorie",
+                                        labelStyle: Theme.of(context)
+                                            .inputDecorationTheme
+                                            .labelStyle,
+                                        enabledBorder: Theme.of(context)
+                                            .inputDecorationTheme
+                                            .enabledBorder,
+                                        focusedBorder: Theme.of(context)
+                                            .inputDecorationTheme
+                                            .focusedBorder,
+                                        iconColor: Colors.black),
+                                    value: selectedCategorie,
+                                    items: StaticValues.getListCategories
+                                        .map((e) => DropdownMenuItem(
+                                            value: e.categoryId,
+                                            child: Text(
+                                              e.name,
+                                              style:
+                                                  const TextStyle(fontSize: 21),
+                                            )))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCategorie = value ?? 0;
+                                      });
+                                    },
+                                    validator: (e) {
+                                      return (e == null)
+                                          ? "Ce champ est obligatoire"
+                                          : null;
+                                    },
+                                  ),
                                 ),
-                          CustomTextFormField(
-                            controller: lowController,
-                            hintText: "Stock critique",
-                            textInputType: TextInputType.number,
-                          ),
+                          // CustomTextFormField(
+                          //   controller: lowController,
+                          //   hintText: "Stock critique",
+                          //   textInputType: TextInputType.number,
+                          // ),
                           CustomTextFormField(
                             controller: priceController,
-                            hintText: "Prix d'approvisionnement",
+                            hintText: "Prix de vente",
                             textInputType: TextInputType.number,
                           ),
                         ],
@@ -281,6 +278,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                         onPressed: () async {
                           if (!_isLoading && formKey.currentState!.validate()) {
                             await addOrEditFunc();
+                            widget.refresh();
                           }
                         },
                         child: _isLoading

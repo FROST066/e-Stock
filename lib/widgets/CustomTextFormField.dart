@@ -32,7 +32,6 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChanged ?? (value) {},
         autofocus: autofocus ?? false,
         maxLines: maxLines ?? 1,
-        // style: const TextStyle(color: Colors.black),
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(

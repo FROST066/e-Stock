@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: defaultStyle(context),
                       // onPressed: () => showMissing(),
                       onPressed: () async {
-                        if (formKey.currentState!.validate()) {
+                        if (!_isLoading && formKey.currentState!.validate()) {
                           await _login(
                               emailController.text, mdpController.text);
                         }
@@ -145,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
       print("---------------requesting $BASE_URL");
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
-      // print(response.body);
       var jsonresponse = json.decode(response.body);
+      // print(response.body);
       //  print (response.statusCode);
       print(jsonresponse);
       try {
@@ -154,9 +154,8 @@ class _LoginPageState extends State<LoginPage> {
           print(jsonresponse);
           final prefs = await SharedPreferences.getInstance();
           prefs.setInt(PrefKeys.USER_ID, int.parse(jsonresponse['id']));
-          // prefs.setString(PrefKeys.USER_NAME, jsonresponse['nom']);
-          // prefs.setString(PrefKeys.USER_URL, jsonresponse['url']);
-
+          prefs.setString(PrefKeys.USER_NAME, jsonresponse['nom']);
+          customFlutterToast(msg: "Bienvenue ${jsonresponse['nom']}");
           Navigator.push(
               context, MaterialPageRoute(builder: (ctx) => ShopList()));
         } else {

@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:e_stock/models/product.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
+import 'package:e_stock/screens/HomepageItem/filteringScreen.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/Category.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -24,47 +24,48 @@ class AllProductsScreen extends StatefulWidget {
 TextStyle ts = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
-  List<Product> productsList = [
-    Product(
-        productId: 1,
-        name: "Carotte",
-        description: "bla bal balla bla bla bla c'est une longue descritption",
-        categoryId: 11,
-        low: 20,
-        sellingPrice: 250,
-        purchasePrice: 500,
-        url:
-            "https://firebasestorage.googleapis.com/v0/b/e-stock0.appspot.com/o/user1%2Fproduts%2F66700634ebb34731a4adb6a1f2f74bb2.jpg?alt=media&token=67bf0513-7362-4f1e-8185-676bec5c6412"),
-    Product(
-      productId: 2,
-      name: "Tomate",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 30,
-      sellingPrice: 350,
-      purchasePrice: 500,
-    ),
-    Product(
-      productId: 2,
-      name: "Carotte",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 20,
-      sellingPrice: 250,
-      purchasePrice: 500,
-    ),
-    Product(
-        productId: 3,
-        name: "Pomme",
-        description: "bla bal balla bla bla bla c'est une longue descritption",
-        categoryId: 1,
-        low: 10,
-        sellingPrice: 100,
-        purchasePrice: 300),
-  ];
+  // List<Product> productsList = [
+  //   Product(
+  //       productId: 1,
+  //       name: "Carotte",
+  //       description: "bla bal balla bla bla bla c'est une longue descritption",
+  //       categoryId: 11,
+  //       low: 20,
+  //       sellingPrice: 250,
+  //       purchasePrice: 500,
+  //       url:
+  //           "https://firebasestorage.googleapis.com/v0/b/e-stock0.appspot.com/o/user1%2Fproduts%2F66700634ebb34731a4adb6a1f2f74bb2.jpg?alt=media&token=67bf0513-7362-4f1e-8185-676bec5c6412"),
+  //   Product(
+  //     productId: 2,
+  //     name: "Tomate",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 30,
+  //     sellingPrice: 350,
+  //     purchasePrice: 500,
+  //   ),
+  //   Product(
+  //     productId: 2,
+  //     name: "Carotte",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 20,
+  //     sellingPrice: 250,
+  //     purchasePrice: 500,
+  //   ),
+  //   Product(
+  //       productId: 3,
+  //       name: "Pomme",
+  //       description: "bla bal balla bla bla bla c'est une longue descritption",
+  //       categoryId: 1,
+  //       low: 10,
+  //       sellingPrice: 100,
+  //       purchasePrice: 300),
+  // ];
+  List<Product> productsList = [];
   List<Product> filteredProductsList = [];
   bool _isLoading = false;
-  loadProductList() async {
+  Future<void> loadProductList() async {
     final prefs = await SharedPreferences.getInstance();
     final shopID = prefs.getInt(PrefKeys.SHOP_ID);
     setState(() {
@@ -75,12 +76,13 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     try {
       print("---------------requesting $url for get all products");
       http.Response response = await http.get(Uri.parse(url));
+      var jsonresponse = json.decode(response.body);
       // print(response.body);
       // print(response.statusCode);
-      var jsonresponse = json.decode(response.body);
       print(jsonresponse);
       try {
-        // list = (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
+        productsList =
+            (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
         filteredProductsList.clear();
         filteredProductsList.addAll(productsList);
       } catch (e) {
@@ -106,15 +108,11 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            bool? confirmPop = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (builder) => AddOrEditProductScreen()));
-            if (confirmPop != null && confirmPop) {
-              await loadProductList();
-            }
-          },
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) =>
+                      AddOrEditProductScreen(refresh: loadProductList))),
           child: const Icon(Icons.add)),
       appBar: AppBar(title: const Text("Produits")),
       body: Center(
@@ -151,9 +149,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                       )),
                   IconButton(
                       padding: const EdgeInsets.only(bottom: 10),
-                      onPressed: () {
-                        print(productsList[0].toJson());
-                      },
+                      onPressed: () => showCustomDialogForFilter(),
                       icon: const Icon(MdiIcons.tuneVertical, size: 30))
                 ],
               ),
@@ -177,7 +173,11 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     : GridView.builder(
                         itemCount: filteredProductsList.length,
                         itemBuilder: (BuildContext context, int index) =>
-                            customCard(filteredProductsList[index], context),
+                            customCard(
+                          filteredProductsList[index],
+                          context,
+                          loadProductList,
+                        ),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -194,11 +194,34 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       ),
     );
   }
+
+  void showCustomDialogForFilter() {
+    showAnimatedDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext ctx) {
+          return FilteringDialog(ctx: ctx);
+        },
+        animationType: DialogTransitionType.slideFromBottom,
+        // animationType: DialogTransitionType.scale,
+        // curve: Curves.linear,
+        duration: const Duration(seconds: 1));
+  }
 }
 
-Widget customCard(Product e, BuildContext context) {
+Widget customCard(
+    Product e, BuildContext context, Future<void> Function() refresh) {
   return GestureDetector(
-    onTap: () => showCustomDialog(context, e),
+    onTap: () => showAnimatedDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext ctx) {
+          return ProductDialogWidget(e: e, refresh: refresh, ctx: ctx);
+        },
+        animationType: DialogTransitionType.slideFromBottom,
+        // animationType: DialogTransitionType.scale,
+        // curve: Curves.linear,
+        duration: const Duration(seconds: 1)),
     child: Container(
       // margin: const EdgeInsets.symmetric(vertical: 7),
       width: 200,
@@ -261,15 +284,15 @@ Widget customCard(Product e, BuildContext context) {
   );
 }
 
-void showCustomDialog(BuildContext context, Product e) {
-  showAnimatedDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext ctx) {
-        return productDialogWidget(ctx, e);
-      },
-      animationType: DialogTransitionType.slideFromBottom,
-      // animationType: DialogTransitionType.scale,
-      // curve: Curves.linear,
-      duration: const Duration(seconds: 1));
-}
+// void showCustomDialog(BuildContext context, Product e) {
+//   showAnimatedDialog(
+//       context: context,
+//       barrierDismissible: true,
+//       builder: (BuildContext ctx) {
+//         return productDialogWidget(ctx, e);
+//       },
+//       animationType: DialogTransitionType.slideFromBottom,
+//       // animationType: DialogTransitionType.scale,
+//       // curve: Curves.linear,
+//       duration: const Duration(seconds: 1));
+// }

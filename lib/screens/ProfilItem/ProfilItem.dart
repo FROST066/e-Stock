@@ -4,8 +4,10 @@ import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/LoginPage.dart';
+import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
+import 'package:e_stock/widgets/reloadPlease.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -29,11 +31,14 @@ class _ProfilItemState extends State<ProfilItem> {
   late SharedPreferences prefs;
   List<Shop>? shopList;
   bool _isLoading = false;
+  String username = "USER NAME";
   loadShopList() async {
     prefs = await SharedPreferences.getInstance();
     final userID = prefs.getInt(PrefKeys.USER_ID);
     final shopID = prefs.getInt(PrefKeys.SHOP_ID);
+
     setState(() {
+      username = prefs.getString(PrefKeys.USER_NAME) ?? username;
       _isLoading = true;
     });
     final url = "$BASE_URL?magasins=1&owner=$userID";
@@ -124,7 +129,10 @@ class _ProfilItemState extends State<ProfilItem> {
                         child: const Icon(Icons.add_a_photo_rounded, size: 30)))
               ],
             ),
-            const Text("User Name"),
+            Text(
+              username,
+              style: Theme.of(context).textTheme.headline4,
+            ),
           ],
         ),
       ),
@@ -179,23 +187,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                   ? const Center(
                                       child: CircularProgressIndicator())
                                   : shopList == null
-                                      ? Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 35, vertical: 15),
-                                              child: Text(
-                                                  "Une erreur s'est produite. Verifiez votre connexion internet et rechargez la page"),
-                                            ),
-                                            ElevatedButton(
-                                                style: defaultStyle(context),
-                                                onPressed: () async =>
-                                                    await loadShopList(),
-                                                child: const Text("Recharger"))
-                                          ],
-                                        )
+                                      ? ReloadPlease(futureFunc: loadShopList)
                                       : SingleChildScrollView(
                                           child: Column(
                                             children: shopList!
@@ -213,6 +205,8 @@ class _ProfilItemState extends State<ProfilItem> {
                                                         prefs.setInt(
                                                             PrefKeys.SHOP_ID,
                                                             e.id);
+                                                        StaticValues
+                                                            .loadCategoryList();
                                                       },
                                                       child: Container(
                                                         padding:

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_stock/models/order.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
@@ -6,6 +8,7 @@ import 'package:search_choices/search_choices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../models/product.dart';
+import 'package:http/http.dart' as http;
 import '../../other/styles.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -18,6 +21,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
   late Order commande;
   late SharedPreferences prefs;
   late List<DropdownMenuItem> dropdownItems;
+  List<Product> listProducts = [];
+  late List<Product> listProductsToDisplay;
   List<TransactionItem> transactionItemList = [];
   bool _isLoading = false;
   initialize() async {
@@ -25,6 +30,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       _isLoading = true;
     });
     //load productList
+    await loadProductList();
     listProductsToDisplay = listProducts;
     dropdownItems = listProductsToDisplay
         .map((e) => DropdownMenuItem(
@@ -42,51 +48,75 @@ class _TransactionScreenState extends State<TransactionScreen> {
     });
   }
 
+  loadProductList() async {
+    final prefs = await SharedPreferences.getInstance();
+    final shopID = prefs.getInt(PrefKeys.SHOP_ID);
+    final url = "$BASE_URL?magasin=$shopID&products";
+    print(url);
+    try {
+      print("---------------requesting $url for get all products");
+      http.Response response = await http.get(Uri.parse(url));
+      var jsonresponse = json.decode(response.body);
+      // print(response.body);
+      // print(response.statusCode);
+      print(jsonresponse);
+      try {
+        listProducts =
+            (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
+      } catch (e) {
+        print("-----1-------${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      // return false;
+    } finally {}
+  }
+
   @override
   void initState() {
     initialize();
     super.initState();
   }
 
-  List<Product> listProducts = [
-    Product(
-      productId: 1,
-      name: "Carotte",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 20,
-      sellingPrice: 250,
-      purchasePrice: 500,
-    ),
-    Product(
-      productId: 2,
-      name: "Tomate",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 30,
-      sellingPrice: 350,
-      purchasePrice: 500,
-    ),
-    Product(
-      productId: 2,
-      name: "Telephone",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 20,
-      sellingPrice: 250,
-      purchasePrice: 500,
-    ),
-    Product(
-      productId: 3,
-      name: "Pomme",
-      description: "bla bal balla bla bla bla c'est une longue descritption",
-      categoryId: 1,
-      low: 10,
-      sellingPrice: 100,
-      purchasePrice: 300,
-    ),
-  ];
-  late List<Product> listProductsToDisplay;
+  // List<Product> listProducts = [
+  //   Product(
+  //     productId: 1,
+  //     name: "Carotte",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 20,
+  //     sellingPrice: 250,
+  //     purchasePrice: 500,
+  //   ),
+  //   Product(
+  //     productId: 2,
+  //     name: "Tomate",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 30,
+  //     sellingPrice: 350,
+  //     purchasePrice: 500,
+  //   ),
+  //   Product(
+  //     productId: 2,
+  //     name: "Telephone",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 20,
+  //     sellingPrice: 250,
+  //     purchasePrice: 500,
+  //   ),
+  //   Product(
+  //     productId: 3,
+  //     name: "Pomme",
+  //     description: "bla bal balla bla bla bla c'est une longue descritption",
+  //     categoryId: 1,
+  //     low: 10,
+  //     sellingPrice: 100,
+  //     purchasePrice: 300,
+  //   ),
+  // ];
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -174,7 +204,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onPressed: () {
                           commande.list = transactionItemList
                               .map((e) => OrderItem(
-                                    productId: e.product.productId,
+                                    productId: e.product.productID,
                                     quantity:
                                         int.parse(e.quantityController.text),
                                   ))

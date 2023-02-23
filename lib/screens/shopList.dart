@@ -32,12 +32,14 @@ class _ShopListState extends State<ShopList> {
     });
     final url = "$BASE_URL?magasins=1&owner=$userID";
     try {
-      print("---------------requesting $url");
+      print("---------------requesting $url to load shop list");
       http.Response response = await http.get(Uri.parse(url));
-      // print(response.body);
+
       var jsonresponse = json.decode(response.body);
-      print(jsonresponse);
+      // print(response.body);
       // print(response.statusCode);
+
+      print(jsonresponse);
       try {
         shopList = (jsonresponse as List).map((e) => Shop.fromJson(e)).toList();
         if (shopList!.length == 1) {

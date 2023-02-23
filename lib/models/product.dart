@@ -10,45 +10,42 @@ String productToJson(Product data) => json.encode(data.toJson());
 
 class Product {
   Product({
-    required this.productId,
+    required this.productID,
     required this.name,
     required this.description,
-    required this.purchasePrice,
     required this.sellingPrice,
-    required this.low,
-    this.categoryId,
-    this.url,
+    required this.quantiteDisponible,
+    required this.categoryID,
+    required this.url,
+    required this.stockMin,
   });
 
-  int productId;
+  int productID;
   String name;
   String description;
-  int purchasePrice;
-  int sellingPrice;
-  int low;
-  int? categoryId;
+  int sellingPrice, quantiteDisponible, categoryID, stockMin;
   String? url;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        productId: json["productID"],
-        name: json["name"],
-        description: json["description"],
-        purchasePrice: json["purchasePrice"],
-        sellingPrice: json["sellingPrice"],
-        low: json["low"],
-        categoryId: json["CategoryID"],
-        url: json["url"] ?? "",
+        productID: int.parse(json["id"] ?? "0"),
+        name: json["nom"] ?? "",
+        description: json["descriptions"] ?? "",
+        sellingPrice: int.parse(json["prixUnitaire"] ?? "0"),
+        quantiteDisponible: int.parse(json["quantiteDisponible"] ?? "0"),
+        categoryID: int.parse(json["categorie"] ?? "0"),
+        url: json["url"],
+        stockMin: int.parse(json["stockMin"] ?? "0"),
       );
 
   Map<String, dynamic> toJson() => {
-        "productID": productId,
-        "name": name,
-        "description": description,
-        "purchasePrice": purchasePrice,
-        "sellingPrice": sellingPrice,
-        "low": low,
-        "CategoryID": categoryId,
+        "id": productID,
+        "nom": name,
+        "descriptions": description,
+        "prixUnitaire": sellingPrice,
+        "quantiteDisponible": quantiteDisponible,
+        "categorie": categoryID,
         "url": url,
+        "stockMin": stockMin,
       };
 }
 

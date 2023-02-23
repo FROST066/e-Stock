@@ -1,7 +1,7 @@
 import '../models/Shop.dart';
 
 const String BASE_URL = "https://flutterapigk.000webhostapp.com";
-// const String BASE_URL = "http://192.168.8.101/apiForFlutterProject/tp/";
+// const String BASE_URL = "http://192.168.8.102/apiForFlutterProject/tp/";
 
 class PrefKeys {
   static String USER_ID = "USER_ID";
