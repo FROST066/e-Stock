@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -137,7 +138,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                             hintText: "Description du produit",
                           ),
                           _isFecthing
-                              ? const Center(child: CircularProgressIndicator())
+                              ? customLoader()
                               : Padding(
                                   padding:
                                       const EdgeInsets.only(bottom: 10, top: 5),
@@ -282,8 +283,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                           }
                         },
                         child: _isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white)
+                            ? customLoader()
                             : Text(addOrEdit ? "Ajouter " : "Enregistrer"),
                       ),
                     ),

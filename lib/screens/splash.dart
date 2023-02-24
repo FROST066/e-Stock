@@ -68,9 +68,6 @@ class _SplashState extends State<Splash> {
                   style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
             ],
           ),
-          // CircularProgressIndicator(
-          //   color: Theme.of(context).primaryColor,
-          // )
         ],
       )),
     );

@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../other/const.dart';
+import '../../widgets/Loader.dart';
 import '../../widgets/customFlutterToast.dart';
 
 class AddOrEditCategoryScreen extends StatefulWidget {
@@ -138,8 +139,7 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
                               }
                             },
                             child: _isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white)
+                                ? customLoader()
                                 : Text(addOrEdit ? "Ajouter " : "Enregistrer"),
                           ),
                         ),

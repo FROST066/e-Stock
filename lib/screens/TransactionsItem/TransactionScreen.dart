@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:e_stock/models/order.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,12 +25,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
   List<Product> listProducts = [];
   late List<Product> listProductsToDisplay;
   List<TransactionItem> transactionItemList = [];
-  bool _isLoading = false;
+  bool _isLoading = false, _isSubmitting = false;
   initialize() async {
     setState(() {
       _isLoading = true;
     });
-    //load productList
     await loadProductList();
     listProductsToDisplay = listProducts;
     dropdownItems = listProductsToDisplay
@@ -46,6 +46,35 @@ class _TransactionScreenState extends State<TransactionScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  submitTransaction(Map<String, dynamic> data) async {
+    setState(() {
+      _isSubmitting = true;
+    });
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var body = json.encode(data);
+      print("body: $body");
+      print("---------------requesting $BASE_URL for submit transaction");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), headers: headers, body: body);
+      var jsonresponse = json.decode(response.body);
+      print("${response.body}");
+      print("${response.statusCode}");
+      print(jsonresponse);
+      // if (jsonresponse["status"]) {
+      //   while (transactionItemList.isNotEmpty) {
+      //     removeTransactionItem(transactionItemList.last.product);
+      //   }
+      // }
+    } catch (e) {
+      print("------1------${e.toString()}");
+    } finally {
+      setState(() {
+        _isSubmitting = false;
+      });
+    }
   }
 
   loadProductList() async {
@@ -147,7 +176,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             activeFgColor: Colors.white,
                             inactiveBgColor: Colors.grey,
                             inactiveFgColor: Colors.white,
-                            initialLabelIndex: 1,
+                            initialLabelIndex: commande.type,
                             totalSwitches: 2,
                             animate: true,
                             curve: Curves.fastLinearToSlowEaseIn,
@@ -155,8 +184,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             radiusStyle: true,
                             onToggle: (index) {
                               // 1 correspond a vente et 0 a approvisionnement
-                              commande.type = index ?? 0;
-                              print('switched to: $index');
+                              if (index! != commande.type) {
+                                setState(() {
+                                  commande.type = index;
+                                  while (transactionItemList.isNotEmpty) {
+                                    removeTransactionItem(
+                                        transactionItemList.last.product);
+                                  }
+                                });
+                                print('switched to: $index');
+                              }
                             },
                           ),
                         ),
@@ -201,19 +238,21 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           top: 30),
                       child: ElevatedButton(
                         style: defaultStyle(context),
-                        onPressed: () {
+                        onPressed: () async {
                           commande.list = transactionItemList
                               .map((e) => OrderItem(
-                                    productId: e.product.productID,
-                                    quantity:
-                                        int.parse(e.quantityController.text),
-                                  ))
+                                  productId: e.product.productID,
+                                  quantity:
+                                      int.parse(e.quantityController.text),
+                                  purchasePrice:
+                                      double.parse(e.priceController.text)))
                               .toList();
-
-                          print(productToJson(listProductsToDisplay[0]));
-                          // print(orderToJson(commande));
+                          // print("${commande.toJsonEndoded()}");
+                          await submitTransaction(commande.toJsonEndoded());
                         },
-                        child: const Text("Valider"),
+                        child: _isSubmitting
+                            ? customLoader()
+                            : const Text("Valider"),
                       ),
                     ),
                   ),
@@ -229,6 +268,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           listProductsToDisplay.firstWhere((element) => element.name == name);
       listProductsToDisplay.remove(product);
       transactionItemList.add(TransactionItem(
+        type: commande.type,
         product: product,
         removeTransactionItem: removeTransactionItem,
       ));
@@ -261,10 +301,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
 class TransactionItem extends StatelessWidget {
   TransactionItem(
-      {super.key, required this.product, required this.removeTransactionItem});
+      {super.key,
+      required this.product,
+      required this.removeTransactionItem,
+      required this.type});
   final Product product;
   void Function(Product) removeTransactionItem;
+  final int type;
   TextEditingController quantityController = TextEditingController(text: "0");
+  TextEditingController priceController = TextEditingController(text: "0");
 
   @override
   Widget build(BuildContext context) {
@@ -285,6 +330,22 @@ class TransactionItem extends StatelessWidget {
                 textInputType: TextInputType.number,
                 controller: quantityController,
                 onChanged: (value) {},
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 3,
+            child: Visibility(
+              visible: type == 0,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: CustomTextFormField(
+                  textAlign: TextAlign.center,
+                  hintText: "Prix",
+                  textInputType: TextInputType.number,
+                  controller: priceController,
+                  onChanged: (value) {},
+                ),
               ),
             ),
           ),

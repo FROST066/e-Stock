@@ -7,6 +7,7 @@ import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:e_stock/widgets/customFlutterToast.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,10 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: !_isLoading
                           ? const Text("Connexion")
-                          : const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.white),
-                            ),
+                          : customLoader(),
                     ),
                   ),
                   Row(
@@ -140,7 +138,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = true;
     });
-    var formData = {"email": email, "mdp": mdp, "connexion": "1"};
+    var formData = {
+      "email": email,
+      "mdp": mdp,
+      "connexion": "1",
+    };
+
     try {
       print("---------------requesting $BASE_URL");
       http.Response response =

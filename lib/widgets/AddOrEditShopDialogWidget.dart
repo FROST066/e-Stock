@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -166,11 +167,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                     }
                   },
                   child: _isCreating
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
+                      ? customLoader()
                       : Text(addOrEdit ? "Valider " : "Modifier  "),
                 ),
               ),

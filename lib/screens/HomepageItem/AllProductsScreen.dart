@@ -283,16 +283,3 @@ Widget customCard(
     ),
   );
 }
-
-// void showCustomDialog(BuildContext context, Product e) {
-//   showAnimatedDialog(
-//       context: context,
-//       barrierDismissible: true,
-//       builder: (BuildContext ctx) {
-//         return productDialogWidget(ctx, e);
-//       },
-//       animationType: DialogTransitionType.slideFromBottom,
-//       // animationType: DialogTransitionType.scale,
-//       // curve: Curves.linear,
-//       duration: const Duration(seconds: 1));
-// }

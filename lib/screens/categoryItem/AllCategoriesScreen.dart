@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:e_stock/models/Category.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../other/const.dart';
@@ -45,7 +46,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: _isLoading
-          ? const CircularProgressIndicator()
+          ? customLoader()
           : Column(
               children: [
                 Container(

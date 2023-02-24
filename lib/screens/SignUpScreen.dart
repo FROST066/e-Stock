@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../other/const.dart';
 import '../other/styles.dart';
+import '../widgets/Loader.dart';
 import '../widgets/customFlutterToast.dart';
 import 'LoginPage.dart';
 import 'package:http/http.dart' as http;
@@ -91,11 +92,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                         }
                       },
-                      child: !_isLoading
-                          ? const Text("Valider")
-                          : const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.white)),
+                      child:
+                          !_isLoading ? const Text("Valider") : customLoader(),
                     ),
                   ),
                   Row(

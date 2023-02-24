@@ -35,16 +35,42 @@ class Order {
         "shopID": shopId,
         "list": List<dynamic>.from(list.map((x) => x.toJson())),
       };
+
+  // String toJsonEndoded() => json.encode(type == 0
+  //     ? {
+  //         "seReaprovisionner": "1",
+  //         "magasin": shopId.toString(),
+  //         "commandes":
+  //             List<String>.from(list.map((x) => x.toJsonEndoded(type))),
+  //       }
+  //     : {
+  //         "vente": "1",
+  //         "shopIdD": shopId.toString(),
+  //         "commandes":
+  //             List<String>.from(list.map((x) => x.toJsonEndoded(type))),
+  //       });
+  Map<String, dynamic> toJsonEndoded() => type == 0
+      ? {
+          "seReaprovisionner": "1",
+          "magasin": shopId.toString(),
+          "commandes": List<Map<String, dynamic>>.from(
+              list.map((x) => x.toJsonEndoded(type))),
+        }
+      : {
+          "vente": "1",
+          "shopIdD": shopId.toString(),
+          "commandes": List<Map<String, dynamic>>.from(
+              list.map((x) => x.toJsonEndoded(type))),
+        };
 }
 
 class OrderItem {
-  OrderItem({
-    required this.quantity,
-    required this.productId,
-  });
+  OrderItem(
+      {required this.quantity, required this.productId, this.purchasePrice});
 
   int quantity;
   int productId;
+  double? purchasePrice;
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
         quantity: json["quantity"],
@@ -55,4 +81,26 @@ class OrderItem {
         "quantity": quantity,
         "productID": productId,
       };
+
+  // String toJsonEndoded(int type) => json.encode(type == 0
+  //     ? {
+  //         "id_produit": productId,
+  //         "qteProduit": quantity,
+  //         "prixAchat": purchasePrice ?? 0,
+  //       }
+  //     : {
+  //         "idProduct": productId,
+  //         "qteProduct": quantity,
+  //       });
+
+  Map<String, dynamic> toJsonEndoded(int type) => type == 0
+      ? {
+          "id_produit": productId,
+          "qteProduit": quantity,
+          "prixAchat": purchasePrice ?? 0,
+        }
+      : {
+          "idProduct": productId,
+          "qteProduct": quantity,
+        };
 }

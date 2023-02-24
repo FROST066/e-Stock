@@ -32,18 +32,14 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChanged ?? (value) {},
         autofocus: autofocus ?? false,
         maxLines: maxLines ?? 1,
+        // style: const TextStyle(color: ),
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             labelText: hintText,
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null
-
-            // filled: true,
-            // fillColor: appGrey,
-            // iconColor: Colors.black
-            ),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null),
         validator: validatorFun ??
             (value) {
               if (value == null || value == "") {

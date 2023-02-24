@@ -10,6 +10,8 @@ import '../other/const.dart';
 import '../other/styles.dart';
 import 'package:http/http.dart' as http;
 
+import 'Loader.dart';
+
 class ProductDialogWidget extends StatefulWidget {
   const ProductDialogWidget(
       {super.key, required this.ctx, required this.e, required this.refresh});
@@ -175,7 +177,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
                         await removeProduct();
                       },
                       child: _isRemoving
-                          ? const CircularProgressIndicator()
+                          ? customLoader()
                           : const Text("Supprimer"))
                 ],
               ),

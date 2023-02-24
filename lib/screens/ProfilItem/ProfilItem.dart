@@ -7,6 +7,7 @@ import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
+import 'package:e_stock/widgets/Loader.dart';
 import 'package:e_stock/widgets/reloadPlease.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,8 +185,7 @@ class _ProfilItemState extends State<ProfilItem> {
                           Flexible(
                               flex: 8,
                               child: _isLoading
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
+                                  ? customLoader()
                                   : shopList == null
                                       ? ReloadPlease(futureFunc: loadShopList)
                                       : SingleChildScrollView(

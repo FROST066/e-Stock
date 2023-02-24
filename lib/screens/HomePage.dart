@@ -60,9 +60,8 @@ class _HomePageState extends State<HomePage> {
               child: GNav(
                 // rippleColor: Colors.grey[300]!,
                 // hoverColor: Colors.grey[100]!,
-                textStyle: TextStyle(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
+                textStyle:
+                    TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
                 gap: 8,
                 activeColor: Colors.black,
                 iconSize: 24,
@@ -91,7 +90,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GButton(
                     iconActiveColor: Theme.of(context).scaffoldBackgroundColor,
-                    textColor: Colors.white,
                     backgroundColor: Theme.of(context).primaryColor,
                     icon: LineIcons.user,
                     text: 'Profil',

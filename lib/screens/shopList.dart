@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../other/styles.dart';
 import '../widgets/CustomTextFormField.dart';
+import '../widgets/Loader.dart';
 import '../widgets/customFlutterToast.dart';
 import 'HomePage.dart';
 import 'package:http/http.dart' as http;
@@ -116,7 +117,7 @@ class _ShopListState extends State<ShopList> {
     return Scaffold(
       body: Center(
         child: _isLoading
-            ? const CircularProgressIndicator()
+            ? customLoader()
             : shopList == null
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -176,10 +177,7 @@ class _ShopListState extends State<ShopList> {
                                   }
                                 },
                                 child: _isCreating
-                                    ? const Center(
-                                        child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ))
+                                    ? customLoader()
                                     : const Text("Créer"),
                               ),
                             ),
