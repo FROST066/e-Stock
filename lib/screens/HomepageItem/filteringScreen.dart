@@ -1,5 +1,5 @@
 import 'package:e_stock/widgets/CustomTextFormField.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';

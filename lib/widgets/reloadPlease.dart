@@ -12,12 +12,17 @@ class ReloadPlease extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
           child: Text(
-              "Une erreur s'est produite. Verifiez votre connexion internet et rechargez la page"),
+            "Une erreur s'est produite. Verifiez votre connexion internet et rechargez la page",
+            textAlign: TextAlign.center,
+          ),
         ),
         ElevatedButton(
             style: defaultStyle(context),
             onPressed: () async => await futureFunc(),
-            child: const Text("Recharger"))
+            child: const Text(
+              "Recharger",
+              style: TextStyle(fontSize: 16),
+            ))
       ],
     );
   }

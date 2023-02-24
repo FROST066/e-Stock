@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../other/styles.dart';
 import '../widgets/CustomTextFormField.dart';
-import '../widgets/Loader.dart';
+import '../widgets/CustomLoader.dart';
 import '../widgets/customFlutterToast.dart';
 import 'HomePage.dart';
 import 'package:http/http.dart' as http;
@@ -53,11 +53,12 @@ class _ShopListState extends State<ShopList> {
           }
         }
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      // return false;
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;
@@ -94,11 +95,12 @@ class _ShopListState extends State<ShopList> {
               (route) => false);
         }
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      // return false;
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {
       setState(() {
         _isCreating = false;

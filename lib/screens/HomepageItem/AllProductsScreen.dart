@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:e_stock/models/product.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/screens/HomepageItem/filteringScreen.dart';
+import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/ProductDialogWidget.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ import '../../other/const.dart';
 import '../../other/styles.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import '../../widgets/customFlutterToast.dart';
 
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
@@ -86,11 +89,12 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
         filteredProductsList.clear();
         filteredProductsList.addAll(productsList);
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      // return false;
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;
@@ -114,7 +118,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   builder: (builder) =>
                       AddOrEditProductScreen(refresh: loadProductList))),
           child: const Icon(Icons.add)),
-      appBar: AppBar(title: const Text("Produits")),
+      appBar: AppBar(title: const Text("Mes produits")),
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .9,
@@ -173,11 +177,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     : GridView.builder(
                         itemCount: filteredProductsList.length,
                         itemBuilder: (BuildContext context, int index) =>
-                            customCard(
-                          filteredProductsList[index],
-                          context,
-                          loadProductList,
-                        ),
+                            customCard(filteredProductsList[index], context,
+                                loadProductList),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -223,10 +224,9 @@ Widget customCard(
         // curve: Curves.linear,
         duration: const Duration(seconds: 1)),
     child: Container(
-      // margin: const EdgeInsets.symmetric(vertical: 7),
       width: 200,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: const [
           BoxShadow(
               color: Colors.grey, //New
@@ -256,9 +256,9 @@ Widget customCard(
               height: double.infinity,
               width: double.infinity,
               padding: const EdgeInsets.only(left: 12),
-              decoration: const BoxDecoration(
-                  color: appGrey,
-                  borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                  color: StaticValues.getIsLightMode! ? appGrey : appDarkGrey,
+                  borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(15),
                       bottomRight: Radius.circular(15))),
               child: Column(
@@ -266,6 +266,8 @@ Widget customCard(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(e.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: ts.copyWith(
                           color: ThemeData.dark().scaffoldBackgroundColor)),
                   Text(

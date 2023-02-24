@@ -18,11 +18,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late int _selectedIndex;
 
-  List<Widget> listPages = const [
-    OverViewScreen(),
-    AllCategoriesScreen(),
+  List<Widget> listPages = [
+    const OverViewScreen(),
+    const AllCategoriesScreen(),
     TransactionScreen(),
-    ProfilItem()
+    const ProfilItem()
   ];
   @override
   void initState() {
@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) =>
                               AddOrEditCategoryScreen(category: null)));
                 },
-                backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add),
               ),
         body: listPages[_selectedIndex],

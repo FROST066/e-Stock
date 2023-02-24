@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../other/const.dart';
 import '../other/styles.dart';
-import '../widgets/Loader.dart';
+import '../widgets/CustomLoader.dart';
 import '../widgets/customFlutterToast.dart';
 import 'LoginPage.dart';
 import 'package:http/http.dart' as http;
@@ -187,7 +187,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // return false;
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       setState(() {

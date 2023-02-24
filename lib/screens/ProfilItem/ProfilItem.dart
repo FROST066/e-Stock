@@ -7,7 +7,7 @@ import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/reloadPlease.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../other/themes.dart';
+import '../../widgets/customFlutterToast.dart';
 import 'AboutScreen.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:http/http.dart' as http;
@@ -60,10 +61,12 @@ class _ProfilItemState extends State<ProfilItem> {
         }
         moveToTop(shopList!.firstWhere((element) => element.isActive == true));
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       setState(() {
@@ -132,7 +135,8 @@ class _ProfilItemState extends State<ProfilItem> {
             ),
             Text(
               username,
-              style: Theme.of(context).textTheme.headline4,
+              style:
+                  Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 27),
             ),
           ],
         ),
@@ -185,7 +189,8 @@ class _ProfilItemState extends State<ProfilItem> {
                           Flexible(
                               flex: 8,
                               child: _isLoading
-                                  ? customLoader()
+                                  ? customLoader(
+                                      color: Theme.of(context).primaryColor)
                                   : shopList == null
                                       ? ReloadPlease(futureFunc: loadShopList)
                                       : SingleChildScrollView(
@@ -357,6 +362,7 @@ class _ProfilItemState extends State<ProfilItem> {
                                         theme:
                                             index == 1 ? darkTheme : lightTheme,
                                       );
+                                      StaticValues.setIsLightMode = index == 0;
                                       final prefs =
                                           await SharedPreferences.getInstance();
                                       prefs.setBool(
@@ -431,7 +437,8 @@ class _ProfilItemState extends State<ProfilItem> {
       var jsonresponse = json.decode(response.body);
       print(jsonresponse);
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {}
     shopList!.removeWhere((element) => element.id == shopId);

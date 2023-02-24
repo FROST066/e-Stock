@@ -10,7 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../other/const.dart';
-import '../../widgets/Loader.dart';
+import '../../widgets/CustomLoader.dart';
 import '../../widgets/customFlutterToast.dart';
 
 class AddOrEditCategoryScreen extends StatefulWidget {
@@ -54,10 +54,8 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
     try {
       print("---------------requesting $BASE_URL for Category");
       try {
-        http.Response response = await http.post(
-          Uri.parse(BASE_URL),
-          body: formData,
-        );
+        http.Response response =
+            await http.post(Uri.parse(BASE_URL), body: formData);
         print("Avant jsondecode ${response.body}");
         var jsonresponse = json.decode(response.body);
 
@@ -74,10 +72,12 @@ class _AddOrEditCategoryScreenState extends State<AddOrEditCategoryScreen> {
           }
         }
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;

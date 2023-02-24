@@ -7,7 +7,7 @@ import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/customFlutterToast.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -166,10 +166,12 @@ class _LoginPageState extends State<LoginPage> {
               msg: "Nom d'utilisateur ou mot de passe incorrect");
         }
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       //set loading to false

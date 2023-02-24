@@ -1,4 +1,5 @@
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/services/static.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -32,7 +33,10 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChanged ?? (value) {},
         autofocus: autofocus ?? false,
         maxLines: maxLines ?? 1,
-        // style: const TextStyle(color: ),
+        style: TextStyle(
+            color: StaticValues.getIsLightMode ?? false
+                ? Colors.black
+                : Colors.white),
         controller: controller,
         keyboardType: textInputType ?? TextInputType.text,
         decoration: InputDecoration(

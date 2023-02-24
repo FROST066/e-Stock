@@ -34,7 +34,7 @@ class Product {
         quantiteDisponible: int.parse(json["quantiteDisponible"] ?? "0"),
         categoryID: int.parse(json["categorie"] ?? "0"),
         url: json["url"],
-        stockMin: int.parse(json["stockMin"] ?? "0"),
+        stockMin: int.parse(json["stockMin"] ?? "5"),
       );
 
   Map<String, dynamic> toJson() => {

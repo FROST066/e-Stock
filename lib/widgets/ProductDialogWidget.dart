@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
+import 'package:e_stock/screens/TransactionsItem/TransactionScreen.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +11,8 @@ import '../other/const.dart';
 import '../other/styles.dart';
 import 'package:http/http.dart' as http;
 
-import 'Loader.dart';
+import 'CustomLoader.dart';
+import 'customFlutterToast.dart';
 
 class ProductDialogWidget extends StatefulWidget {
   const ProductDialogWidget(
@@ -47,6 +49,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
       }
     } catch (e) {
       print("------1------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
     } finally {
       setState(() {
         _isRemoving = false;
@@ -87,14 +90,17 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(widget.ctx).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(widget.ctx).primaryColor,
-                  child: const ClipOval(
-                    child: Icon(LineIcons.tags, size: 70),
+                  child: ClipOval(
+                    child: widget.e.url != null && widget.e.url != ""
+                        ? Image.network(widget.e.url!, fit: BoxFit.cover)
+                        : const Icon(LineIcons.tags, size: 70),
                   ),
                 ),
-                Padding(
+                Container(
                   padding: const EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -142,16 +148,29 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
                 children: [
                   TextButton(
                       style: productDialogBtStyle(Colors.green),
-                      onPressed: () {},
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => Scaffold(
+                                  appBar: AppBar(),
+                                  body: TransactionScreen(
+                                      type: 0, e: widget.e)))),
                       child: const Text("Acheter")),
                   TextButton(
                       style: productDialogBtStyle(Colors.red),
-                      onPressed: () {},
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => Scaffold(
+                                  appBar: AppBar(),
+                                  body: TransactionScreen(
+                                      type: 1, e: widget.e)))),
                       child: const Text("Vendre"))
                 ],
               ),
             ),
             customTableWithArray([
+              ["Quantite disponible", widget.e.quantiteDisponible.toString()],
               ["Prix de vente", widget.e.sellingPrice.toString()],
               ["Stock critique", widget.e.stockMin.toString()],
             ], widget.ctx),

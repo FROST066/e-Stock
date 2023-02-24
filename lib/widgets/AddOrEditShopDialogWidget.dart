@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_stock/widgets/CustomTextFormField.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import '../models/Shop.dart';
 import '../other/const.dart';
 import '../other/styles.dart';
+import 'customFlutterToast.dart';
 
 class AddOrEditShopDialogWidget extends StatefulWidget {
   AddOrEditShopDialogWidget(
@@ -49,10 +50,12 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
       try {
         widget.addFun!(int.parse(jsonresponse['id']), shopNameController.text);
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       if (mounted) {
@@ -86,10 +89,12 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
       try {
         widget.updateFun!(shopNameController.text);
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       if (mounted) {

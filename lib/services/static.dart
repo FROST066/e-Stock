@@ -4,8 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../models/Category.dart';
 import '../other/const.dart';
+import '../widgets/customFlutterToast.dart';
 
 class StaticValues {
+  static bool? _isLightMode;
+  static bool? get getIsLightMode => _isLightMode;
+  static set setIsLightMode(bool newValue) {
+    _isLightMode = newValue;
+  }
+
   static List<Category> _listCategories = [];
   static List<Category> get getListCategories => _listCategories;
   static set setListCategories(List<Category> listCategories) {
@@ -41,11 +48,13 @@ class StaticValues {
         }
       } catch (e) {
         _listCategories.clear();
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
       _listCategories.clear();
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {
       printListCategories();

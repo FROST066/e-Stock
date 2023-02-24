@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,6 +68,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
       _isLoading = true;
     });
     final urlGot = await uploadAndGetUrl();
+    print("urlGot: ${urlGot}");
     final formData = addOrEdit
         ? {
             "nom": productNameController.text,
@@ -76,7 +77,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
             "prixUnitaire": priceController.text,
             "quantiteDisponible": "0",
             "categorie": "${selectedCategorie!}",
-            "urlPhoto": urlGot ?? url ?? ""
+            "url": urlGot ?? url ?? ""
           }
         : {
             "updateProduct": "1",
@@ -93,15 +94,19 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
           "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "} product ");
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
-      var jsonresponse = json.decode(response.body);
-      print("${response.body}");
-      print("${response.statusCode}");
-      print(jsonresponse);
-      if (mounted && jsonresponse["status"]) {
-        Navigator.pop(context, true);
+      print(" le reponse ${response.body}");
+      if (response.statusCode == 200) {
+        var jsonresponse = json.decode(response.body);
+        //  print(jsonresponse);
+        if (mounted && jsonresponse["status"]) {
+          Navigator.pop(context);
+        }
+      } else {
+        customFlutterToast(msg: "Code d'erreur: ${response.statusCode} ");
       }
     } catch (e) {
-      print("------1------${e.toString()}");
+      //print("-----1-------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;

@@ -37,13 +37,17 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText2!.color),
                   initialValue: DateTime.now().toString(),
                   dateMask: 'd-MM-yyyy',
                   firstDate: DateTime(2020),
                   lastDate: DateTime.now(),
                   calendarTitle: "Selectionnez la date de début",
                   cancelText: "Annuler",
-                  decoration: const InputDecoration(border: InputBorder.none),
+                  decoration: const InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.black)),
                   onChanged: (val) => print(val),
                   onSaved: (val) => print(val),
                 ),
@@ -53,13 +57,16 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText2!.color),
                   initialValue: DateTime.now().toString(),
                   dateMask: 'd-MM-yyyy',
                   calendarTitle: "Selectionnez la date de fin",
                   cancelText: "Annuler",
                   firstDate: DateTime(2020),
                   lastDate: DateTime.now(),
-                  decoration: const InputDecoration(border: InputBorder.none),
+                  decoration:
+                      const InputDecoration(enabledBorder: InputBorder.none),
                   onChanged: (val) => print(val),
                   onSaved: (val) => print(val),
                 ),

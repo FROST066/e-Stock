@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:e_stock/models/Category.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
 import '../../services/static.dart';
 import '../../widgets/CustomTextFormField.dart';
+import '../../widgets/customFlutterToast.dart';
 import 'AddOrEditCategoryScreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,7 +47,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: _isLoading
-          ? customLoader()
+          ? customLoader(color: Theme.of(context).primaryColor)
           : Column(
               children: [
                 Container(
@@ -182,7 +183,8 @@ class _AllCategoryListViewItemState extends State<AllCategoryListViewItem> {
       widget.removeFun!(widget.e);
       print(jsonresponse);
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {}
     setState(() {

@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:e_stock/models/order.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
-import 'package:e_stock/widgets/Loader.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
+import 'package:e_stock/widgets/customFlutterToast.dart';
 import 'package:flutter/material.dart';
 import 'package:search_choices/search_choices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,13 @@ import 'package:http/http.dart' as http;
 import '../../other/styles.dart';
 
 class TransactionScreen extends StatefulWidget {
-  const TransactionScreen({super.key});
+  TransactionScreen({
+    super.key,
+    this.type,
+    this.e,
+  });
+  int? type;
+  Product? e;
   @override
   State<TransactionScreen> createState() => _TransactionScreenState();
 }
@@ -42,7 +49,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .toList();
     prefs = await SharedPreferences.getInstance();
     int? shopID = prefs.getInt(PrefKeys.SHOP_ID);
-    commande = Order(orderId: 1, type: 0, shopId: shopID!, list: []);
+    commande =
+        Order(orderId: 1, type: widget.type ?? 0, shopId: shopID!, list: []);
+    if (widget.e != null) {
+      addTransactionItem(widget.e!.name);
+    }
     setState(() {
       _isLoading = false;
     });
@@ -63,13 +74,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
       print("${response.body}");
       print("${response.statusCode}");
       print(jsonresponse);
+      customFlutterToast(
+          msg: "Jordy n'a pas encore implémenté la fonction de transaction");
       // if (jsonresponse["status"]) {
       //   while (transactionItemList.isNotEmpty) {
       //     removeTransactionItem(transactionItemList.last.product);
       //   }
+      //   customFlutterToast(msg: "Transaction effectuée avec succès");
+      //   if (mounted && widget.e != null) {
+      //     Navigator.pop(context);
+      //   }
       // }
     } catch (e) {
       print("------1------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
     } finally {
       setState(() {
         _isSubmitting = false;
@@ -93,10 +111,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
         listProducts =
             (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
       } catch (e) {
-        print("-----1-------${e.toString()}");
+        //print("-----1-------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
+      // print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {}
   }
@@ -150,12 +170,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: _isLoading
-          ? const CircularProgressIndicator()
+          ? customLoader(color: Theme.of(context).primaryColor)
           : SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width * 0.9,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     margin: const EdgeInsets.only(top: 60, bottom: 10),
@@ -201,25 +220,18 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     ),
                   ),
                   SearchChoices.single(
-                    style: const TextStyle(color: Colors.black, fontSize: 15),
                     items: dropdownItems,
-                    hint: "  Produit",
+                    hint: "  Selectionner un produit ici",
                     searchHint: "Selectionner un produit",
                     fieldDecoration: BoxDecoration(
-                      color: appGrey,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: appGrey),
-                    ),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            width: 2, color: Theme.of(context).primaryColor)),
                     searchInputDecoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
                                 vertical: 15, horizontal: 2)
                             .copyWith(right: 0),
                         prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: appDarkGrey,
                         iconColor: Colors.black),
                     onChanged: (value) => addTransactionItem(value.toString()),
                     isExpanded: true,
