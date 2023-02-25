@@ -22,7 +22,7 @@ class GetStarted extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20, right: 20),
             child: const Text(
-              "Manage \nyour stock\nefficacy and efficient",
+              "Gérer \nvotre stock\nde manière efficace et efficiente",
               style: TextStyle(
                   fontSize: 22, fontWeight: FontWeight.bold, height: 1.6),
             ),

@@ -82,10 +82,12 @@ class _CustomPasswordFormFieldState extends State<CustomPasswordFormField> {
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         autofocus: widget.autofocus ?? false,
-        // maxLines: widget.maxLines ?? 1,
         obscureText: obscureText,
-        // style: const TextStyle(color: Colors.black),
         controller: widget.controller,
+        style: TextStyle(
+            color: StaticValues.getIsLightMode ?? false
+                ? Colors.black
+                : Colors.white),
         decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 1),
             labelText: widget.labelText,

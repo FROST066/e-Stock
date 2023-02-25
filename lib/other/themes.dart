@@ -6,7 +6,7 @@ final lightTheme = ThemeData.light().copyWith(
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: appBlue, foregroundColor: Colors.white),
   appBarTheme: AppBarTheme(
-      // backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       elevation: 0,
       foregroundColor: Colors.black,
       centerTitle: true,
@@ -39,7 +39,6 @@ final darkTheme = ThemeData.dark().copyWith(
       const FloatingActionButtonThemeData(backgroundColor: appDarkBlue),
   appBarTheme: AppBarTheme(
       elevation: 0,
-      // backgroundColor: Colors.black,
       foregroundColor: Colors.white,
       centerTitle: true,
       titleTextStyle: GoogleFonts.lora(

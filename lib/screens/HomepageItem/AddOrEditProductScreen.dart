@@ -149,7 +149,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                                       const EdgeInsets.only(bottom: 10, top: 5),
                                   child: DropdownButtonFormField<int>(
                                     style:
-                                        Theme.of(context).textTheme.bodyText1,
+                                        Theme.of(context).textTheme.bodyText2,
                                     decoration: InputDecoration(
                                         contentPadding:
                                             const EdgeInsets.symmetric(
@@ -199,80 +199,96 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                           ),
                         ],
                       )),
-                  const Text("Image du produit",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: url == null
-                          ? imageFile != null
-                              ? Stack(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.file(
-                                        imageFile!,
-                                        fit: BoxFit.cover,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .5,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                .5,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      right: 10,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        child: InkWell(
-                                          onTap: () => getFile(),
-                                          child: const Icon(
-                                              CupertinoIcons.camera,
-                                              size: 40),
+                  Visibility(
+                    visible: addOrEdit,
+                    child: Column(
+                      children: [
+                        const Text("Image du produit",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: url == null
+                                ? imageFile != null
+                                    ? Stack(
+                                        children: [
+                                          ClipOval(
+                                            child: Image.file(
+                                              imageFile!,
+                                              fit: BoxFit.cover,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .5,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .5,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            right: 10,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              child: InkWell(
+                                                onTap: () => getFile(),
+                                                child: const Icon(
+                                                    CupertinoIcons.camera,
+                                                    size: 40),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : InkWell(
+                                        onTap: () => getFile(),
+                                        child: const Icon(
+                                            Icons.add_a_photo_outlined,
+                                            size: 80),
+                                      )
+                                : Stack(
+                                    children: [
+                                      ClipOval(
+                                        child: Image.network(
+                                          url!,
+                                          fit: BoxFit.cover,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .5,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .5,
                                         ),
                                       ),
-                                    )
-                                  ],
-                                )
-                              : InkWell(
-                                  onTap: () => getFile(),
-                                  child: const Icon(Icons.add_a_photo_outlined,
-                                      size: 80),
-                                )
-                          : Stack(
-                              children: [
-                                ClipOval(
-                                  child: Image.network(
-                                    url!,
-                                    fit: BoxFit.cover,
-                                    width:
-                                        MediaQuery.of(context).size.width * .5,
-                                    height:
-                                        MediaQuery.of(context).size.width * .5,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 10,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Theme.of(context).primaryColor),
-                                    child: InkWell(
-                                      onTap: () => getFile(),
-                                      child: const Icon(CupertinoIcons.camera,
-                                          size: 40),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )),
+                                      Positioned(
+                                        bottom: 0,
+                                        right: 10,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                          child: InkWell(
+                                            onTap: () => getFile(),
+                                            child: const Icon(
+                                                CupertinoIcons.camera,
+                                                size: 40),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                      ],
+                    ),
+                  ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 20, top: 30),
                     width: MediaQuery.of(context).size.width * 0.9,

@@ -80,7 +80,7 @@ class _FilteringDialogState extends State<FilteringDialog> {
                   : Padding(
                       padding: const EdgeInsets.only(bottom: 10, top: 5),
                       child: DropdownButtonFormField<int>(
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyText2,
                         decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 10),

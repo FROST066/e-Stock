@@ -251,16 +251,24 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       child: ElevatedButton(
                         style: defaultStyle(context),
                         onPressed: () async {
-                          commande.list = transactionItemList
-                              .map((e) => OrderItem(
-                                  productId: e.product.productID,
-                                  quantity:
-                                      int.parse(e.quantityController.text),
-                                  purchasePrice:
-                                      double.parse(e.priceController.text)))
-                              .toList();
-                          // print("${commande.toJsonEndoded()}");
-                          await submitTransaction(commande.toJsonEndoded());
+                          if (transactionItemList.isEmpty) {
+                            customFlutterToast(
+                                msg: "Veuillez ajouter au moins un produit");
+                          } else if (!validateTransactionItem()) {
+                            customFlutterToast(
+                                msg: "Veuillez bien remplir tous les champs");
+                          } else {
+                            commande.list = transactionItemList
+                                .map((e) => OrderItem(
+                                    productId: e.product.productID,
+                                    quantity:
+                                        int.parse(e.quantityController.text),
+                                    purchasePrice:
+                                        double.parse(e.priceController.text)))
+                                .toList();
+                            // print("${commande.toJsonEndoded()}");
+                            await submitTransaction(commande.toJsonEndoded());
+                          }
                         },
                         child: _isSubmitting
                             ? customLoader()
@@ -272,6 +280,27 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ),
             ),
     );
+  }
+
+// bool validateTransactionItem() {
+//     bool isValid = true;
+//     transactionItemList.forEach((element) {
+//       if (element.quantityController.text.isEmpty ||
+//           element.priceController.text.isEmpty) {
+//         isValid = false;
+//       }
+//     });
+//     return isValid;
+//   }
+
+  bool validateTransactionItem() {
+    bool isValid = true;
+    transactionItemList.forEach((element) {
+      if (!element._FormKey.currentState!.validate()) {
+        isValid = false;
+      }
+    });
+    return isValid;
   }
 
   addTransactionItem(String name) {
@@ -312,61 +341,85 @@ class _TransactionScreenState extends State<TransactionScreen> {
 }
 
 class TransactionItem extends StatelessWidget {
-  TransactionItem(
-      {super.key,
-      required this.product,
-      required this.removeTransactionItem,
-      required this.type});
+  TransactionItem({
+    super.key,
+    required this.product,
+    required this.removeTransactionItem,
+    required this.type,
+  });
   final Product product;
   void Function(Product) removeTransactionItem;
   final int type;
+  // bool Function(GlobalKey<FormState>) validityFunc;
   TextEditingController quantityController = TextEditingController(text: "0");
   TextEditingController priceController = TextEditingController(text: "0");
-
+  final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .85,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(flex: 2, child: Center(child: Text(product.name))),
-          const Flexible(flex: 1, child: SizedBox()),
-          Flexible(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: CustomTextFormField(
-                textAlign: TextAlign.center,
-                hintText: "Quantité",
-                textInputType: TextInputType.number,
-                controller: quantityController,
-                onChanged: (value) {},
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 3,
-            child: Visibility(
-              visible: type == 0,
+      child: Form(
+        key: _FormKey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(flex: 2, child: Center(child: Text(product.name))),
+            const Flexible(flex: 1, child: SizedBox()),
+            Flexible(
+              flex: 3,
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: CustomTextFormField(
                   textAlign: TextAlign.center,
-                  hintText: "Prix",
+                  hintText: "Quantité",
                   textInputType: TextInputType.number,
-                  controller: priceController,
+                  controller: quantityController,
                   onChanged: (value) {},
+                  validatorFun: (p0) {
+                    if (int.parse(p0!) <= 0) {
+                      customFlutterToast(
+                          msg: "La quantité doit être strtement positive");
+                      return " ";
+                    } else if (type == 1 &&
+                        int.parse(p0) > product.quantiteDisponible) {
+                      return "La quantité doit être inférieure à ${product.quantiteDisponible}";
+                    }
+                    return null;
+                  },
                 ),
               ),
             ),
-          ),
-          Flexible(
+            Flexible(
               flex: 3,
-              child: IconButton(
-                  onPressed: () => removeTransactionItem(product),
-                  icon: const Icon(Icons.delete, color: Colors.red)))
-        ],
+              child: Visibility(
+                visible: type == 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: CustomTextFormField(
+                    textAlign: TextAlign.center,
+                    hintText: "Prix",
+                    textInputType: TextInputType.number,
+                    controller: priceController,
+                    onChanged: (value) {},
+                    validatorFun: (p0) {
+                      if (type == 0 && double.parse(p0!) <= 0) {
+                        customFlutterToast(
+                            msg: "Le prix doit être strictement positif");
+                        return " ";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+                flex: 3,
+                child: IconButton(
+                    onPressed: () => removeTransactionItem(product),
+                    icon: const Icon(Icons.delete, color: Colors.red)))
+          ],
+        ),
       ),
     );
   }
