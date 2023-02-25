@@ -1,26 +1,20 @@
-import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-
 import '../../other/styles.dart';
 import '../../services/static.dart';
 
 class FilteringDialog extends StatefulWidget {
-  FilteringDialog({super.key, required this.ctx, this.updateFun, this.addFun});
-  BuildContext ctx;
-
-  void Function(String)? updateFun;
-  void Function(int, String)? addFun;
+  const FilteringDialog({super.key, required this.filter});
+  final Future<void> Function(bool isLowStock, int categoryId) filter;
   @override
   State<FilteringDialog> createState() => _FilteringDialogState();
 }
 
 class _FilteringDialogState extends State<FilteringDialog> {
   int? selectedCategorie;
-  bool _isFecthing = false;
+  bool _isFecthing = false, swithStatus = false;
   initialize() async {
     setState(() {
       _isFecthing = true;
@@ -47,10 +41,10 @@ class _FilteringDialogState extends State<FilteringDialog> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Theme.of(widget.ctx).scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           height: 250,
-          width: MediaQuery.of(widget.ctx).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.8,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,10 +57,9 @@ class _FilteringDialogState extends State<FilteringDialog> {
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                           decoration: TextDecoration.none,
-                          color:
-                              Theme.of(widget.ctx).textTheme.bodyText2!.color)),
+                          color: Theme.of(context).textTheme.bodyText2!.color)),
                   GestureDetector(
-                    onTap: () => Navigator.pop(widget.ctx),
+                    onTap: () => Navigator.pop(context),
                     child: const Icon(
                       Icons.cancel,
                       size: 35,
@@ -116,7 +109,7 @@ class _FilteringDialogState extends State<FilteringDialog> {
                         },
                       ),
                     ),
-              Text("Produits en rupture:"),
+              const Text("Produits en rupture:"),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ToggleSwitch(
@@ -130,15 +123,17 @@ class _FilteringDialogState extends State<FilteringDialog> {
                   activeFgColor: Colors.white,
                   inactiveBgColor: Colors.grey,
                   inactiveFgColor: Colors.white,
-                  initialLabelIndex: 1,
+                  initialLabelIndex: swithStatus ? 0 : 1,
                   totalSwitches: 2,
                   animate: true,
                   curve: Curves.fastLinearToSlowEaseIn,
                   labels: const ['OUI', 'NON'],
                   radiusStyle: true,
                   onToggle: (index) {
-                    // 1 correspond a vente et 0 a approvisionnement
-
+                    // 1 correspond a non et 0 a oui
+                    setState(() {
+                      swithStatus = index == 0;
+                    });
                     print('switched to: $index');
                   },
                 ),
@@ -148,8 +143,11 @@ class _FilteringDialogState extends State<FilteringDialog> {
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
                   style: defaultStyle(context),
-                  onPressed: () {},
-                  child: Text("Appliquer"),
+                  onPressed: () {
+                    widget.filter(swithStatus, selectedCategorie ?? 0);
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Appliquer"),
                 ),
               ),
             ],

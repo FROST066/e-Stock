@@ -60,4 +60,14 @@ class StaticValues {
       printListCategories();
     }
   }
+
+  static getCategoryNameByID(int id) async {
+    if (_listCategories.isEmpty) await loadCategoryList();
+    for (var item in _listCategories) {
+      if (item.categoryId == id) {
+        return item.name;
+      }
+    }
+    return "Inconnu";
+  }
 }
