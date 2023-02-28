@@ -47,8 +47,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: myTheme,
-          initialRoute: '/',
-          routes: routes,
+          home: const Splash(),
         );
       },
     );

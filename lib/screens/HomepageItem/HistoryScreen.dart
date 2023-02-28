@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/HistoryItem.dart';
 import '../../other/const.dart';
-import '../../other/styles.dart';
 import '../../widgets/HistoryDialogWidget.dart';
 import '../../widgets/customFlutterToast.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +22,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   bool _isLoading = false;
   List<HistoryItem> _historyItems = [];
+
   loadHistory() async {
     setState(() {
       _isLoading = true;
@@ -39,11 +38,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
         var jsonresponse = json.decode(response.body);
         // print("${response.body}");
         // print("${response.statusCode}");
-        // print(jsonresponse);
+        print(jsonresponse);
 
         _historyItems =
             (jsonresponse as List).map((e) => historyItemFromJson(e)).toList();
-        print("---------------response $_historyItems");
+        // print("---------------response $_historyItems");
       } catch (e) {
         print("------1------${e.toString()}");
         customFlutterToast(msg: "Erreur: ${e.toString()}");

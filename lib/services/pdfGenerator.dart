@@ -40,7 +40,7 @@ pw.Widget _contentTable(pw.Context context, List<List<String>> data) {
     border: null,
     headerHeight: 25,
     cellHeight: 40,
-    cellAlignment: pw.Alignment.centerLeft,
+    cellAlignment: pw.Alignment.center,
     headerDecoration: const pw.BoxDecoration(
       borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
       color: PdfColor.fromInt(0xFFceced6),

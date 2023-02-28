@@ -48,6 +48,7 @@ Widget centerText(String text, ctx) {
     child: Center(
       child: Text(
         text,
+        textAlign: TextAlign.center,
         style: GoogleFonts.abel(
             fontSize: 13,
             decoration: TextDecoration.none,
