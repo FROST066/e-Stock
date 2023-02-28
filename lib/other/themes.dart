@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final lightTheme = ThemeData.light().copyWith(
+  useMaterial3: true,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: appBlue, foregroundColor: Colors.white),
   appBarTheme: AppBarTheme(
@@ -35,6 +36,7 @@ final lightTheme = ThemeData.light().copyWith(
 );
 
 final darkTheme = ThemeData.dark().copyWith(
+  useMaterial3: true,
   floatingActionButtonTheme:
       const FloatingActionButtonThemeData(backgroundColor: appDarkBlue),
   appBarTheme: AppBarTheme(

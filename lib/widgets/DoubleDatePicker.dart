@@ -29,7 +29,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
           width: MediaQuery.of(context).size.width * 0.9,
           height: 50,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: appGrey),
+              borderRadius: BorderRadius.circular(15), color: Colors.grey[400]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -37,8 +37,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText2!.color),
+                  style: const TextStyle(color: Colors.black),
                   initialValue: DateTime.now().toString(),
                   dateMask: 'd-MM-yyyy',
                   firstDate: DateTime(2020),
@@ -52,13 +51,12 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                   onSaved: (val) => print(val),
                 ),
               ),
-              const Text("à"),
+              const Text("à", style: TextStyle(color: Colors.black)),
               Container(
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText2!.color),
+                  style: const TextStyle(color: Colors.black),
                   initialValue: DateTime.now().toString(),
                   dateMask: 'd-MM-yyyy',
                   calendarTitle: "Selectionnez la date de fin",

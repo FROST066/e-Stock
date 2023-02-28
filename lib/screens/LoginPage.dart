@@ -38,8 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 15),
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  // width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.25,
                   child: Image.asset(
                     "assets/images/logo.png",
                     fit: BoxFit.contain,
@@ -118,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               color: Theme.of(context).primaryColor,
                             )),
-                        onTap: () => Navigator.pushReplacement(
+                        onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (builder) => const GetEmail())),
@@ -138,11 +137,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = true;
     });
-    var formData = {
-      "email": email,
-      "mdp": mdp,
-      "connexion": "1",
-    };
+    var formData = {"email": email, "mdp": mdp, "connexion": "1"};
 
     try {
       print("---------------requesting $BASE_URL");

@@ -1,5 +1,6 @@
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/services/static.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -91,7 +92,7 @@ class _CustomPasswordFormFieldState extends State<CustomPasswordFormField> {
         decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 1),
             labelText: widget.labelText,
-            prefixIcon: const Icon(Icons.lock_outline),
+            prefixIcon: const Icon(CupertinoIcons.lock_shield_fill),
             suffixIcon: GestureDetector(
                 onTap: () => setState(() {
                       obscureText = !obscureText;

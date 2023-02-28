@@ -33,7 +33,7 @@ class Product {
         sellingPrice: int.parse(json["prixUnitaire"] ?? "0"),
         quantiteDisponible: int.parse(json["quantiteDisponible"] ?? "0"),
         categoryID: int.parse(json["categorie"] ?? "0"),
-        url: json["url"],
+        url: json["urlPhoto"],
         stockMin: int.parse(json["stockMin"] ?? "5"),
       );
 
@@ -44,7 +44,7 @@ class Product {
         "prixUnitaire": sellingPrice,
         "quantiteDisponible": quantiteDisponible,
         "categorie": categoryID,
-        "url": url,
+        "urlPhoto": url,
         "stockMin": stockMin,
       };
 }

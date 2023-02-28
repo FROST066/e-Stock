@@ -52,13 +52,13 @@ class Order {
   Map<String, dynamic> toJsonEndoded() => type == 0
       ? {
           "seReaprovisionner": "1",
-          "magasin": shopId.toString(),
+          "magasin": "$shopId",
           "commandes": List<Map<String, dynamic>>.from(
               list.map((x) => x.toJsonEndoded(type))),
         }
       : {
           "vente": "1",
-          "shopIdD": shopId.toString(),
+          "shopID": "$shopId",
           "commandes": List<Map<String, dynamic>>.from(
               list.map((x) => x.toJsonEndoded(type))),
         };

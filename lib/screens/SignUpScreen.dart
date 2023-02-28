@@ -34,14 +34,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              height: MediaQuery.of(context).size.height * 0.35,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Image.asset(
-                "assets/images/incription.png",
-                fit: BoxFit.fill,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10, top: 15),
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  child: Image.asset(
+                    "assets/images/logo.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const Text("e-Stock",
+                    style: TextStyle(fontFamily: 'Chancery', fontSize: 30))
+              ],
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
@@ -160,12 +166,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _isLoading = true;
     });
     var formData = {"nom": nom, "prenom": "", "mail": mail, "mdp": mdp};
+    print("-----------$formData");
     print("---------------requesting $BASE_URL for sign up");
     try {
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
       // print(response.body);
       var jsonresponse = json.decode(response.body);
+      print("---------------response $jsonresponse");
       if (response.statusCode.toString().startsWith("2")) {
         try {
           if (jsonresponse['status']) {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/themes.dart';
 import 'package:e_stock/screens/HomePage.dart';
@@ -11,6 +13,7 @@ import 'package:e_stock/screens/LoginPage.dart';
 import 'package:e_stock/screens/getStarted.dart';
 import 'package:e_stock/screens/shopList.dart';
 import 'package:e_stock/screens/splash.dart';
+import 'package:e_stock/services/route.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +22,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (!Platform.isLinux) {
+    await Firebase.initializeApp();
+  }
   final prefs = await SharedPreferences.getInstance();
   final themeIsLight = prefs.getBool(PrefKeys.IS_LIGHT);
   bool isLight = themeIsLight ??
@@ -42,17 +47,8 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: myTheme,
-          // home: const HistoryScreen(),
-          // home: const HomePage(),
-          // home: const Congrats(),
-          // home: const ProvideNewMdp(),
-          // home: const ProvideOtp(),
-          // home: const GetEmail(),
-          // home: const SignUpScreen(),
-          // home: const LoginPage(),
-          // home: const FirstPage(),
-          home: const Splash(),
-          // home: const GetStarted(),
+          initialRoute: '/',
+          routes: routes,
         );
       },
     );

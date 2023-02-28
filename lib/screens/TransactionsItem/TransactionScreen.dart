@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_stock/models/order.dart';
 import 'package:e_stock/other/const.dart';
+import 'package:e_stock/screens/HomepageItem/AllProductsScreen.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/customFlutterToast.dart';
@@ -64,27 +65,32 @@ class _TransactionScreenState extends State<TransactionScreen> {
       _isSubmitting = true;
     });
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var body = json.encode(data);
-      print("body: $body");
+      var body = data;
+      body['commandes'] = json.encode(data['commandes']);
       print("---------------requesting $BASE_URL for submit transaction");
-      http.Response response =
-          await http.post(Uri.parse(BASE_URL), headers: headers, body: body);
-      var jsonresponse = json.decode(response.body);
-      print("${response.body}");
-      print("${response.statusCode}");
-      print(jsonresponse);
-      customFlutterToast(
-          msg: "Jordy n'a pas encore implémenté la fonction de transaction");
-      // if (jsonresponse["status"]) {
-      //   while (transactionItemList.isNotEmpty) {
-      //     removeTransactionItem(transactionItemList.last.product);
-      //   }
-      //   customFlutterToast(msg: "Transaction effectuée avec succès");
-      //   if (mounted && widget.e != null) {
-      //     Navigator.pop(context);
-      //   }
-      // }
+      http.Response response = await http.post(Uri.parse(BASE_URL), body: data);
+      print("  response.body--------${response.body}");
+      try {
+        var jsonresponse = json.decode(response.body);
+        // print("${response.body}");
+        // print("${response.statusCode}");
+        // print(jsonresponse);
+        if (jsonresponse["status"]) {
+          while (transactionItemList.isNotEmpty) {
+            removeTransactionItem(transactionItemList.last.product);
+          }
+          customFlutterToast(msg: "Transaction effectuée avec succès");
+          if (mounted && widget.e != null) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (builder) => AllProductsScreen()));
+          }
+        }
+      } catch (e) {
+        print("------0------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ${e.toString()}");
+      }
     } catch (e) {
       print("------1------${e.toString()}");
       customFlutterToast(msg: "Erreur: ${e.toString()}");

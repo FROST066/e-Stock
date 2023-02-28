@@ -1,10 +1,18 @@
+import 'dart:convert';
+
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/DoubleDatePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/HistoryItem.dart';
+import '../../other/const.dart';
 import '../../other/styles.dart';
 import '../../widgets/HistoryDialogWidget.dart';
+import '../../widgets/customFlutterToast.dart';
+import 'package:http/http.dart' as http;
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -14,74 +22,81 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  bool _isLoading = false;
+  List<HistoryItem> _historyItems = [];
+  loadHistory() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
+    var forData = {"historique": "1", "id": "${shopId!}"};
+    try {
+      print("---------------requesting $BASE_URL for load history");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: forData);
+      try {
+        var jsonresponse = json.decode(response.body);
+        // print("${response.body}");
+        // print("${response.statusCode}");
+        // print(jsonresponse);
+
+        _historyItems =
+            (jsonresponse as List).map((e) => historyItemFromJson(e)).toList();
+        print("---------------response $_historyItems");
+      } catch (e) {
+        print("------1------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    loadHistory();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Historique des transaction"),
-      ),
+      appBar: AppBar(title: const Text("Historique des transaction")),
       body: Center(
         child: Column(
           children: [
-            Flexible(
-                flex: !isPortrait ? 6 : 2, child: const DoubleDatePicker()),
+            const DoubleDatePicker(),
             Flexible(
               flex: 8,
               child: SingleChildScrollView(
-                child: Column(
-                    children: [
-                  {
-                    "name": "Tomato",
-                    "Category": "Fruit",
-                    "type": "V",
-                    "hour": "10:34",
-                    "date": "31-12-2022",
-                    "nbre": "50",
-                    "price": "50 FCFA",
-                    "total": "2500 FCFA"
-                  },
-                  {
-                    "name": "Ananas",
-                    "Category": "Fruit",
-                    "type": "A",
-                    "hour": "10:34",
-                    "date": "31-12-2022",
-                    "nbre": "50",
-                    "price": "50 FCFA",
-                    "total": "2500 FCFA"
-                  },
-                  {
-                    "name": "Tomato",
-                    "Category": "Fruit",
-                    "type": "V",
-                    "hour": "10:34",
-                    "date": "31-12-2022",
-                    "nbre": "50",
-                    "price": "50 FCFA",
-                    "total": "2500 FCFA"
-                  },
-                ]
-                        .map((e) => InkWell(
-                              onTap: () => showCustomDialog(context, e),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 6),
-                                margin: const EdgeInsets.symmetric(vertical: 7),
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: appGrey),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
+                child: _isLoading
+                    ? customLoader()
+                    : Column(
+                        children: _historyItems
+                            .map((e) => InkWell(
+                                  onTap: () => showCustomDialog(context, e),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 6),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 7),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.grey[400]),
+                                    child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Image.asset(
-                                          (e["type"] == "A")
+                                          e.type == 0
                                               ? "assets/images/transactionA.png"
                                               : "assets/images/transactionV.png",
                                           height: 50,
@@ -92,7 +107,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               const EdgeInsets.only(left: 12),
                                           child: Column(
                                             children: [
-                                              Text(e["nbre"]!,
+                                              Text("${e.nbr}",
                                                   style: TextStyle(
                                                       color: ThemeData.dark()
                                                           .scaffoldBackgroundColor,
@@ -108,58 +123,56 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            15),
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                                child: Text(e["date"]!,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
+                                                            15)),
+                                                child: Text(e.date,
+                                                    style: TextStyle(
+                                                        color: ThemeData.dark()
+                                                            .scaffoldBackgroundColor,
                                                         fontWeight:
                                                             FontWeight.normal,
-                                                        fontSize: 11)),
+                                                        fontSize: 15)),
                                               )
                                             ],
                                           ),
                                         ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  e.product.name,
+                                                  style: TextStyle(
+                                                      color: ThemeData.dark()
+                                                          .scaffoldBackgroundColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Text(
+                                                  e.type == 0
+                                                      ? "TYPE: Achat"
+                                                      : "TYPE: Vente",
+                                                  style: GoogleFonts.aBeeZee(
+                                                    fontSize: 11,
+                                                    color: ThemeData.dark()
+                                                        .scaffoldBackgroundColor,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    Flexible(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              e["name"]!,
-                                              style: TextStyle(
-                                                  color: ThemeData.dark()
-                                                      .scaffoldBackgroundColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Text(
-                                              (e["type"]! == "A")
-                                                  ? "TYPE: Achat"
-                                                  : "TYPE: Vente",
-                                              style: GoogleFonts.aBeeZee(
-                                                fontSize: 11,
-                                                color: ThemeData.dark()
-                                                    .scaffoldBackgroundColor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ))
-                        .toList()),
+                                  ),
+                                ))
+                            .toList()),
               ),
             )
           ],
@@ -169,7 +182,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 }
 
-void showCustomDialog(BuildContext context, Map<String, String> e) {
+void showCustomDialog(BuildContext context, HistoryItem e) {
   showAnimatedDialog(
       context: context,
       barrierDismissible: true,

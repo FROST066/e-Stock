@@ -143,11 +143,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   ElevatedButton(
                       style: homePageBtStyle(context),
                       child: const Text("     BILAN      "),
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) =>
-                                  const BalanceSheetScreen()))),
+                      onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) =>
+                                        const BalanceSheetScreen())),
+                          }),
                 ],
               )),
         ],

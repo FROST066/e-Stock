@@ -1,10 +1,10 @@
+import 'package:e_stock/models/HistoryItem.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-import '../other/styles.dart';
 
-Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
+Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
   return Center(
     child: Container(
       decoration: BoxDecoration(
@@ -28,11 +28,8 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                       color: Theme.of(ctx).textTheme.bodyText2!.color)),
               GestureDetector(
                 onTap: () => Navigator.pop(ctx),
-                child: const Icon(
-                  Icons.cancel,
-                  size: 35,
-                  color: appGrey,
-                ),
+                child: Icon(Icons.cancel,
+                    size: 35, color: Theme.of(ctx).scaffoldBackgroundColor),
               )
             ],
           ),
@@ -40,13 +37,12 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(ctx).scaffoldBackgroundColor,
                 foregroundColor: Theme.of(ctx).primaryColor,
-                child: const ClipOval(
-                  child: Icon(
-                    LineIcons.tags,
-                    size: 70,
-                  ),
+                child: ClipOval(
+                  child: e.product.url != null && e.product.url != ""
+                      ? Image.network(e.product.url!, fit: BoxFit.cover)
+                      : const Icon(LineIcons.tags, size: 70),
                 ),
               ),
               Padding(
@@ -55,7 +51,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      e["name"]!,
+                      e.product.name,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -64,7 +60,7 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Catégorie: ${e['Category']!}",
+                      "Catégorie: ${e.categoryName}",
                       style: GoogleFonts.quicksand(
                           fontSize: 13,
                           decoration: TextDecoration.none,
@@ -76,11 +72,17 @@ Widget historyDialogWidget(BuildContext ctx, Map<String, String> e) {
             ],
           ),
           customTableWithArray([
-            ["Heure", e["hour"]!],
-            ["Date", e["date"]!],
-            ["Nombre d'article", e["nbre"]!],
-            ["Prix unitaire", e["price"]!],
-            ["Total", e["total"]!],
+            ["Heure", e.heure],
+            ["Date", e.date],
+            ["Nombre d'article", "${e.nbr}"],
+            [
+              "Prix unitaire",
+              "${e.prixApprovisionement ?? e.product.sellingPrice}"
+            ],
+            [
+              "Total",
+              "${(e.prixApprovisionement ?? e.product.sellingPrice) * e.nbr}"
+            ],
           ], ctx)
         ],
       ),

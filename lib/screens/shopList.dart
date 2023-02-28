@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/themes.dart';
+import 'package:e_stock/widgets/reloadPlease.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -121,21 +122,7 @@ class _ShopListState extends State<ShopList> {
         child: _isLoading
             ? customLoader()
             : shopList == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                        child: Text(
-                            "Une erreur s'est produite. Verifiez votre connexion internet et rechargez la page"),
-                      ),
-                      ElevatedButton(
-                          style: defaultStyle(context),
-                          onPressed: () async => await loadShopList(),
-                          child: const Text("Recharger"))
-                    ],
-                  )
+                ? ReloadPlease(futureFunc: loadShopList)
                 : shopList!.isEmpty
                     ? Container(
                         decoration: BoxDecoration(

@@ -16,42 +16,41 @@ class HistoryItem {
     required this.product,
     required this.categoryName,
     required this.type,
-    required this.hour,
+    required this.heure,
     required this.date,
-    required this.nbre,
+    required this.nbr,
+    required this.prixApprovisionement,
   });
 
   Product product;
   String categoryName;
-  int type;
-  String hour;
-  String date;
-  String nbre;
+  int type, nbr;
+  String heure, date;
+  int? prixApprovisionement;
 
   factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
         product: Product.fromJson(json["product"]),
         categoryName: json["CategoryName"],
         type: json["type"],
-        hour: json["hour"],
+        heure: json["heure"],
         date: json["date"],
-        nbre: json["nbre"],
+        nbr: int.parse(json["nbr"]),
+        prixApprovisionement: json["PrixApprovisionement"] != null
+            ? int.parse(json["PrixApprovisionement"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "product": product.toJson(),
         "CategoryName": categoryName,
         "type": type,
-        "hour": hour,
+        "heure": heure,
         "date": date,
-        "nbre": nbre,
+        "nbr": nbr,
+        "PrixApprovisionement": prixApprovisionement,
       };
-}
 
-// {
-//     "product":{"productID":3,"name":"Pomme","description":"bla bal balla bla bla bla c'est une longue descritption","purchasePrice":300,"sellingPrice":100,"low":10,"CategoryID":1},
-//     "CategoryName": "Fruit",
-//     "type": 0,
-//     "hour": "10:34",
-//     "date": "31-12-2022",
-//     "nbre": "50"
-// }
+  @override
+  String toString() =>
+      "{ product: ${product.name}, categoryName: $categoryName, type: $type, heure: $heure, date: $date, nbr: $nbr, prixApprovisionement: $prixApprovisionement}";
+}
