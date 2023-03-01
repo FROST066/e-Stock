@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/screens/TransactionsItem/TransactionScreen.dart';
+import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,6 +56,19 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
         _isRemoving = false;
       });
     }
+  }
+
+  loadCatName() async {
+    catName = await StaticValues.getCategoryNameByID(widget.e.categoryID);
+    setState(() {});
+  }
+
+  late String catName;
+  @override
+  void initState() {
+    catName = widget.e.categoryID.toString();
+    loadCatName();
+    super.initState();
   }
 
   @override
@@ -117,7 +131,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        "Catégorie: ${widget.e.categoryID}",
+                        "Catégorie: $catName",
                         style: GoogleFonts.quicksand(
                             fontSize: 13,
                             decoration: TextDecoration.none,

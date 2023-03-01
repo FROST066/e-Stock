@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/themes.dart';
+import 'package:e_stock/widgets/mainLogo.dart';
 import 'package:e_stock/widgets/reloadPlease.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -129,24 +130,23 @@ class _ShopListState extends State<ShopList> {
                           borderRadius: BorderRadius.circular(15),
                           color: Theme.of(context).scaffoldBackgroundColor,
                         ),
-                        height: 200,
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 450,
+                        width: MediaQuery.of(context).size.width * 0.9,
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 20),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Créer une boutique ",
-                                  style: GoogleFonts.oswald(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ],
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: MainLogo(),
+                            ),
+                            Text(
+                              "Créer une boutique ",
+                              style: GoogleFonts.oswald(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                              ),
                             ),
                             Form(
                                 key: _formKey,
@@ -156,7 +156,7 @@ class _ShopListState extends State<ShopList> {
                                     hintText: "Nom de la boutique",
                                     prefixIcon: Icons.business_outlined)),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
+                              width: MediaQuery.of(context).size.width * 0.5,
                               margin: const EdgeInsets.only(bottom: 10),
                               child: ElevatedButton(
                                 style: defaultStyle(context),

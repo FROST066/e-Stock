@@ -75,13 +75,20 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                     )),
                 Expanded(
                   flex: 7,
-                  child: SingleChildScrollView(
-                    child: Column(
-                        children: listCategorysToDisplay
-                            .map((e) => AllCategoryListViewItem(
-                                e: e, removeFun: removeCategory))
-                            .toList()),
-                  ),
+                  child: listCategorysToDisplay.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "Aucunes catétogies",
+                            style: TextStyle(color: Colors.grey, fontSize: 20),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                              children: listCategorysToDisplay
+                                  .map((e) => AllCategoryListViewItem(
+                                      e: e, removeFun: removeCategory))
+                                  .toList()),
+                        ),
                 )
               ],
             ),

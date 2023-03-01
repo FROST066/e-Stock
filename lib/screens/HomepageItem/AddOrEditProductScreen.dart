@@ -291,7 +291,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 20, top: 30),
-                    width: MediaQuery.of(context).size.width * 0.9,
+                    width: MediaQuery.of(context).size.width * 0.5,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       margin: const EdgeInsets.symmetric(vertical: 12),

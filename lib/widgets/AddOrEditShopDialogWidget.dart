@@ -161,7 +161,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
                       hintText: "Nom de la boutique",
                       prefixIcon: Icons.business_outlined)),
               Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.5,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
                   style: defaultStyle(context),

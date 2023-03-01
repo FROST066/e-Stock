@@ -249,7 +249,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   Center(
                     heightFactor: 1,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       margin: const EdgeInsets.only(
                           // bottom: 20, top: !isKeyboardVisible ? 30 : 250),
                           bottom: 20,

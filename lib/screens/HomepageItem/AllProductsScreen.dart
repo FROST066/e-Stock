@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
 import 'package:e_stock/models/product.dart';
+import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/screens/HomepageItem/filteringScreen.dart';
 import 'package:e_stock/services/static.dart';
@@ -156,7 +157,15 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   builder: (builder) =>
                       AddOrEditProductScreen(refresh: loadProductList))),
           child: const Icon(Icons.add)),
-      appBar: AppBar(title: const Text("Mes produits")),
+      appBar: AppBar(
+          title: const Text("Mes produits"),
+          leading: BackButton(
+            onPressed: (() => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => const HomePage(selectedIndex: 0)),
+                (route) => false)),
+          )),
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .9,
@@ -224,20 +233,28 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                             height: 50,
                             width: 50,
                             child: CircularProgressIndicator()))
-                    : GridView.builder(
-                        itemCount: filteredProductsList.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            customCard(filteredProductsList[index], context,
-                                loadProductList),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 1,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10),
-                        padding: const EdgeInsets.all(10),
-                        shrinkWrap: true,
-                      ),
+                    : filteredProductsList.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "Aucun produit trouvé",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 20),
+                            ),
+                          )
+                        : GridView.builder(
+                            itemCount: filteredProductsList.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                customCard(filteredProductsList[index], context,
+                                    loadProductList),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 1,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10),
+                            padding: const EdgeInsets.all(10),
+                            shrinkWrap: true,
+                          ),
               )
             ],
           ),

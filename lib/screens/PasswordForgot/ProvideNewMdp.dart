@@ -59,7 +59,7 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
                 child: Column(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: ElevatedButton(
                         style: defaultStyle(context),

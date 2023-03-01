@@ -51,7 +51,9 @@ class _ProvideOtpState extends State<ProvideOtp> {
                   child: const Icon(CupertinoIcons.lock_shield_fill, size: 100),
                 ),
               ),
-              const Text("Verifiez votre boite mail. Un code a été envoyé"),
+              const Text("Entrez le code",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text("Nous avons envoyé le code OTP à votre adresse mail"),
               OTPTextField(
                   length: 5,
                   otpFieldStyle: OtpFieldStyle(

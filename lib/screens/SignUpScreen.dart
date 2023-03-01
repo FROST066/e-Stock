@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
+                    width: MediaQuery.of(context).size.width * 0.5,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     child: ElevatedButton(
                       style: defaultStyle(context),
@@ -104,7 +104,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             _signUp();
                                           },
                                         )));
-                            await _signUp();
                           }
                         }
                       },
@@ -135,40 +134,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         )),
       ),
     );
-  }
-
-  void showMissing() {
-    String msg = "";
-    if (nameController.text == "") {
-      msg = "Entrez votre nom et prénom(s) ";
-    } else if (emailController.text == "" ||
-        !emailController.text.contains('@')) {
-      msg = "Entrez un email valide";
-    } else if (mdpController.text == "") {
-      msg = "Entrez un mot de passe valide";
-    } else if (confimedMdpController.text == "") {
-      msg = "Confirmez le mot de passe ";
-    } else if (confimedMdpController.text != mdpController.text) {
-      msg = "Les 2 mots de passe ne correspondent pas";
-    } else {
-      //traitement
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (ctx) => const LoginPage()),
-          (route) => false);
-    }
-    //Don't work on Linux
-    if (msg != "") {
-      print(msg);
-      if (!Platform.isLinux) {
-        Fluttertoast.showToast(
-          msg: msg,
-          fontSize: 18,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-        );
-      }
-    }
   }
 
   _signUp() async {

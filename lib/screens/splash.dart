@@ -36,7 +36,7 @@ class _SplashState extends State<Splash> {
           PageRouteBuilder(
               transitionsBuilder: (_, a, __, c) =>
                   FadeTransition(opacity: a, child: c),
-              transitionDuration: const Duration(seconds: 1),
+              transitionDuration: const Duration(milliseconds: 1000),
               pageBuilder: (builder, _, __) => userID == null
                   ? isFirstTime == null
                       ? const GetStarted()
