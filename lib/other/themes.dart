@@ -16,16 +16,16 @@ final lightTheme = ThemeData.light().copyWith(
   primaryColor: appBlue,
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: const TextStyle(color: appBlue, fontSize: 18),
-    floatingLabelStyle: const TextStyle(fontSize: 18, color: appBlue),
+    floatingLabelStyle: const TextStyle(fontSize: 17, color: appBlue),
     prefixIconColor: appBlue,
     suffixIconColor: appBlue,
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: appBlue, width: 2)),
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: appBlue, width: 1.5)),
     labelStyle: const TextStyle(color: appBlue, fontSize: 18),
     enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: appBlue, width: 2)),
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: appBlue, width: 1.5)),
   ),
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20, color: Colors.black),
@@ -48,16 +48,16 @@ final darkTheme = ThemeData.dark().copyWith(
   primaryColor: appDarkBlue,
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: const TextStyle(color: appDarkBlue, fontSize: 18),
-    floatingLabelStyle: const TextStyle(fontSize: 18, color: appDarkBlue),
+    floatingLabelStyle: const TextStyle(fontSize: 17, color: appDarkBlue),
     prefixIconColor: appDarkBlue,
     suffixIconColor: appDarkBlue,
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: appDarkBlue, width: 2)),
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: appDarkBlue, width: 1.5)),
     labelStyle: const TextStyle(color: appDarkBlue, fontSize: 18),
     enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: appDarkBlue, width: 2)),
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: appDarkBlue, width: 1.5)),
   ),
   textTheme: TextTheme(
     button: const TextStyle(fontSize: 20, color: Colors.white),

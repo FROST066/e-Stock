@@ -18,7 +18,6 @@ Map<String, WidgetBuilder> routes = {
   '/login': (context) => const LoginPage(),
   '/signUp': (context) => const SignUpScreen(),
   '/getEmail': (context) => const GetEmail(),
-  '/provideOtp': (context) => const ProvideOtp(),
   '/provideNewMdp': (context) => const ProvideNewMdp(),
   '/congrats': (context) => const Congrats(),
   '/home': (context) => const HomePage(),

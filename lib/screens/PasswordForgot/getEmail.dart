@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:e_stock/other/styles.dart';
+import 'package:e_stock/screens/PasswordForgot/ProvideNewMdp.dart';
 import 'package:e_stock/screens/PasswordForgot/ProvideOtp.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
@@ -70,7 +71,15 @@ class _GetEmailState extends State<GetEmail> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (b) => const ProvideOtp()))
+                                        builder: (b) => ProvideOtp(
+                                              email: emailController.text,
+                                              afterOTPValidation: () =>
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (builder) =>
+                                                              const ProvideNewMdp())),
+                                            )))
                               }
                           },
                           child: const Text("Continuer"),

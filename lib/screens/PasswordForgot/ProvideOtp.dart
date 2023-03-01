@@ -1,20 +1,32 @@
+import 'dart:async';
 import 'dart:io';
-
-import 'package:e_stock/other/styles.dart';
-import 'package:e_stock/screens/PasswordForgot/ProvideNewMdp.dart';
+import 'package:e_stock/widgets/customFlutterToast.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class ProvideOtp extends StatefulWidget {
-  const ProvideOtp({super.key});
-
+  const ProvideOtp(
+      {super.key, required this.email, required this.afterOTPValidation});
+  final String email;
+  final void Function() afterOTPValidation;
   @override
   State<ProvideOtp> createState() => _ProvideOtpState();
 }
 
 class _ProvideOtpState extends State<ProvideOtp> {
+  int _start = 30;
+  bool isEnabled = false;
+  Timer timer = Timer(const Duration(seconds: 1), () {});
+  EmailOTP myauth = EmailOTP();
+  @override
+  void initState() {
+    startTimer();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool keyBordOpen =
@@ -43,34 +55,20 @@ class _ProvideOtpState extends State<ProvideOtp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Renvoyer le code dans 0:30"),
+                  Text("Renvoyer le code dans 0:$_start"),
                   TextButton(
-                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      foregroundColor: isEnabled
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                    onPressed: isEnabled ? () => startTimer() : null,
                     child: Text(
                       "Renvoyer",
-                      style: GoogleFonts.lora(
-                          color: Theme.of(context).primaryColor, fontSize: 17),
+                      style: GoogleFonts.lora(fontSize: 17),
                     ),
-                  )
+                  ),
                 ],
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      margin: const EdgeInsets.symmetric(vertical: 12),
-                      child: ElevatedButton(
-                        style: defaultStyle(context),
-                        onPressed: () {},
-                        child: const Text("Valider",
-                            style: TextStyle(fontSize: 18)),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -79,11 +77,46 @@ class _ProvideOtpState extends State<ProvideOtp> {
     );
   }
 
-  void onOTPFieldComplete(String pin) {
-    print("Completed: " + pin);
-    //check if correct code by Firebase authentification
-    // if ok
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (ctx) => const ProvideNewMdp()));
+  Future<void> startTimer() async {
+    myauth.setConfig(
+        appEmail: "e-stockteam@gmail.com",
+        appName: "e-Stock",
+        userEmail: widget.email,
+        otpLength: 5,
+        otpType: OTPType.digitsOnly);
+    if (await myauth.sendOTP() == false) {
+      customFlutterToast(msg: "Oops, OTP send failed");
+    } else {
+      customFlutterToast(msg: "OTP has been sent");
+      const oneSec = Duration(seconds: 1);
+      setState(() {
+        isEnabled = false;
+      });
+      timer = Timer.periodic(
+        oneSec,
+        (Timer timer) => setState(
+          () {
+            if (_start < 1) {
+              timer.cancel();
+              setState(() {
+                isEnabled = true;
+              });
+            } else {
+              _start = _start - 1;
+            }
+          },
+        ),
+      );
+    }
+  }
+
+  Future<void> onOTPFieldComplete(String pin) async {
+    // print("Completed: " + pin);
+    if (await myauth.verifyOTP(otp: pin) == true) {
+      customFlutterToast(msg: "OTP is verified");
+      widget.afterOTPValidation();
+    } else {
+      customFlutterToast(msg: "Invalid OTP");
+    }
   }
 }

@@ -93,8 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               msg: "Les 2 mots de passe ne correspondent pas");
                         } else {
                           if (!_isLoading && formKey.currentState!.validate()) {
-                            await _signUp(nameController.text,
-                                emailController.text, mdpController.text);
+                            await _signUp();
                           }
                         }
                       },
@@ -161,11 +160,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  _signUp(String nom, mail, mdp) async {
+  _signUp() async {
     setState(() {
       _isLoading = true;
     });
-    var formData = {"nom": nom, "prenom": "", "mail": mail, "mdp": mdp};
+    var formData = {
+      "nom": nameController.text,
+      "prenom": "",
+      "mail": emailController.text,
+      "mdp": mdpController.text
+    };
     print("-----------$formData");
     print("---------------requesting $BASE_URL for sign up");
     try {
