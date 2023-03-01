@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:e_stock/widgets/customFlutterToast.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 
 class ProvideOtp extends StatefulWidget {
@@ -34,20 +36,35 @@ class _ProvideOtpState extends State<ProvideOtp> {
     return Scaffold(
       appBar: AppBar(title: const Text("Verification email")),
       body: Center(
-        heightFactor: 1,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(),
-              const Text("Verifiez votre boite mail. Le code a été envoyé"),
+              SizedBox(
+                height: 150,
+                width: 150,
+                child: CircleAvatar(
+                  foregroundColor: Colors.red,
+                  backgroundColor: Colors.red.shade100,
+                  child: const Icon(CupertinoIcons.lock_shield_fill, size: 100),
+                ),
+              ),
+              const Text("Verifiez votre boite mail. Un code a été envoyé"),
               OTPTextField(
                   length: 5,
-                  width: MediaQuery.of(context).size.width * 0.7,
+                  otpFieldStyle: OtpFieldStyle(
+                      enabledBorderColor: Colors.transparent,
+                      borderColor: Colors.transparent,
+                      backgroundColor:
+                          Theme.of(context).primaryColor.withOpacity(0.2)),
+                  keyboardType: TextInputType.number,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   fieldWidth: (MediaQuery.of(context).size.width * 0.7 / 5) - 8,
-                  style: const TextStyle(fontSize: 17),
+                  style: TextStyle(
+                      fontSize: 17,
+                      color: Theme.of(context).appBarTheme.foregroundColor),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
                   onChanged: (value) => print(value),
@@ -85,9 +102,9 @@ class _ProvideOtpState extends State<ProvideOtp> {
         otpLength: 5,
         otpType: OTPType.digitsOnly);
     if (await myauth.sendOTP() == false) {
-      customFlutterToast(msg: "Oops, OTP send failed");
+      customFlutterToast(msg: "Oops, le code n'a pas été envoyé");
     } else {
-      customFlutterToast(msg: "OTP has been sent");
+      // customFlutterToast(msg: "le code n'a pas été envoyé");
       const oneSec = Duration(seconds: 1);
       setState(() {
         isEnabled = false;
@@ -113,10 +130,10 @@ class _ProvideOtpState extends State<ProvideOtp> {
   Future<void> onOTPFieldComplete(String pin) async {
     // print("Completed: " + pin);
     if (await myauth.verifyOTP(otp: pin) == true) {
-      customFlutterToast(msg: "OTP is verified");
+      customFlutterToast(msg: "Verification réussie");
       widget.afterOTPValidation();
     } else {
-      customFlutterToast(msg: "Invalid OTP");
+      customFlutterToast(msg: "Le code est incorrect");
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_stock/screens/PasswordForgot/ProvideOtp.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +94,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               msg: "Les 2 mots de passe ne correspondent pas");
                         } else {
                           if (!_isLoading && formKey.currentState!.validate()) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => ProvideOtp(
+                                          email: emailController.text,
+                                          afterOTPValidation: () {
+                                            Navigator.pop(context);
+                                            _signUp();
+                                          },
+                                        )));
                             await _signUp();
                           }
                         }
