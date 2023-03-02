@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
-import '../other/styles.dart';
-
 class DoubleDatePicker extends StatefulWidget {
-  const DoubleDatePicker({super.key});
+  const DoubleDatePicker(
+      {super.key,
+      required this.dateDebutController,
+      required this.dateFinController});
+  final TextEditingController dateDebutController;
+  final TextEditingController dateFinController;
 
   @override
   State<DoubleDatePicker> createState() => _DoubleDatePickerState();
 }
 
 class _DoubleDatePickerState extends State<DoubleDatePicker> {
+  @override
+  void initState() {
+    widget.dateDebutController.text = DateTime(2023).toString();
+    widget.dateFinController.text = DateTime.now().toString();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,9 +49,9 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
                   style: const TextStyle(color: Colors.black),
-                  initialValue: DateTime.now().toString(),
+                  controller: widget.dateDebutController,
                   dateMask: 'd-MM-yyyy',
-                  firstDate: DateTime(2020),
+                  firstDate: DateTime(2023),
                   lastDate: DateTime.now(),
                   calendarTitle: "Selectionnez la date de début",
                   cancelText: "Annuler",
@@ -57,11 +68,11 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
                   style: const TextStyle(color: Colors.black),
-                  initialValue: DateTime.now().toString(),
+                  controller: widget.dateFinController,
                   dateMask: 'd-MM-yyyy',
                   calendarTitle: "Selectionnez la date de fin",
                   cancelText: "Annuler",
-                  firstDate: DateTime(2020),
+                  firstDate: DateTime(2023),
                   lastDate: DateTime.now(),
                   decoration:
                       const InputDecoration(enabledBorder: InputBorder.none),

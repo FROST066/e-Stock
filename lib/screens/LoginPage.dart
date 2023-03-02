@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:e_stock/other/const.dart';
-import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/PasswordForgot/getEmail.dart';
 import 'package:e_stock/screens/SignUpScreen.dart';
 import 'package:e_stock/screens/shopList.dart';
@@ -26,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final mdpController = TextEditingController();
   bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,14 +147,20 @@ class _LoginPageState extends State<LoginPage> {
       //  print (response.statusCode);
       print(jsonresponse);
       try {
-        if (jsonresponse['status']) {
+        if (jsonresponse['status'] || jsonresponse['staus']) {
           print(jsonresponse);
           final prefs = await SharedPreferences.getInstance();
           prefs.setInt(PrefKeys.USER_ID, int.parse(jsonresponse['id']));
           prefs.setString(PrefKeys.USER_NAME, jsonresponse['nom']);
+          if (jsonresponse['urlPhoto'] != null) {
+            prefs.setString(PrefKeys.USER_URL, jsonresponse['urlPhoto']);
+          }
           customFlutterToast(msg: "Bienvenue ${jsonresponse['nom']}");
+
           Navigator.push(
-              context, MaterialPageRoute(builder: (ctx) => ShopList()));
+              context, MaterialPageRoute(builder: (ctx) => const ShopList()));
+        } else if (jsonresponse['error'] != null) {
+          customFlutterToast(msg: jsonresponse['error']);
         } else {
           customFlutterToast(
               msg: "Nom d'utilisateur ou mot de passe incorrect");

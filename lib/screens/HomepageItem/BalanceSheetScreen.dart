@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/HistoryItem.dart';
 import '../../other/const.dart';
-import '../../other/styles.dart';
 import '../../widgets/customFlutterToast.dart';
 
 class BalanceSheetScreen extends StatefulWidget {
@@ -36,7 +35,8 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
   // ];
   List<List<String>> data = [];
   Map<String, dynamic> sheetResult = {}, historyResult = {};
-
+  final TextEditingController _dateFromController = TextEditingController();
+  final TextEditingController _dateToController = TextEditingController();
   loadHistory() async {
     setState(() {
       _isLoadingHistory = true;
@@ -53,12 +53,12 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
         // print("${response.body}");
         // print("${response.statusCode}");
         // print(jsonresponse);
-        List<HistoryItem> _historyItems =
+        List<HistoryItem> historyItems =
             (jsonresponse as List).map((e) => historyItemFromJson(e)).toList();
 
         // Calculer les totaux par produit
         Map<String, dynamic> summary = {};
-        for (HistoryItem historyItem in _historyItems) {
+        for (HistoryItem historyItem in historyItems) {
           String productName = historyItem.product.name;
           if (!summary.containsKey(productName)) {
             summary[productName] = {
@@ -180,7 +180,11 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
         child: Column(
           children: [
             Flexible(
-                flex: !isPortrait ? 6 : 2, child: const DoubleDatePicker()),
+                flex: !isPortrait ? 6 : 2,
+                child: DoubleDatePicker(
+                  dateDebutController: _dateFromController,
+                  dateFinController: _dateToController,
+                )),
             Flexible(
               flex: 8,
               child: SingleChildScrollView(

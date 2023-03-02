@@ -55,10 +55,27 @@ class _OverViewScreenState extends State<OverViewScreen> {
     } finally {}
   }
 
+  loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    int? userID = prefs.getInt(PrefKeys.USER_ID);
+    try {
+      print("---------------requesting $BASE_URL/?user=$userID");
+      http.Response response =
+          await http.get(Uri.parse("$BASE_URL/?user=$userID"));
+      // var jsonresponse = json.decode(response.body);
+      print(response.body);
+      print(response.statusCode);
+      // print(jsonresponse);
+    } catch (e) {
+      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     loadProductList();
+    loadUser();
   }
 
   @override

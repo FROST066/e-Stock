@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/models/product.dart';
 import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
@@ -312,7 +313,17 @@ Widget customCard(
                         size: 60,
                         color: Theme.of(context).primaryColor,
                       )
-                    : Image.network(e.url!, width: 190),
+                    : CachedNetworkImage(
+                        imageUrl: e.url!,
+                        // fit: BoxFit.cover,
+                        width: 190,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
               ),
             ),
             Flexible(

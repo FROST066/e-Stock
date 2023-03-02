@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/services/static.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../models/product.dart';
@@ -68,7 +69,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
       _isLoading = true;
     });
     final urlGot = await uploadAndGetUrl();
-    print("urlGot: ${urlGot}");
+    print("urlGot: $urlGot");
     final formData = addOrEdit
         ? {
             "nom": productNameController.text,
@@ -88,7 +89,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
             "categorie": "${selectedCategorie!}",
             "idProduct": widget.product!.productID.toString(),
           };
-    print("${formData}");
+    print("$formData");
     try {
       print(
           "---------------requesting $BASE_URL for ${addOrEdit ? "add" : "edit "} product ");
@@ -116,6 +117,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double photoWidth = MediaQuery.of(context).size.width * 0.5;
     return Scaffold(
       appBar: AppBar(
           title:
@@ -208,84 +210,61 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         Container(
                             margin: const EdgeInsets.only(top: 10),
-                            child: url == null
-                                ? imageFile != null
-                                    ? Stack(
-                                        children: [
-                                          ClipOval(
-                                            child: Image.file(
+                            child: Stack(
+                              children: [
+                                ClipOval(
+                                  child: url == null
+                                      ? imageFile != null
+                                          ? Image.file(
                                               imageFile!,
                                               fit: BoxFit.cover,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .5,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .5,
-                                            ),
-                                          ),
-                                          Positioned(
-                                            bottom: 0,
-                                            right: 10,
-                                            child: Container(
-                                              padding: const EdgeInsets.all(5),
+                                              width: photoWidth,
+                                              height: photoWidth,
+                                            )
+                                          : Container(
+                                              width: photoWidth,
+                                              height: photoWidth,
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Theme.of(context)
-                                                      .primaryColor),
-                                              child: InkWell(
-                                                onTap: () => getFile(),
-                                                child: const Icon(
-                                                    CupertinoIcons.camera,
-                                                    size: 40),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    : InkWell(
-                                        onTap: () => getFile(),
-                                        child: const Icon(
-                                            Icons.add_a_photo_outlined,
-                                            size: 80),
-                                      )
-                                : Stack(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.network(
-                                          url!,
+                                                      .primaryColor
+                                                      .withAlpha(100)),
+                                              child: const Icon(
+                                                LineIcons.tags,
+                                                size: 80,
+                                              ))
+                                      : CachedNetworkImage(
+                                          imageUrl: url!,
                                           fit: BoxFit.cover,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .5,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .5,
+                                          width: photoWidth,
+                                          height: photoWidth,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 10,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          child: InkWell(
-                                            onTap: () => getFile(),
-                                            child: const Icon(
-                                                CupertinoIcons.camera,
-                                                size: 40),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 10,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).primaryColor),
+                                    child: InkWell(
+                                      onTap: () => getFile(),
+                                      child: const Icon(
+                                          Icons.add_a_photo_rounded,
+                                          size: 30),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
                       ],
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/models/Shop.dart';
 import 'package:e_stock/other/const.dart';
 import 'package:e_stock/other/styles.dart';
@@ -9,6 +10,7 @@ import 'package:e_stock/widgets/AddOrEditShopDialogWidget.dart';
 import 'package:e_stock/widgets/ChangePasswordDialogWidget.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:e_stock/widgets/reloadPlease.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -34,6 +36,8 @@ class _ProfilItemState extends State<ProfilItem> {
   List<Shop>? shopList;
   bool _isLoading = false;
   String username = "USER NAME";
+  String? urlPhoto;
+
   loadShopList() async {
     prefs = await SharedPreferences.getInstance();
     final userID = prefs.getInt(PrefKeys.USER_ID);
@@ -41,6 +45,8 @@ class _ProfilItemState extends State<ProfilItem> {
 
     setState(() {
       username = prefs.getString(PrefKeys.USER_NAME) ?? username;
+      urlPhoto = prefs.getString(PrefKeys.USER_URL);
+      print("urlPhoto: $urlPhoto");
       _isLoading = true;
     });
     final url = "$BASE_URL?magasins=1&owner=$userID";
@@ -89,6 +95,7 @@ class _ProfilItemState extends State<ProfilItem> {
 
   @override
   Widget build(BuildContext context) {
+    double photoWidth = MediaQuery.of(context).size.width * 0.5;
     bool isLight = Theme.of(context).brightness == Brightness.light;
     return Center(
         child: SizedBox(
@@ -102,35 +109,60 @@ class _ProfilItemState extends State<ProfilItem> {
             Stack(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20, top: 30),
-                  width: MediaQuery.of(context).size.width * .5,
-                  height: MediaQuery.of(context).size.height * .25,
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    child: ClipOval(
-                      child: imageFile != null
-                          ? Image.file(
-                              imageFile!,
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(
-                              CupertinoIcons.person_crop_circle_fill,
-                              size: 120,
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Stack(
+                      children: [
+                        ClipOval(
+                          child: urlPhoto == null
+                              ? imageFile != null
+                                  ? Image.file(
+                                      imageFile!,
+                                      fit: BoxFit.cover,
+                                      width: photoWidth,
+                                      height: photoWidth,
+                                    )
+                                  : Container(
+                                      width: photoWidth,
+                                      height: photoWidth,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withAlpha(100)),
+                                      child: const Icon(
+                                        CupertinoIcons.person_crop_circle_fill,
+                                        size: 120,
+                                      ))
+                              : CachedNetworkImage(
+                                  imageUrl: urlPhoto!,
+                                  fit: BoxFit.cover,
+                                  width: photoWidth,
+                                  height: photoWidth,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 10,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColor),
+                            child: InkWell(
+                              onTap: () => getFile(),
+                              child: const Icon(Icons.add_a_photo_rounded,
+                                  size: 30),
                             ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                    // bottom: 25,
-                    bottom: MediaQuery.of(context).size.height * .3 * .15,
-                    right: MediaQuery.of(context).size.width * .1,
-                    child: GestureDetector(
-                        onTap: () => getFile(),
-                        child: const Icon(Icons.add_a_photo_rounded, size: 30)))
+                          ),
+                        )
+                      ],
+                    )),
               ],
             ),
             Text(
@@ -406,9 +438,44 @@ class _ProfilItemState extends State<ProfilItem> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg']);
     if (result != null) {
+      print("-----picker result----------${result.files.single.path}");
       setState(() {
+        urlPhoto = null;
         imageFile = File(result.paths[0]!);
       });
+      final prefs = await SharedPreferences.getInstance();
+      final userID = prefs.getInt(PrefKeys.USER_ID);
+      // Create a reference to the Firebase Storage bucket
+      final storageRef = FirebaseStorage.instance.ref();
+      // Upload file and metadata to the path 'images/mountains.jpg'
+      final childTask =
+          storageRef.child("user$userID/${imageFile!.path.split('/').last}");
+      final uploadTask = await childTask.putFile(imageFile!);
+      final uploadUrl = await childTask.getDownloadURL();
+      print("------------DownloadURL-----------$uploadUrl");
+
+      final formData = {
+        "idUser": "$userID",
+        "newPhoto": uploadUrl,
+        "changeUserImage": "1"
+      };
+      try {
+        print("---------------requesting $BASE_URL  for setting user photo");
+        http.Response response =
+            await http.post(Uri.parse(BASE_URL), body: formData);
+        print(response.statusCode);
+        print("response.body-----------${response.body}");
+        var jsonresponse = json.decode(response.body);
+        print(jsonresponse);
+        if (jsonresponse["status"]) {
+          prefs.setString(PrefKeys.USER_URL, uploadUrl);
+          customFlutterToast(msg: "Photo de profil modifiée avec succès");
+        }
+      } catch (e) {
+        // print("------2------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
+        // return false;
+      }
     }
   }
 

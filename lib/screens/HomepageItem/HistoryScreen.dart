@@ -22,6 +22,8 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   bool _isLoading = false;
   List<HistoryItem> _historyItems = [];
+  final TextEditingController _dateFromController = TextEditingController();
+  final TextEditingController _dateToController = TextEditingController();
 
   loadHistory() async {
     setState(() {
@@ -70,108 +72,126 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: Center(
         child: Column(
           children: [
-            const DoubleDatePicker(),
+            DoubleDatePicker(
+              dateDebutController: _dateFromController,
+              dateFinController: _dateToController,
+            ),
             Flexible(
               flex: 8,
               child: SingleChildScrollView(
                 child: _isLoading
                     ? customLoader()
-                    : Column(
-                        children: _historyItems
-                            .map((e) => InkWell(
-                                  onTap: () => showCustomDialog(context, e),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 6),
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 7),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.grey[400]),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset(
-                                          e.type == 0
-                                              ? "assets/images/transactionA.png"
-                                              : "assets/images/transactionV.png",
-                                          height: 50,
-                                          width: 70,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 12),
-                                          child: Column(
-                                            children: [
-                                              Text("${e.nbr}",
-                                                  style: TextStyle(
-                                                      color: ThemeData.dark()
-                                                          .scaffoldBackgroundColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 17)),
-                                              const SizedBox(height: 5),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+                    : _historyItems.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "L'historique est vide",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 20),
+                            ),
+                          )
+                        : Column(
+                            children: _historyItems
+                                .map((e) => InkWell(
+                                      onTap: () => showCustomDialog(context, e),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 6),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 7),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.grey[400]),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Image.asset(
+                                              e.type == 0
+                                                  ? "assets/images/transactionA.png"
+                                                  : "assets/images/transactionV.png",
+                                              height: 50,
+                                              width: 70,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 12),
+                                              child: Column(
+                                                children: [
+                                                  Text("${e.nbr}",
+                                                      style: TextStyle(
+                                                          color: ThemeData
+                                                                  .dark()
+                                                              .scaffoldBackgroundColor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 17)),
+                                                  const SizedBox(height: 5),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         horizontal: 4,
                                                         vertical: 1),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: Text(e.date,
-                                                    style: TextStyle(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
+                                                    child: Text(e.date,
+                                                        style: TextStyle(
+                                                            color: ThemeData
+                                                                    .dark()
+                                                                .scaffoldBackgroundColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 15)),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      e.product.name,
+                                                      style: TextStyle(
+                                                          color: ThemeData
+                                                                  .dark()
+                                                              .scaffoldBackgroundColor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20),
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Text(
+                                                      e.type == 0
+                                                          ? "TYPE: Achat"
+                                                          : "TYPE: Vente",
+                                                      style:
+                                                          GoogleFonts.aBeeZee(
+                                                        fontSize: 11,
                                                         color: ThemeData.dark()
                                                             .scaffoldBackgroundColor,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontSize: 15)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 8),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  e.product.name,
-                                                  style: TextStyle(
-                                                      color: ThemeData.dark()
-                                                          .scaffoldBackgroundColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20),
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                                const SizedBox(height: 5),
-                                                Text(
-                                                  e.type == 0
-                                                      ? "TYPE: Achat"
-                                                      : "TYPE: Vente",
-                                                  style: GoogleFonts.aBeeZee(
-                                                    fontSize: 11,
-                                                    color: ThemeData.dark()
-                                                        .scaffoldBackgroundColor,
-                                                  ),
-                                                )
-                                              ],
+                                              ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ))
-                            .toList()),
+                                      ),
+                                    ))
+                                .toList()),
               ),
             )
           ],

@@ -36,13 +36,15 @@ class _ProvideOtpState extends State<ProvideOtp> {
     return Scaffold(
       appBar: AppBar(title: const Text("Verification email")),
       body: Center(
+        heightFactor: 1,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
+              Container(
+                margin: const EdgeInsets.only(top: 25),
                 height: 150,
                 width: 150,
                 child: CircleAvatar(
