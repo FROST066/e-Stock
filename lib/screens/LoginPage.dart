@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
       //  print (response.statusCode);
       print(jsonresponse);
       try {
-        if (jsonresponse['status'] || jsonresponse['staus']) {
+        if (jsonresponse['status']) {
           print(jsonresponse);
           final prefs = await SharedPreferences.getInstance();
           prefs.setInt(PrefKeys.USER_ID, int.parse(jsonresponse['id']));
@@ -159,22 +159,16 @@ class _LoginPageState extends State<LoginPage> {
 
           Navigator.push(
               context, MaterialPageRoute(builder: (ctx) => const ShopList()));
-        } else if (jsonresponse['error'] != null) {
-          customFlutterToast(msg: jsonresponse['error']);
         } else {
           customFlutterToast(
               msg: "Nom d'utilisateur ou mot de passe incorrect");
         }
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
-      //set loading to false
       setState(() {
         _isLoading = false;
       });

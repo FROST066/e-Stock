@@ -121,7 +121,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
       // return false;
     } finally {}
@@ -132,45 +131,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
     initialize();
     super.initState();
   }
-
-  // List<Product> listProducts = [
-  //   Product(
-  //     productId: 1,
-  //     name: "Carotte",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 20,
-  //     sellingPrice: 250,
-  //     purchasePrice: 500,
-  //   ),
-  //   Product(
-  //     productId: 2,
-  //     name: "Tomate",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 30,
-  //     sellingPrice: 350,
-  //     purchasePrice: 500,
-  //   ),
-  //   Product(
-  //     productId: 2,
-  //     name: "Telephone",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 20,
-  //     sellingPrice: 250,
-  //     purchasePrice: 500,
-  //   ),
-  //   Product(
-  //     productId: 3,
-  //     name: "Pomme",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 10,
-  //     sellingPrice: 100,
-  //     purchasePrice: 300,
-  //   ),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +233,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                         double.parse(e.priceController.text)))
                                 .toList();
                             // print("${commande.toJsonEndoded()}");
-                            await submitTransaction(commande.toJsonEndoded());
+                            if (await validateTransactionItem2()) {
+                              await submitTransaction(commande.toJsonEndoded());
+                            }
                           }
                         },
                         child: _isSubmitting
@@ -288,24 +250,53 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-// bool validateTransactionItem() {
-//     bool isValid = true;
-//     transactionItemList.forEach((element) {
-//       if (element.quantityController.text.isEmpty ||
-//           element.priceController.text.isEmpty) {
-//         isValid = false;
-//       }
-//     });
-//     return isValid;
-//   }
+  Future<bool> validateTransactionItem2() async {
+    bool isValid = true;
+
+    for (var element in transactionItemList) {
+      if (commande.type == 0 &&
+          element.product.sellingPrice <=
+              double.parse(element.priceController.text)) {
+        print("validateTransactionItem2");
+
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Attention !!!'),
+              content: Text(
+                  "Pour le produit ${element.product.name} , le prix d'approvisionnement renseigné doit être inférieur au prix de vente\n Voulez-vous continuer ?"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Oui', style: TextStyle(color: Colors.red)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    isValid = false;
+                    Navigator.pop(context);
+                  },
+                  child:
+                      const Text('Non', style: TextStyle(color: Colors.green)),
+                ),
+              ],
+            );
+          },
+        );
+      }
+      if (!isValid) break;
+    }
+    return isValid;
+  }
 
   bool validateTransactionItem() {
     bool isValid = true;
-    transactionItemList.forEach((element) {
-      if (!element._FormKey.currentState!.validate()) {
+    for (var element in transactionItemList) {
+      if (!element.formKey.currentState!.validate()) {
         isValid = false;
       }
-    });
+    }
     return isValid;
   }
 
@@ -354,18 +345,19 @@ class TransactionItem extends StatelessWidget {
     required this.type,
   });
   final Product product;
-  void Function(Product) removeTransactionItem;
+  final void Function(Product) removeTransactionItem;
   final int type;
-  // bool Function(GlobalKey<FormState>) validityFunc;
-  TextEditingController quantityController = TextEditingController(text: "0");
-  TextEditingController priceController = TextEditingController(text: "0");
-  final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
+  final TextEditingController quantityController =
+      TextEditingController(text: "0");
+  final TextEditingController priceController =
+      TextEditingController(text: "0");
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .85,
       child: Form(
-        key: _FormKey,
+        key: formKey,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -78,7 +78,7 @@ class _AddOrEditProductScreenState extends State<AddOrEditProductScreen> {
             "prixUnitaire": priceController.text,
             "quantiteDisponible": "0",
             "categorie": "${selectedCategorie!}",
-            "url": urlGot ?? url ?? ""
+            "urlPhoto": urlGot ?? url ?? ""
           }
         : {
             "updateProduct": "1",

@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:e_stock/screens/PasswordForgot/ProvideOtp.dart';
 import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../other/const.dart';
 import '../other/styles.dart';
 import '../widgets/CustomLoader.dart';
@@ -154,30 +152,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // print(response.body);
       var jsonresponse = json.decode(response.body);
       print("---------------response $jsonresponse");
-      if (response.statusCode.toString().startsWith("2")) {
-        try {
-          if (jsonresponse['status']) {
-            //traitement des données recues
-            customFlutterToast(msg: "Inscription réussie");
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (ctx) => const LoginPage()),
-                (route) => false);
-          } else {
-            customFlutterToast(
-                msg: "Une erreur est survenue!!! Veuillez réessayer");
-          }
-        } catch (e) {
-          print("------1------${e.toString()}");
+      try {
+        if (jsonresponse['status'] != null && jsonresponse['status']) {
+          //traitement des données recues
+          customFlutterToast(msg: "Inscription réussie");
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (ctx) => const LoginPage()),
+              (route) => false);
+        } else if (jsonresponse['error'] != null) {
+          customFlutterToast(msg: jsonresponse['error']);
+        } else {
+          customFlutterToast(
+              msg: "Une erreur est survenue!!! Veuillez réessayer");
         }
-      } else {
-        print("pb httt code statuts ${response.statusCode}");
-        // return false;
+      } catch (e) {
+        customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
       setState(() {
         _isLoading = false;

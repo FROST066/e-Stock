@@ -5,9 +5,11 @@ class DoubleDatePicker extends StatefulWidget {
   const DoubleDatePicker(
       {super.key,
       required this.dateDebutController,
-      required this.dateFinController});
+      required this.dateFinController,
+      required this.onChanged});
   final TextEditingController dateDebutController;
   final TextEditingController dateFinController;
+  final void Function(String?) onChanged;
 
   @override
   State<DoubleDatePicker> createState() => _DoubleDatePickerState();
@@ -58,8 +60,8 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                   decoration: const InputDecoration(
                       enabledBorder: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.black)),
-                  onChanged: (val) => print(val),
-                  onSaved: (val) => print(val),
+                  onChanged: widget.onChanged,
+                  // onSaved: widget.onChanged,
                 ),
               ),
               const Text("à", style: TextStyle(color: Colors.black)),
@@ -76,8 +78,8 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                   lastDate: DateTime.now(),
                   decoration:
                       const InputDecoration(enabledBorder: InputBorder.none),
-                  onChanged: (val) => print(val),
-                  onSaved: (val) => print(val),
+                  onChanged: widget.onChanged,
+                  // onSaved: widget.onChanged,
                 ),
               )
             ],

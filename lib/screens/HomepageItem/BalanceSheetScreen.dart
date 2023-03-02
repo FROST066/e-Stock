@@ -35,15 +35,22 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
   // ];
   List<List<String>> data = [];
   Map<String, dynamic> sheetResult = {}, historyResult = {};
-  final TextEditingController _dateFromController = TextEditingController();
-  final TextEditingController _dateToController = TextEditingController();
+  final TextEditingController _dateFromController =
+      TextEditingController(text: "2023-01-01");
+  final TextEditingController _dateToController =
+      TextEditingController(text: "${DateTime.now()}");
   loadHistory() async {
     setState(() {
       _isLoadingHistory = true;
     });
     final prefs = await SharedPreferences.getInstance();
     int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
-    var forData = {"historique": "1", "id": "${shopId!}"};
+    var forData = {
+      "historique": "1",
+      "id": "${shopId!}",
+      "dateDebut": _dateFromController.text.substring(0, 10),
+      "dateFin": _dateToController.text.substring(0, 10),
+    };
     try {
       print("---------------requesting $BASE_URL for load history");
       http.Response response =
@@ -122,7 +129,13 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
     });
     final prefs = await SharedPreferences.getInstance();
     int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
-    var forData = {"bilan": "1", "magasin": "${shopId!}"};
+    var forData = {
+      "bilan": "1",
+      "magasin": "${shopId!}",
+      "dateDebut": _dateFromController.text.substring(0, 10),
+      "dateFin": _dateToController.text.substring(0, 10),
+    };
+    print("----------formData: $forData");
     try {
       print("---------------requesting $BASE_URL for load balance sheet");
       http.Response response =
@@ -167,7 +180,8 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                 MaterialPageRoute(
                     builder: (builder) => pdfScreen(
                           data: data,
-                          fileName: "Bilan_du__au__",
+                          fileName:
+                              "Bilan_du_${_dateFromController.text.substring(0, 10)}_au_${_dateToController.text.substring(0, 10)}",
                         ))),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -182,6 +196,10 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
             Flexible(
                 flex: !isPortrait ? 6 : 2,
                 child: DoubleDatePicker(
+                  onChanged: (value) {
+                    loadBalanceSheet();
+                    loadHistory();
+                  },
                   dateDebutController: _dateFromController,
                   dateFinController: _dateToController,
                 )),
@@ -200,10 +218,20 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                                 horizontal: 5, vertical: 4),
                             margin: const EdgeInsets.only(bottom: 20),
                             width: MediaQuery.of(context).size.width * 0.9,
+                            height: MediaQuery.of(context).size.height * 0.3,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Colors.grey[400]),
-                            child: Wrap(
+                            child: GridView(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1.9,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              shrinkWrap: true,
                               children: [
                                 iconWithTex(
                                     Icons.assignment_outlined,
@@ -238,31 +266,36 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
   Widget iconWithTex(IconData icon, String title, String value) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 18),
-      width: 150,
+      // width: 150,
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: Theme.of(context).primaryColor,
-            size: 50,
+          Flexible(
+            flex: 4,
+            child: Icon(icon, color: Theme.of(context).primaryColor, size: 50),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style:
-                    TextStyle(color: ThemeData.dark().scaffoldBackgroundColor),
-              ),
-              const SizedBox(),
-              Text(
-                value,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: ThemeData.dark().scaffoldBackgroundColor),
-              )
-            ],
+          Flexible(
+            flex: 8,
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                        color: ThemeData.dark().scaffoldBackgroundColor),
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: ThemeData.dark().scaffoldBackgroundColor),
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

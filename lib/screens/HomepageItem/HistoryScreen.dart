@@ -22,8 +22,10 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   bool _isLoading = false;
   List<HistoryItem> _historyItems = [];
-  final TextEditingController _dateFromController = TextEditingController();
-  final TextEditingController _dateToController = TextEditingController();
+  final TextEditingController _dateFromController =
+      TextEditingController(text: "2023-01-01");
+  final TextEditingController _dateToController =
+      TextEditingController(text: "${DateTime.now()}");
 
   loadHistory() async {
     setState(() {
@@ -31,7 +33,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
     });
     final prefs = await SharedPreferences.getInstance();
     int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
-    var forData = {"historique": "1", "id": "${shopId!}"};
+    var forData = {
+      "historique": "1",
+      "id": "${shopId!}",
+      "dateDebut": _dateFromController.text.substring(0, 10),
+      "dateFin": _dateToController.text.substring(0, 10),
+    };
+    print("---------Fordata $forData");
     try {
       print("---------------requesting $BASE_URL for load history");
       http.Response response =
@@ -73,6 +81,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Column(
           children: [
             DoubleDatePicker(
+              onChanged: (value) => loadHistory(),
               dateDebutController: _dateFromController,
               dateFinController: _dateToController,
             ),

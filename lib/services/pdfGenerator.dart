@@ -24,8 +24,6 @@ Future<Uint8List> buildPdf(
         _contentHeader(filename, logo),
         pw.SizedBox(height: 20),
         _contentTable(context, data),
-
-        // pw.SizedBox(height: 20),
       ],
     ),
   );
@@ -81,9 +79,10 @@ pw.Widget _contentHeader(String filename, String? logo) {
         ]),
         pw.Text(
           filename.replaceAll("_", " "),
+          textAlign: pw.TextAlign.center,
           style: pw.TextStyle(
             fontWeight: pw.FontWeight.bold,
-            fontSize: 40,
+            fontSize: 33,
           ),
         ),
       ],

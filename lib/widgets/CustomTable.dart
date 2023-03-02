@@ -23,7 +23,7 @@ Widget customTableWithMap(Map<String, String> map, BuildContext ctx) {
 }
 
 Widget customTableWithArray(List<List<String>> tab, BuildContext ctx) {
-  print(tab);
+  // print(tab);
 
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 6),
