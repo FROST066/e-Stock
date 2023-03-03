@@ -42,7 +42,8 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
           width: MediaQuery.of(context).size.width * 0.9,
           height: 50,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: Colors.grey[400]),
+              borderRadius: BorderRadius.circular(15),
+              color: Theme.of(context).primaryColor.withAlpha(100)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -52,7 +53,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 child: DateTimePicker(
                   style: const TextStyle(color: Colors.black),
                   controller: widget.dateDebutController,
-                  dateMask: 'd-MM-yyyy',
+                  dateMask: 'dd-MM-yyyy',
                   firstDate: DateTime(2023),
                   lastDate: DateTime.now(),
                   calendarTitle: "Selectionnez la date de début",
@@ -71,7 +72,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 child: DateTimePicker(
                   style: const TextStyle(color: Colors.black),
                   controller: widget.dateFinController,
-                  dateMask: 'd-MM-yyyy',
+                  dateMask: 'dd-MM-yyyy',
                   calendarTitle: "Selectionnez la date de fin",
                   cancelText: "Annuler",
                   firstDate: DateTime(2023),

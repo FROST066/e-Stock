@@ -35,7 +35,6 @@ class _CongratsState extends State<Congrats> {
             style: GoogleFonts.lora(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           const Text("Votre mot de passe a été mis à jour avec succes"),
-          // const Flexible(flex: 3, child: SizedBox()),
           Flexible(
             flex: 1,
             child: Container(

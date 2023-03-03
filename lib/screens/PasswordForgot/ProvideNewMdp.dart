@@ -1,14 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:e_stock/other/styles.dart';
 import 'package:e_stock/screens/PasswordForgot/Congrats.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
+import 'package:e_stock/widgets/customFlutterToast.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ProvideNewMdp extends StatefulWidget {
-  const ProvideNewMdp({super.key});
+import '../../other/const.dart';
+import '../../widgets/CustomLoader.dart';
 
+class ProvideNewMdp extends StatefulWidget {
+  const ProvideNewMdp({super.key, required this.email});
+  final String email;
   @override
   State<ProvideNewMdp> createState() => _ProvideNewMdpState();
 }
@@ -17,6 +22,45 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
   final formKey = GlobalKey<FormState>();
   final mdpController = TextEditingController();
   final confirmedMdpController = TextEditingController();
+  bool _isLoading = false;
+
+  changeMDP() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    var forData = {
+      "forgotPassword": "1",
+      "email": widget.email,
+      "newMdp": mdpController.text
+    };
+    print("----------formData: $forData");
+    try {
+      print("---------------requesting $BASE_URL for change password");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: forData);
+      try {
+        var jsonresponse = json.decode(response.body);
+        // print(response.body);
+        // print("${response.statusCode}");
+        // print(jsonresponse);
+        if (jsonresponse["status"] && mounted) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (b) => const Congrats()));
+        }
+      } catch (e) {
+        print("------1------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +107,21 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: ElevatedButton(
                         style: defaultStyle(context),
-                        onPressed: () => showMissing(),
-                        child: const Text("Valider"),
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            if (mdpController.text ==
+                                confirmedMdpController.text) {
+                              await changeMDP();
+                            } else {
+                              customFlutterToast(
+                                  msg:
+                                      "Les 2 mots de passe entrés ne correspondent pas",
+                                  show: true);
+                            }
+                          }
+                        },
+                        child:
+                            _isLoading ? customLoader() : const Text("Valider"),
                       ),
                     ),
                   ],

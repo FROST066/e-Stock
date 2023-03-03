@@ -155,16 +155,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
       try {
         if (jsonresponse['status'] != null && jsonresponse['status']) {
           //traitement des données recues
-          customFlutterToast(msg: "Inscription réussie");
+          customFlutterToast(msg: "Inscription réussie", show: true);
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (ctx) => const LoginPage()),
               (route) => false);
         } else if (jsonresponse['error'] != null) {
-          customFlutterToast(msg: jsonresponse['error']);
+          customFlutterToast(msg: jsonresponse['error'], show: true);
         } else {
           customFlutterToast(
-              msg: "Une erreur est survenue!!! Veuillez réessayer");
+              msg: "Une erreur est survenue!!! Veuillez réessayer", show: true);
         }
       } catch (e) {
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");

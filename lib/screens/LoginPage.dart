@@ -155,13 +155,14 @@ class _LoginPageState extends State<LoginPage> {
           if (jsonresponse['urlPhoto'] != null) {
             prefs.setString(PrefKeys.USER_URL, jsonresponse['urlPhoto']);
           }
-          customFlutterToast(msg: "Bienvenue ${jsonresponse['nom']}");
+          customFlutterToast(
+              msg: "Bienvenue ${jsonresponse['nom']}", show: true);
 
           Navigator.push(
               context, MaterialPageRoute(builder: (ctx) => const ShopList()));
         } else {
           customFlutterToast(
-              msg: "Nom d'utilisateur ou mot de passe incorrect");
+              msg: "Nom d'utilisateur ou mot de passe incorrect", show: true);
         }
       } catch (e) {
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");

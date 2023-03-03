@@ -7,7 +7,6 @@ import 'package:e_stock/services/validator.dart';
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:e_stock/widgets/mainLogo.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class GetEmail extends StatefulWidget {
   const GetEmail({super.key});
@@ -62,7 +61,9 @@ class _GetEmailState extends State<GetEmail> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (builder) =>
-                                                      const ProvideNewMdp())),
+                                                      ProvideNewMdp(
+                                                          email: emailController
+                                                              .text))),
                                     )))
                       }
                   },
