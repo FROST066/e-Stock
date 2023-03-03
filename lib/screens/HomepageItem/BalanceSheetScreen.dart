@@ -174,7 +174,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
       appBar: AppBar(
         title: const Text("Bilan"),
         actions: [
-          GestureDetector(
+          InkWell(
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -185,7 +185,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                         ))),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset("assets/images/pdf.png"),
+              child: Image.asset("assets/images/pdf.webp"),
             ),
           )
         ],
