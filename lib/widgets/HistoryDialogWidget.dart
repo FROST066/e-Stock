@@ -12,7 +12,7 @@ Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
         borderRadius: BorderRadius.circular(15),
         color: Theme.of(ctx).scaffoldBackgroundColor,
       ),
-      height: 300,
+      height: 310,
       width: MediaQuery.of(ctx).size.width * 0.8,
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -30,7 +30,7 @@ Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
               GestureDetector(
                 onTap: () => Navigator.pop(ctx),
                 child: Icon(Icons.cancel,
-                    size: 35, color: Theme.of(ctx).scaffoldBackgroundColor),
+                    size: 35, color: Theme.of(ctx).appBarTheme.foregroundColor),
               )
             ],
           ),
@@ -61,7 +61,7 @@ Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -86,6 +86,7 @@ Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
               ),
             ],
           ),
+          const SizedBox(height: 5),
           customTableWithArray([
             ["Heure", e.heure],
             ["Date", e.date],

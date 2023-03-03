@@ -52,6 +52,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
         _historyItems =
             (jsonresponse as List).map((e) => historyItemFromJson(e)).toList();
+        //sort list by date and by time
+        _historyItems.sort((a, b) => a.date.compareTo(b.date) == 0
+            ? a.heure.compareTo(b.heure)
+            : a.date.compareTo(b.date));
+
         // print("---------------response $_historyItems");
       } catch (e) {
         print("------1------${e.toString()}");
@@ -89,7 +94,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               flex: 8,
               child: SingleChildScrollView(
                 child: _isLoading
-                    ? customLoader()
+                    ? customLoader(color: Theme.of(context).primaryColor)
                     : _historyItems.isEmpty
                         ? const Center(
                             child: Text(

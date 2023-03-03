@@ -83,7 +83,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
               ? (historyItem.nbr * historyItem.product.sellingPrice)
               : -(historyItem.nbr * historyItem.prixApprovisionement!));
         }
-
+        data.clear();
         data.add(
           [
             "",
@@ -225,7 +225,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                                 borderRadius: BorderRadius.circular(15),
                                 color: Theme.of(context)
                                     .primaryColor
-                                    .withAlpha(70)),
+                                    .withAlpha(50)),
                             child: GridView(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -272,36 +272,34 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
   Widget iconWithTex(IconData icon, String title, String value) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 18),
-      // width: 150,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(
-            flex: 4,
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
             child: Icon(icon, color: Theme.of(context).primaryColor, size: 50),
           ),
-          Flexible(
-            flex: 8,
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                        color: Theme.of(context).appBarTheme.foregroundColor),
-                  ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      color: Theme.of(context).appBarTheme.foregroundColor),
                 ),
-                Flexible(
-                  child: Text(
-                    value,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).appBarTheme.foregroundColor),
-                  ),
-                )
-              ],
-            ),
+              ),
+              Flexible(
+                child: Text(
+                  value,
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).appBarTheme.foregroundColor),
+                ),
+              )
+            ],
           )
         ],
       ),

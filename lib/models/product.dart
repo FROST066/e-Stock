@@ -33,7 +33,7 @@ class Product {
         sellingPrice: int.parse(json["prixUnitaire"] ?? "0"),
         quantiteDisponible: int.parse(json["quantiteDisponible"] ?? "0"),
         categoryID: int.parse(json["categorie"] ?? "0"),
-        url: json["urlPhoto"],
+        url: json["urlPhoto"] ?? json["urlImage"],
         stockMin: int.parse(json["stockMin"] ?? "5"),
       );
 

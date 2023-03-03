@@ -42,7 +42,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
           height: 50,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).primaryColor.withAlpha(70)),
+              color: Theme.of(context).primaryColor.withAlpha(50)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

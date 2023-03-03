@@ -53,4 +53,20 @@ class HistoryItem {
   @override
   String toString() =>
       "{ product: ${product.name}, categoryName: $categoryName, type: $type, heure: $heure, date: $date, nbr: $nbr, prixApprovisionement: $prixApprovisionement}";
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HistoryItem &&
+          runtimeType == other.runtimeType &&
+          product == other.product &&
+          categoryName == other.categoryName &&
+          type == other.type &&
+          heure == other.heure &&
+          date == other.date &&
+          nbr == other.nbr &&
+          prixApprovisionement == other.prixApprovisionement;
+
+  bool operator <(Object other) =>
+      other is HistoryItem && date.compareTo(other.date) < 0;
 }
