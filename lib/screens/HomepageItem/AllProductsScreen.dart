@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/models/product.dart';
-import 'package:e_stock/screens/HomePage.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/screens/HomepageItem/filteringScreen.dart';
 import 'package:e_stock/services/static.dart';
@@ -18,10 +17,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:http/http.dart' as http;
 
 import '../../widgets/customFlutterToast.dart';
+import '../HomePage.dart';
 
 class AllProductsScreen extends StatefulWidget {
-  AllProductsScreen({super.key, this.initFilter});
-  bool? initFilter;
+  const AllProductsScreen({super.key, this.initFilter});
+  final bool? initFilter;
   @override
   State<AllProductsScreen> createState() => _AllProductsScreenState();
 }
@@ -29,44 +29,6 @@ class AllProductsScreen extends StatefulWidget {
 TextStyle ts = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
-  // List<Product> productsList = [
-  //   Product(
-  //       productId: 1,
-  //       name: "Carotte",
-  //       description: "bla bal balla bla bla bla c'est une longue descritption",
-  //       categoryId: 11,
-  //       low: 20,
-  //       sellingPrice: 250,
-  //       purchasePrice: 500,
-  //       url:
-  //           "https://firebasestorage.googleapis.com/v0/b/e-stock0.appspot.com/o/user1%2Fproduts%2F66700634ebb34731a4adb6a1f2f74bb2.jpg?alt=media&token=67bf0513-7362-4f1e-8185-676bec5c6412"),
-  //   Product(
-  //     productId: 2,
-  //     name: "Tomate",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 30,
-  //     sellingPrice: 350,
-  //     purchasePrice: 500,
-  //   ),
-  //   Product(
-  //     productId: 2,
-  //     name: "Carotte",
-  //     description: "bla bal balla bla bla bla c'est une longue descritption",
-  //     categoryId: 1,
-  //     low: 20,
-  //     sellingPrice: 250,
-  //     purchasePrice: 500,
-  //   ),
-  //   Product(
-  //       productId: 3,
-  //       name: "Pomme",
-  //       description: "bla bal balla bla bla bla c'est une longue descritption",
-  //       categoryId: 1,
-  //       low: 10,
-  //       sellingPrice: 100,
-  //       purchasePrice: 300),
-  // ];
   List<Product> productsList = [];
   List<Product> filteredProductsList = [];
   bool _isLoading = false;
@@ -147,116 +109,129 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     loadProductList();
   }
 
+  Future<bool> onWillPop() async {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => const HomePage(selectedIndex: 0)),
+        (route) => false);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (builder) =>
-                      AddOrEditProductScreen(refresh: loadProductList))),
-          child: const Icon(Icons.add)),
-      appBar: AppBar(
-          title: const Text("Mes produits"),
-          leading: BackButton(
-            onPressed: (() => Navigator.pushAndRemoveUntil(
+    return WillPopScope(
+      onWillPop: () => onWillPop(),
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (builder) => const HomePage(selectedIndex: 0)),
-                (route) => false)),
-          )),
-      body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * .9,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                      flex: 7,
-                      child: CustomTextFormField(
-                        hintText: "Chercher un produit",
-                        prefixIcon: Icons.search,
-                        onChanged: (value) {
-                          if (filterStatus != "Tous les produits") {
-                            filter(false, 0);
-                          }
-                          setState(() {
-                            filteredProductsList.clear();
-                            if (value.isEmpty) {
-                              filteredProductsList.addAll(productsList);
-                            } else {
-                              for (Product item in productsList) {
-                                if (item.name
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase())) {
-                                  filteredProductsList.add(item);
+                    builder: (builder) =>
+                        AddOrEditProductScreen(refresh: loadProductList))),
+            child: const Icon(Icons.add)),
+        appBar: AppBar(
+            title: const Text("Mes produits"),
+            leading: const BackButton(
+                // onPressed: (() => Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (builder) => const HomePage(selectedIndex: 0)),
+                //     (route) => false)),
+                )),
+        body: Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * .9,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                        flex: 7,
+                        child: CustomTextFormField(
+                          hintText: "Chercher un produit",
+                          prefixIcon: Icons.search,
+                          onChanged: (value) {
+                            if (filterStatus != "Tous les produits") {
+                              filter(false, 0);
+                            }
+                            setState(() {
+                              filteredProductsList.clear();
+                              if (value.isEmpty) {
+                                filteredProductsList.addAll(productsList);
+                              } else {
+                                for (Product item in productsList) {
+                                  if (item.name
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase())) {
+                                    filteredProductsList.add(item);
+                                  }
                                 }
                               }
-                            }
-                          });
-                        },
-                      )),
-                  IconButton(
-                    icon: const Icon(MdiIcons.tuneVertical, size: 30),
-                    padding: const EdgeInsets.only(bottom: 10),
-                    onPressed: () => showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext ctx) =>
-                            FilteringDialog(filter: filter),
-                        animationType: DialogTransitionType.slideFromBottom,
-                        // animationType: DialogTransitionType.scale,
-                        // curve: Curves.linear,
-                        duration: const Duration(seconds: 1)),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(filterStatus, style: ts),
-                      Text("Total: ${filteredProductsList.length}", style: ts),
-                    ]),
-              ),
-              Expanded(
-                flex: 9,
-                child: _isLoading
-                    ? const Center(
-                        child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: CircularProgressIndicator()))
-                    : filteredProductsList.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "Aucun produit trouvé",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 20),
+                            });
+                          },
+                        )),
+                    IconButton(
+                      icon: const Icon(MdiIcons.tuneVertical, size: 30),
+                      padding: const EdgeInsets.only(bottom: 10),
+                      onPressed: () => showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext ctx) =>
+                              FilteringDialog(filter: filter),
+                          animationType: DialogTransitionType.slideFromBottom,
+                          // animationType: DialogTransitionType.scale,
+                          // curve: Curves.linear,
+                          duration: const Duration(seconds: 1)),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(filterStatus, style: ts),
+                        Text("Total: ${filteredProductsList.length}",
+                            style: ts),
+                      ]),
+                ),
+                Expanded(
+                  flex: 9,
+                  child: _isLoading
+                      ? const Center(
+                          child: SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator()))
+                      : filteredProductsList.isEmpty
+                          ? const Center(
+                              child: Text(
+                                "Aucun produit trouvé",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 20),
+                              ),
+                            )
+                          : GridView.builder(
+                              itemCount: filteredProductsList.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  customCard(filteredProductsList[index],
+                                      context, loadProductList),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 1,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10),
+                              padding: const EdgeInsets.all(10),
+                              shrinkWrap: true,
                             ),
-                          )
-                        : GridView.builder(
-                            itemCount: filteredProductsList.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                customCard(filteredProductsList[index], context,
-                                    loadProductList),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 1,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10),
-                            padding: const EdgeInsets.all(10),
-                            shrinkWrap: true,
-                          ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

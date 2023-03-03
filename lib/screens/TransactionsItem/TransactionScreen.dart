@@ -83,8 +83,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
           if (mounted && widget.e != null) {
             Navigator.pop(context);
             Navigator.pop(context);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (builder) => AllProductsScreen()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => const AllProductsScreen()));
           }
         }
       } catch (e) {

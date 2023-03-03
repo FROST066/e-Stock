@@ -186,8 +186,9 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (builder) =>
-                                  AllProductsScreen(initFilter: true))),
+                              builder: (builder) => const AllProductsScreen(
+                                    initFilter: true,
+                                  ))),
                     ),
                   ),
                   ElevatedButton(
@@ -196,7 +197,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (builder) => AllProductsScreen())),
+                            builder: (builder) => const AllProductsScreen())),
                   )
                 ],
               )),

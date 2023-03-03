@@ -20,7 +20,6 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
   void initState() {
     widget.dateDebutController.text = DateTime(2023).toString();
     widget.dateFinController.text = DateTime.now().toString();
-
     super.initState();
   }
 
@@ -43,7 +42,7 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
           height: 50,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).primaryColor.withAlpha(100)),
+              color: Theme.of(context).primaryColor.withAlpha(70)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,7 +50,8 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
-                  style: const TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Theme.of(context).appBarTheme.foregroundColor),
                   controller: widget.dateDebutController,
                   dateMask: 'dd-MM-yyyy',
                   firstDate: DateTime(2023),
@@ -62,15 +62,15 @@ class _DoubleDatePickerState extends State<DoubleDatePicker> {
                       enabledBorder: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.black)),
                   onChanged: widget.onChanged,
-                  // onSaved: widget.onChanged,
                 ),
               ),
-              const Text("à", style: TextStyle(color: Colors.black)),
+              const Text("à"),
               Container(
                 padding: const EdgeInsets.only(left: 20),
                 width: MediaQuery.of(context).size.width * 0.45 * 0.8,
                 child: DateTimePicker(
-                  style: const TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Theme.of(context).appBarTheme.foregroundColor),
                   controller: widget.dateFinController,
                   dateMask: 'dd-MM-yyyy',
                   calendarTitle: "Selectionnez la date de fin",

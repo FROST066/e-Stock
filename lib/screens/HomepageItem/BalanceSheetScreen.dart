@@ -212,7 +212,9 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                       : MediaQuery.of(context).size.height * 0.9,
                   child: Column(children: [
                     _isLoadingSheet
-                        ? Flexible(child: customLoader())
+                        ? Flexible(
+                            child: customLoader(
+                                color: Theme.of(context).primaryColor))
                         : Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 4),
@@ -221,7 +223,9 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                             height: MediaQuery.of(context).size.height * 0.3,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey[400]),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withAlpha(70)),
                             child: GridView(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -248,7 +252,9 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                               ],
                             )),
                     _isLoadingHistory
-                        ? Flexible(child: customLoader())
+                        ? Flexible(
+                            child: customLoader(
+                                color: Theme.of(context).primaryColor))
                         : SizedBox(
                             width: MediaQuery.of(context).size.width * 0.9,
                             child: customTableWithArray(data, context),
@@ -282,7 +288,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                   child: Text(
                     title,
                     style: TextStyle(
-                        color: ThemeData.dark().scaffoldBackgroundColor),
+                        color: Theme.of(context).appBarTheme.foregroundColor),
                   ),
                 ),
                 Flexible(
@@ -291,7 +297,7 @@ class _BalanceSheetScreenState extends State<BalanceSheetScreen> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: ThemeData.dark().scaffoldBackgroundColor),
+                        color: Theme.of(context).appBarTheme.foregroundColor),
                   ),
                 )
               ],
