@@ -383,8 +383,9 @@ class TransactionItem extends StatelessWidget {
                     } else if (type == 1 &&
                         int.parse(p0) > product.quantiteDisponible) {
                       customFlutterToast(
-                          msg:
-                              "La quantité doit être inférieure à ${product.quantiteDisponible}",
+                          msg: product.quantiteDisponible == 0
+                              ? "Le produit ${product.name} est épuisé"
+                              : "Il n'y a que ${product.quantiteDisponible} ${product.name} en stock}",
                           show: true);
                       return " ";
                     }

@@ -25,7 +25,7 @@ class OverViewScreen extends StatefulWidget {
 class _OverViewScreenState extends State<OverViewScreen> {
   int lowerProductCounter = 0;
   bool _isLoading = false;
-  Map<String, double> dataMap = {};
+  Map<String, double> dataMap = {"Entrée": 0, "Sortie": 0, "En stock": 0};
   Future<void> loadProductList() async {
     final prefs = await SharedPreferences.getInstance();
     final shopID = prefs.getInt(PrefKeys.SHOP_ID);
@@ -138,27 +138,45 @@ class _OverViewScreenState extends State<OverViewScreen> {
               flex: 2,
               child: _isLoading
                   ? customLoader(color: Theme.of(context).primaryColor)
-                  : PieChart(
-                      animationDuration: const Duration(milliseconds: 1000),
-                      dataMap: dataMap,
-                      colorList: const [Colors.green, Colors.red, Colors.blue],
-                      chartValuesOptions: const ChartValuesOptions(
-                          showChartValueBackground: false,
-                          showChartValues: true,
-                          // showChartValuesOutside: true,
-                          decimalPlaces: 0,
-                          chartValueStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                      initialAngleInDegree: 90,
-                      chartLegendSpacing: 20,
-                      legendOptions: const LegendOptions(
-                        showLegendsInRow: true,
-                        legendPosition: LegendPosition.bottom,
-                        legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ))),
+                  : dataMap["Entrée"] == 0
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width * .55,
+                          child: const Center(
+                            child: Text(
+                              "Effectuez votre première transaction pour pouvoir consulter les statistiques",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  color: Colors.grey,
+                                  height: 1.5),
+                            ),
+                          ),
+                        )
+                      : PieChart(
+                          animationDuration: const Duration(milliseconds: 1000),
+                          dataMap: dataMap,
+                          colorList: const [
+                            Colors.green,
+                            Colors.red,
+                            Colors.blue
+                          ],
+                          chartValuesOptions: const ChartValuesOptions(
+                              showChartValueBackground: false,
+                              showChartValues: true,
+                              // showChartValuesOutside: true,
+                              decimalPlaces: 0,
+                              chartValueStyle: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                          initialAngleInDegree: 90,
+                          chartLegendSpacing: 20,
+                          legendOptions: const LegendOptions(
+                            showLegendsInRow: true,
+                            legendPosition: LegendPosition.bottom,
+                            legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ))),
           Flexible(
               flex: 1,
               child: Row(
