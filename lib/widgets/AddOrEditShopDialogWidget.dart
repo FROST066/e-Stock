@@ -50,13 +50,10 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
       try {
         widget.addFun!(int.parse(jsonresponse['id']), shopNameController.text);
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
       if (mounted) {
         setState(() {
@@ -89,13 +86,10 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
       try {
         widget.updateFun!(shopNameController.text);
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
       if (mounted) {
         setState(() {

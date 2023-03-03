@@ -48,12 +48,10 @@ class _ProvideNewMdpState extends State<ProvideNewMdp> {
               context, MaterialPageRoute(builder: (b) => const Congrats()));
         }
       } catch (e) {
-        print("------1------${e.toString()}");
-        customFlutterToast(msg: "Erreur: ${e.toString()}");
+        customFlutterToast(msg: "------1------${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      customFlutterToast(msg: "Erreur: ${e.toString()}");
+      customFlutterToast(msg: "------2------${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;

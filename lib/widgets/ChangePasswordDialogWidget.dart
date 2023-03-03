@@ -57,12 +57,10 @@ class _ChangePasswordDialogWidgetState
               msg: "L'ancien mot de passe est incorrect", show: true);
         }
       } catch (e) {
-        print("------1------${e.toString()}");
-        customFlutterToast(msg: "Erreur: ${e.toString()}");
+        customFlutterToast(msg: "Erreur:------1------ ${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      customFlutterToast(msg: "Erreur: ${e.toString()}");
+      customFlutterToast(msg: "Erreur: ------2------${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;

@@ -67,13 +67,10 @@ class _ProfilItemState extends State<ProfilItem> {
         }
         moveToTop(shopList!.firstWhere((element) => element.isActive == true));
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
       setState(() {
         _isLoading = false;
@@ -464,17 +461,16 @@ class _ProfilItemState extends State<ProfilItem> {
         http.Response response =
             await http.post(Uri.parse(BASE_URL), body: formData);
         print(response.statusCode);
-        print("response.body-----------${response.body}");
+        // print("response.body-----------${response.body}");
         var jsonresponse = json.decode(response.body);
-        print(jsonresponse);
+        // print(jsonresponse);
         if (jsonresponse["status"]) {
           prefs.setString(PrefKeys.USER_URL, uploadUrl);
-          customFlutterToast(msg: "Photo de profil modifiée avec succès");
+          customFlutterToast(
+              msg: "Photo de profil modifiée avec succès", show: true);
         }
       } catch (e) {
-        // print("------2------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
-        // return false;
       }
     }
   }
@@ -504,9 +500,7 @@ class _ProfilItemState extends State<ProfilItem> {
       var jsonresponse = json.decode(response.body);
       print(jsonresponse);
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {}
     shopList!.removeWhere((element) => element.id == shopId);
     setState(() {

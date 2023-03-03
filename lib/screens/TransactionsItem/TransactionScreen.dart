@@ -79,7 +79,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
           while (transactionItemList.isNotEmpty) {
             removeTransactionItem(transactionItemList.last.product);
           }
-          customFlutterToast(msg: "Transaction effectuée avec succès");
+          customFlutterToast(
+              msg: "Transaction effectuée avec succès", show: true);
           if (mounted && widget.e != null) {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -90,12 +91,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
           }
         }
       } catch (e) {
-        print("------0------${e.toString()}");
-        customFlutterToast(msg: "Erreur: ${e.toString()}");
+        customFlutterToast(msg: "------1------${e.toString()}");
       }
     } catch (e) {
-      print("------1------${e.toString()}");
-      customFlutterToast(msg: "Erreur: ${e.toString()}");
+      customFlutterToast(msg: "------2------${e.toString()}");
     } finally {
       setState(() {
         _isSubmitting = false;
@@ -119,12 +118,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
         listProducts =
             (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {}
   }
 
@@ -221,10 +218,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onPressed: () async {
                           if (transactionItemList.isEmpty) {
                             customFlutterToast(
-                                msg: "Veuillez ajouter au moins un produit");
+                                msg: "Veuillez ajouter au moins un produit",
+                                show: true);
                           } else if (!validateTransactionItem()) {
                             customFlutterToast(
-                                msg: "Veuillez bien remplir tous les champs");
+                                msg: "Veuillez bien remplir tous les champs",
+                                show: true);
                           } else {
                             commande.list = transactionItemList
                                 .map((e) => OrderItem(
@@ -378,11 +377,16 @@ class TransactionItem extends StatelessWidget {
                   validatorFun: (p0) {
                     if (int.parse(p0!) <= 0) {
                       customFlutterToast(
-                          msg: "La quantité doit être strtement positive");
+                          msg: "La quantité doit être strtement positive",
+                          show: true);
                       return " ";
                     } else if (type == 1 &&
                         int.parse(p0) > product.quantiteDisponible) {
-                      return "La quantité doit être inférieure à ${product.quantiteDisponible}";
+                      customFlutterToast(
+                          msg:
+                              "La quantité doit être inférieure à ${product.quantiteDisponible}",
+                          show: true);
+                      return " ";
                     }
                     return null;
                   },
@@ -404,7 +408,8 @@ class TransactionItem extends StatelessWidget {
                     validatorFun: (p0) {
                       if (type == 0 && double.parse(p0!) <= 0) {
                         customFlutterToast(
-                            msg: "Le prix doit être strictement positif");
+                            msg: "Le prix doit être strictement positif",
+                            show: true);
                         return " ";
                       }
                       return null;

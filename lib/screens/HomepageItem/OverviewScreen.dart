@@ -49,11 +49,9 @@ class _OverViewScreenState extends State<OverViewScreen> {
           lowerProductCounter;
         });
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {}
   }
@@ -70,7 +68,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
       print(response.statusCode);
       // print(jsonresponse);
     } catch (e) {
-      customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
+      customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
     }
   }
 
@@ -112,12 +110,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
           "En stock": result[2],
         };
       } catch (e) {
-        print("------1------${e.toString()}");
-        customFlutterToast(msg: "Erreur: ${e.toString()}");
+        customFlutterToast(msg: "------1------${e.toString()}");
       }
     } catch (e) {
-      print("------2------${e.toString()}");
-      customFlutterToast(msg: "Erreur: ${e.toString()}");
+      customFlutterToast(msg: "------2------${e.toString()}");
     } finally {
       setState(() {
         _isLoading = false;

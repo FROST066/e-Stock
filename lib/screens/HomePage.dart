@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                     iconActiveColor: Theme.of(context).scaffoldBackgroundColor,
                     icon: Icons.home,
                     backgroundColor: Theme.of(context).primaryColor,
-                    text: 'Acceuil',
+                    text: 'Accueil',
                   ),
                   GButton(
                     iconActiveColor: Theme.of(context).scaffoldBackgroundColor,

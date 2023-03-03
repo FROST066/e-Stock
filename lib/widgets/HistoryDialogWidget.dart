@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/models/HistoryItem.dart';
 import 'package:e_stock/widgets/CustomTable.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,21 @@ Widget historyDialogWidget(BuildContext ctx, HistoryItem e) {
                 foregroundColor: Theme.of(ctx).primaryColor,
                 child: ClipOval(
                   child: e.product.url != null && e.product.url != ""
-                      ? Image.network(e.product.url!, fit: BoxFit.cover)
+                      ? CachedNetworkImage(
+                          imageUrl: e.product.url!,
+                          fit: BoxFit.fill,
+                          width: 80,
+                          height: 80,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        )
                       : const Icon(LineIcons.tags, size: 70),
                 ),
               ),

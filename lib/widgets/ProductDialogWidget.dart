@@ -42,7 +42,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
       var jsonresponse = json.decode(response.body);
-      print(response.body);
+      // print(response.body);
       print("${response.statusCode}");
       print(jsonresponse);
       if (mounted && jsonresponse["status"]) {
@@ -50,8 +50,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
         Navigator.pop(context);
       }
     } catch (e) {
-      print("------1------${e.toString()}");
-      customFlutterToast(msg: "Erreur: ${e.toString()}");
+      customFlutterToast(msg: "Erreur:------1------ ${e.toString()}");
     } finally {
       setState(() {
         _isRemoving = false;

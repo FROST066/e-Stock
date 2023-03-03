@@ -48,14 +48,11 @@ class StaticValues {
         }
       } catch (e) {
         _listCategories.clear();
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
       _listCategories.clear();
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
-      // return false;
     } finally {
       printListCategories();
     }

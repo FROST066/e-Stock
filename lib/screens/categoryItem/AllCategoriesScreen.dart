@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:e_stock/models/Category.dart';
 import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
 import '../../services/static.dart';
@@ -105,9 +104,9 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
 }
 
 class AllCategoryListViewItem extends StatefulWidget {
-  AllCategoryListViewItem({super.key, required this.e, this.removeFun});
+  const AllCategoryListViewItem({super.key, required this.e, this.removeFun});
   final Category e;
-  void Function(Category)? removeFun;
+  final void Function(Category)? removeFun;
   @override
   State<AllCategoryListViewItem> createState() =>
       _AllCategoryListViewItemState();

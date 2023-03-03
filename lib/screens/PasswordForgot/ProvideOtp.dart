@@ -106,9 +106,8 @@ class _ProvideOtpState extends State<ProvideOtp> {
         otpLength: 5,
         otpType: OTPType.digitsOnly);
     if (await myauth.sendOTP() == false) {
-      customFlutterToast(msg: "Oops, le code n'a pas été envoyé");
+      customFlutterToast(msg: "Oops, le code n'a pas été envoyé", show: true);
     } else {
-      // customFlutterToast(msg: "le code n'a pas été envoyé");
       const oneSec = Duration(seconds: 1);
       setState(() {
         isEnabled = false;
@@ -134,10 +133,10 @@ class _ProvideOtpState extends State<ProvideOtp> {
   Future<void> onOTPFieldComplete(String pin) async {
     // print("Completed: " + pin);
     if (await myauth.verifyOTP(otp: pin) == true) {
-      customFlutterToast(msg: "Verification réussie");
+      customFlutterToast(msg: "Verification réussie", show: true);
       widget.afterOTPValidation();
     } else {
-      customFlutterToast(msg: "Le code est incorrect");
+      customFlutterToast(msg: "Le code est incorrect", show: true);
     }
   }
 }
