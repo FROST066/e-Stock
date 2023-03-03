@@ -89,7 +89,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () async {
                         if (mdpController.text != confimedMdpController.text) {
                           customFlutterToast(
-                              msg: "Les 2 mots de passe ne correspondent pas");
+                              msg: "Les 2 mots de passe ne correspondent pas",
+                              show: true);
                         } else {
                           if (!_isLoading && formKey.currentState!.validate()) {
                             Navigator.push(

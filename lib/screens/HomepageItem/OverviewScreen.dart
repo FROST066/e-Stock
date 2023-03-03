@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:e_stock/screens/HomepageItem/AllProductsScreen.dart';
 import 'package:e_stock/screens/HomepageItem/BalanceSheetScreen.dart';
 import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
+import 'package:e_stock/widgets/CustomLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,8 @@ class OverViewScreen extends StatefulWidget {
 
 class _OverViewScreenState extends State<OverViewScreen> {
   int lowerProductCounter = 0;
+  bool _isLoading = false;
+  Map<String, double> dataMap = {};
   Future<void> loadProductList() async {
     final prefs = await SharedPreferences.getInstance();
     final shopID = prefs.getInt(PrefKeys.SHOP_ID);
@@ -71,11 +74,62 @@ class _OverViewScreenState extends State<OverViewScreen> {
     }
   }
 
+  loadDataMap() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    int? shopId = prefs.getInt(PrefKeys.SHOP_ID);
+    var forData = {
+      "historique": "1",
+      "id": "${shopId!}",
+      "dateDebut": "01-01-2022",
+      "dateFin": DateTime.now().toString().substring(0, 10),
+    };
+    print("---------Fordata $forData");
+    try {
+      print("---------------requesting $BASE_URL for load data map");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: forData);
+      try {
+        var jsonresponse = json.decode(response.body);
+        // print("${response.body}");
+        // print("${response.statusCode}");
+        // print(jsonresponse);
+        List<double> result = [0, 0, 0];
+        for (var item in jsonresponse as List) {
+          var i = json.decode(item);
+          if (i["type"] == 0) {
+            result[0] += double.parse(i["nbr"]);
+          } else {
+            result[1] += double.parse(i["nbr"]);
+          }
+        }
+        result[2] = result[0] - result[1];
+        dataMap = {
+          "Entrée": result[0],
+          "Sortie": result[1],
+          "En stock": result[2],
+        };
+      } catch (e) {
+        print("------1------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    loadDataMap();
     loadProductList();
-    loadUser();
   }
 
   @override
@@ -84,29 +138,31 @@ class _OverViewScreenState extends State<OverViewScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Flexible(
+          Flexible(
               flex: 2,
-              child: PieChart(
-                  animationDuration: Duration(milliseconds: 1000),
-                  dataMap: {"Entreé": 100, "Sortie": 70, "En stock": 30},
-                  colorList: [Colors.green, Colors.red, Colors.blue],
-                  chartValuesOptions: ChartValuesOptions(
-                      showChartValueBackground: false,
-                      showChartValues: true,
-                      // showChartValuesOutside: true,
-                      decimalPlaces: 0,
-                      chartValueStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                  initialAngleInDegree: 90,
-                  chartLegendSpacing: 20,
-                  legendOptions: LegendOptions(
-                    showLegendsInRow: true,
-                    legendPosition: LegendPosition.bottom,
-                    legendTextStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ))),
+              child: _isLoading
+                  ? customLoader(color: Theme.of(context).primaryColor)
+                  : PieChart(
+                      animationDuration: const Duration(milliseconds: 1000),
+                      dataMap: dataMap,
+                      colorList: const [Colors.green, Colors.red, Colors.blue],
+                      chartValuesOptions: const ChartValuesOptions(
+                          showChartValueBackground: false,
+                          showChartValues: true,
+                          // showChartValuesOutside: true,
+                          decimalPlaces: 0,
+                          chartValueStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black)),
+                      initialAngleInDegree: 90,
+                      chartLegendSpacing: 20,
+                      legendOptions: const LegendOptions(
+                        showLegendsInRow: true,
+                        legendPosition: LegendPosition.bottom,
+                        legendTextStyle: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ))),
           Flexible(
               flex: 1,
               child: Row(

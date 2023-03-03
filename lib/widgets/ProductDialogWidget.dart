@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_stock/screens/HomepageItem/AddOrEditProductScreen.dart';
 import 'package:e_stock/screens/TransactionsItem/TransactionScreen.dart';
 import 'package:e_stock/services/static.dart';
@@ -41,7 +42,7 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
       var jsonresponse = json.decode(response.body);
-      print("${response.body}");
+      print(response.body);
       print("${response.statusCode}");
       print(jsonresponse);
       if (mounted && jsonresponse["status"]) {
@@ -103,12 +104,26 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
             Row(
               children: [
                 CircleAvatar(
-                  radius: 40,
+                  radius: 50,
                   backgroundColor: Theme.of(widget.ctx).scaffoldBackgroundColor,
                   foregroundColor: Theme.of(widget.ctx).primaryColor,
                   child: ClipOval(
                     child: widget.e.url != null && widget.e.url != ""
-                        ? Image.network(widget.e.url!, fit: BoxFit.cover)
+                        ? CachedNetworkImage(
+                            imageUrl: widget.e.url!,
+                            fit: BoxFit.fill,
+                            width: 80,
+                            height: 80,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          )
                         : const Icon(LineIcons.tags, size: 70),
                   ),
                 ),

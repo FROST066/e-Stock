@@ -89,14 +89,13 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       try {
         productsList =
             (jsonresponse as List).map((e) => Product.fromJson(e)).toList();
-        filteredProductsList.clear();
-        filteredProductsList.addAll(productsList);
+        widget.initFilter != null && widget.initFilter == true
+            ? await filter(true, 0)
+            : await filter(false, 0);
       } catch (e) {
-        //print("-----1-------${e.toString()}");
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }
     } catch (e) {
-      // print("------2------${e.toString()}");
       customFlutterToast(msg: "Erreur: ----2----${e.toString()}");
     } finally {
       setState(() {
@@ -131,21 +130,21 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
           filteredProductsList.add(item);
         }
       }
+      print("filteredProductsList: ${filteredProductsList.length}");
       filterStatus = "Tous les produits \nen rupture de stock";
     } else {
       filteredProductsList.addAll(productsList);
       filterStatus = "Tous les produits";
     }
-    setState(() {});
+    // setState(() {
+    //   filteredProductsList;
+    // });
   }
 
   @override
   void initState() {
-    loadProductList();
-    if (widget.initFilter == true) {
-      filter(true, 0);
-    }
     super.initState();
+    loadProductList();
   }
 
   @override
@@ -292,12 +291,12 @@ Widget customCard(
       child: Container(
         width: 200,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: const [
+          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(.9),
+          boxShadow: [
             BoxShadow(
-                color: Colors.grey, //New
-                blurRadius: 20.0,
-                offset: Offset(0, 12))
+                color: Theme.of(context).primaryColor.withAlpha(100),
+                blurRadius: 10,
+                offset: const Offset(5, 2))
           ],
           borderRadius: BorderRadius.circular(15),
         ),
@@ -315,12 +314,15 @@ Widget customCard(
                       )
                     : CachedNetworkImage(
                         imageUrl: e.url!,
-                        // fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         width: 190,
                         progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
+                            (context, url, downloadProgress) => SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress),
+                        ),
                         errorWidget: (context, url, error) =>
                             const Icon(Icons.error),
                       ),

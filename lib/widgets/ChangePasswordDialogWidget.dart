@@ -1,10 +1,14 @@
-import 'package:e_stock/widgets/CustomTable.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:e_stock/widgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../other/const.dart';
 import '../other/styles.dart';
+import 'CustomLoader.dart';
+import 'customFlutterToast.dart';
 
 class ChangePasswordDialogWidget extends StatefulWidget {
   const ChangePasswordDialogWidget({super.key, required this.ctx});
@@ -18,7 +22,53 @@ class _ChangePasswordDialogWidgetState
     extends State<ChangePasswordDialogWidget> {
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
-  final repeatPasswordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  bool _isLoading = false;
+
+  changeMDP() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt(PrefKeys.USER_ID);
+    var forData = {
+      "changePassword": "1",
+      "idUser": "$userID",
+      "oldPassword": oldPasswordController.text,
+      "newPassword": newPasswordController.text
+    };
+    print("----------formData: $forData");
+    try {
+      print("---------------requesting $BASE_URL for change password");
+      http.Response response =
+          await http.post(Uri.parse(BASE_URL), body: forData);
+      try {
+        var jsonresponse = json.decode(response.body);
+        // print(response.body);
+        // print("${response.statusCode}");
+        // print(jsonresponse);
+        if (jsonresponse["status"] && mounted) {
+          Navigator.pop(context);
+          customFlutterToast(
+              msg: "Mot de passe modifié avec succès", show: true);
+        } else if (mounted) {
+          customFlutterToast(
+              msg: "L'ancien mot de passe est incorrect", show: true);
+        }
+      } catch (e) {
+        print("------1------${e.toString()}");
+        customFlutterToast(msg: "Erreur: ${e.toString()}");
+      }
+    } catch (e) {
+      print("------2------${e.toString()}");
+      customFlutterToast(msg: "Erreur: ${e.toString()}");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +89,6 @@ class _ChangePasswordDialogWidgetState
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // const SizedBox(),
                   Text("Modifier le mot de passe",
                       style: GoogleFonts.oswald(
                           fontWeight: FontWeight.bold,
@@ -58,29 +107,31 @@ class _ChangePasswordDialogWidgetState
                 ],
               ),
               Form(
+                  key: formKey,
                   child: Column(
-                children: [
-                  CustomPasswordFormField(
-                    autofocus: true,
-                    controller: oldPasswordController,
-                    labelText: "Ancien mot de passe",
-                  ),
-                  CustomPasswordFormField(
-                    controller: newPasswordController,
-                    labelText: "Nouveau mot de passe",
-                  ),
-                ],
-              )),
+                    children: [
+                      CustomPasswordFormField(
+                        autofocus: true,
+                        controller: oldPasswordController,
+                        labelText: "Ancien mot de passe",
+                      ),
+                      CustomPasswordFormField(
+                        controller: newPasswordController,
+                        labelText: "Nouveau mot de passe",
+                      ),
+                    ],
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.5,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
                   style: defaultStyle(context),
-                  onPressed: () {
-                    //traitement
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      await changeMDP();
+                    }
                   },
-                  child: const Text("Modifier  "),
+                  child: _isLoading ? customLoader() : const Text("Modifier  "),
                 ),
               ),
             ],
