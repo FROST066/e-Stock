@@ -22,8 +22,8 @@ class Category {
   String description;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-        categoryId: int.parse(json["id"]),
-        shopId: json["magasin"] == null ? null : int.parse(json["magasin"]),
+        categoryId: (json["id"]),
+        shopId: json["magasin"] == null ? null : (json["magasin"]),
         name: json["nom"],
         description: json["descriptions"],
       );

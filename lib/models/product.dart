@@ -27,14 +27,14 @@ class Product {
   String? url;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        productID: int.parse(json["id"] ?? "0"),
+        productID: (json["id"] ?? 0),
         name: json["nom"] ?? "",
         description: json["descriptions"] ?? "",
-        sellingPrice: int.parse(json["prixUnitaire"] ?? "0"),
-        quantiteDisponible: int.parse(json["quantiteDisponible"] ?? "0"),
-        categoryID: int.parse(json["categorie"] ?? "0"),
+        sellingPrice: (json["prixUnitaire"] ?? 0),
+        quantiteDisponible: (json["quantiteDisponible"] ?? 0),
+        categoryID: (json["categorie"] ?? 0),
         url: json["urlPhoto"] ?? json["urlImage"],
-        stockMin: int.parse(json["stockMin"] ?? "5"),
+        stockMin: (json["stockMin"] ?? 5),
       );
 
   Map<String, dynamic> toJson() => {

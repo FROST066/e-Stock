@@ -48,7 +48,7 @@ class _AddOrEditShopDialogWidgetState extends State<AddOrEditShopDialogWidget> {
       var jsonresponse = json.decode(response.body);
       print(jsonresponse);
       try {
-        widget.addFun!(int.parse(jsonresponse['id']), shopNameController.text);
+        widget.addFun!((jsonresponse['id']), shopNameController.text);
       } catch (e) {
         customFlutterToast(msg: "Erreur: ----1----${e.toString()}");
       }

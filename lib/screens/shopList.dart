@@ -89,7 +89,7 @@ class _ShopListState extends State<ShopList> {
       print(jsonresponse);
       // print(response.statusCode);
       try {
-        prefs.setInt(PrefKeys.SHOP_ID, int.parse(jsonresponse["id"]));
+        prefs.setInt(PrefKeys.SHOP_ID, (jsonresponse["id"]));
         if (mounted) {
           Navigator.pushAndRemoveUntil(
               context,

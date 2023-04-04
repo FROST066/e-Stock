@@ -29,16 +29,13 @@ class HistoryItem {
   int? prixApprovisionement;
 
   factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
-        product: Product.fromJson(json["product"]),
-        categoryName: json["CategoryName"],
-        type: json["type"],
-        heure: json["heure"],
-        date: json["date"],
-        nbr: int.parse(json["nbr"]),
-        prixApprovisionement: json["PrixApprovisionement"] != null
-            ? int.parse(json["PrixApprovisionement"])
-            : null,
-      );
+      product: Product.fromJson(json["product"]),
+      categoryName: json["CategoryName"],
+      type: json["type"],
+      heure: json["heure"],
+      date: json["date"],
+      nbr: (json["nbr"]),
+      prixApprovisionement: json["PrixApprovisionement"]);
 
   Map<String, dynamic> toJson() => {
         "product": product.toJson(),
@@ -69,4 +66,8 @@ class HistoryItem {
 
   bool operator <(Object other) =>
       other is HistoryItem && date.compareTo(other.date) < 0;
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
 }

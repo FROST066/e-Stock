@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         if (jsonresponse['status']) {
           print(jsonresponse);
           final prefs = await SharedPreferences.getInstance();
-          prefs.setInt(PrefKeys.USER_ID, int.parse(jsonresponse['id']));
+          prefs.setInt(PrefKeys.USER_ID, jsonresponse['id']);
           prefs.setString(PrefKeys.USER_NAME, jsonresponse['nom']);
           if (jsonresponse['urlPhoto'] != null) {
             prefs.setString(PrefKeys.USER_URL, jsonresponse['urlPhoto']);

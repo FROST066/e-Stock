@@ -10,7 +10,7 @@ class Shop {
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
-      int.parse(json['id']),
+      json['id'],
       json['nom'].toString(),
     );
   }

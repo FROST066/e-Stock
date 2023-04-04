@@ -41,9 +41,12 @@ class _ProductDialogWidgetState extends State<ProductDialogWidget> {
       print("---------------requesting $BASE_URL remove product ");
       http.Response response =
           await http.post(Uri.parse(BASE_URL), body: formData);
-      var jsonresponse = json.decode(response.body);
-      // print(response.body);
+      print("formData: $formData");
+      print("response.body: ${response.body}");
+
       print("${response.statusCode}");
+      var jsonresponse = json.decode(response.body);
+
       print(jsonresponse);
       if (mounted && jsonresponse["status"]) {
         widget.refresh();

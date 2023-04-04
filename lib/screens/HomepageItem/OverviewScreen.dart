@@ -97,11 +97,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
         List<double> result = [0, 0, 0];
         for (var item in jsonresponse as List) {
           var i = json.decode(item);
-          if (i["type"] == 0) {
-            result[0] += double.parse(i["nbr"]);
-          } else {
-            result[1] += double.parse(i["nbr"]);
-          }
+          result[i["type"]] += (i["nbr"]);
         }
         result[2] = result[0] - result[1];
         dataMap = {
@@ -110,7 +106,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
           "En stock": result[2],
         };
       } catch (e) {
-        customFlutterToast(msg: "------1------${e.toString()}");
+        customFlutterToast(msg: "In load data------1------${e.toString()}");
       }
     } catch (e) {
       customFlutterToast(msg: "------2------${e.toString()}");
