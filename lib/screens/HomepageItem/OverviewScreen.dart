@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as Badge;
 import 'package:e_stock/screens/HomepageItem/AllProductsScreen.dart';
 import 'package:e_stock/screens/HomepageItem/BalanceSheetScreen.dart';
 import 'package:e_stock/screens/HomepageItem/HistoryScreen.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 import '../../models/product.dart';
 import '../../other/const.dart';
 import '../../other/styles.dart';
@@ -178,9 +176,9 @@ class _OverViewScreenState extends State<OverViewScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Badge(
+                  Badge.Badge(
                     key: UniqueKey(),
-                    badgeAnimation: const BadgeAnimation.slide(
+                    badgeAnimation: const Badge.BadgeAnimation.slide(
                       animationDuration: Duration(seconds: 2),
                       loopAnimation: true,
                       curve: Curves.slowMiddle,
